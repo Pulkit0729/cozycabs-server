@@ -13,7 +13,6 @@ const BookingSchema = new mongoose.Schema({
     total: Number,
     is_paid: Boolean,
     is_cancelled: Boolean,
-    booking_id: Number,
     status: String,
 });
 

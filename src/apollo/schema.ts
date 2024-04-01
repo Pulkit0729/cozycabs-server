@@ -43,7 +43,6 @@ export const typeDefs = gql`
     total: Int!
     is_paid: Boolean!
     is_cancelled: Boolean!
-    booking_id: Int!
     status: String!
   }
 
@@ -96,7 +95,6 @@ export const typeDefs = gql`
     total: Int!
     is_paid: Boolean!
     is_cancelled: Boolean!
-    booking_id: Int!
     status: String!
   }
   input BookingUpdateInput {
@@ -112,7 +110,6 @@ export const typeDefs = gql`
     total: Int
     is_paid: Boolean
     is_cancelled: Boolean
-    booking_id: Int
     status: String
   }
 
@@ -162,7 +159,6 @@ export const typeDefs = gql`
     total: Int
     is_paid: Boolean
     is_cancelled: Boolean
-    booking_id: Int
     status: String
   }
   type Query {

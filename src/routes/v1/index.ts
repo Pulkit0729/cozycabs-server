@@ -20,7 +20,7 @@ router.post('/book', async (req, res) => {
         // Update ride with seats booked
         let ride = await Ride.findOneAndUpdate(
             {ride_id: blabla_ride_id},
-            { $inc: { seats: -Number.parseInt(seats) } }
+            { $inc: { seats: -seats } }
         );
         if (!ride) throw new Error("No ride found");
         const booking = new Booking({
@@ -41,7 +41,7 @@ router.post('/book', async (req, res) => {
         await booking.save();
         res.json({success: true, booking});
     } catch (error: any) {
-        logger.log({ level: "info", message:"Booking Error", error })
+        logger.log({ level: "info", message:"Booking Error"+ error })
         res.json({ success: false, error: error });
     }
 
@@ -66,7 +66,7 @@ router.post('/cancel', async (req, res) => {
         await ride.save();
         res.json({success: true, ride});
     } catch (error: any) {
-        logger.log({ level: "info", message:"Cancel Error", error })
+        logger.log({ level: "info", message:"Cancel Error"+error })
         res.json({success: false,  error: error });
     }
 

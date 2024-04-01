@@ -37,10 +37,10 @@ router.post('/book', async (req, res) => {
             status: "pending",
         });
         await booking.save();
-        res.json(booking);
+        res.json({success: true, booking});
     } catch (error: any) {
         logger.log({ level: "info", message:"Booking Error", error })
-        res.json({ error: error });
+        res.json({ success: false, error: error });
     }
 
 });
@@ -62,10 +62,10 @@ router.post('/cancel', async (req, res) => {
         if (!booking) throw new Error("No Booking found");
         ride.seats = ride.seats! + booking.seats!;
         await ride.save();
-        res.json(ride);
+        res.json({success: true, ride});
     } catch (error: any) {
         logger.log({ level: "info", message:"Cancel Error", error })
-        res.json({ error: error });
+        res.json({success: false,  error: error });
     }
 
 });

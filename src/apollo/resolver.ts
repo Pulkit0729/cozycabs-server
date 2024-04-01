@@ -58,7 +58,7 @@ export const resolvers = {
     },
     updateRide: async (_: any, { rideId, input }: any) => {
       try {
-        const ride = await Ride.findById(rideId);
+        const ride = await Ride.findOne({ride_id: rideId});
         if (!ride) {
           throw new Error('Ride not found');
         }

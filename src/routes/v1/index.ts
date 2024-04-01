@@ -39,7 +39,7 @@ router.post('/book', async (req, res) => {
         await booking.save();
         res.json(booking);
     } catch (error: any) {
-        logger.log({ level: "error", message: error.message })
+        logger.log({ level: "info", message:"Booking Error", error })
         res.json({ error: error });
     }
 
@@ -64,7 +64,7 @@ router.post('/cancel', async (req, res) => {
         await ride.save();
         res.json(ride);
     } catch (error: any) {
-        logger.log({ level: "error", message: error.message })
+        logger.log({ level: "info", message:"Cancel Error", error })
         res.json({ error: error });
     }
 

@@ -18,11 +18,12 @@ router.post('/book', async (req, res) => {
         seats = Number.parseInt(seats);
         total = Number.parseInt(total);
         // Update ride with seats booked
-        let ride = await Ride.findOneAndUpdate(
-            {ride_id: blabla_ride_id},
-            { $inc: { seats: -seats } }
+        let ride = await Ride.findOne(
+            {ride_id: blabla_ride_id}
         );
         if (!ride) throw new Error("No ride found");
+        ride.seats = ride.seats! - seats;
+        await ride.save()
         const booking = new Booking({
             ride_id: blabla_ride_id,
             from: ride.from,
@@ -56,13 +57,13 @@ router.post('/cancel', async (req, res) => {
             { ride_id: blabla_ride_id }
         );
         if (!ride) throw new Error("No ride found");
-        let booking = await Booking.findOneAndUpdate({
+        let booking = await Booking.findOne({
             $and: [{ ride_id: blabla_ride_id }, { user_name: user_name }, {is_cancelled: false}]
-        },
-            { is_cancelled: true }
-        );
+        });
         if (!booking) throw new Error("No Booking found");
+        booking.is_cancelled = true;
         ride.seats = ride.seats! + booking.seats!;
+        await booking.save();
         await ride.save();
         res.json({success: true, ride});
     } catch (error: any) {

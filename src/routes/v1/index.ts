@@ -49,17 +49,25 @@ router.post('/book', async (req, res) => {
 });
 router.post('/cancel', async (req, res) => {
     try {
-        const {
-            user_name, blabla_ride_id
+        let {
+            user_name, blabla_ride_id, user_phone
         } = req.body;
         // Update ride with seats booked
         let ride = await Ride.findOne(
             { ride_id: blabla_ride_id }
         );
         if (!ride) throw new Error("No ride found");
-        let booking = await Booking.findOne({
-            $and: [{ ride_id: blabla_ride_id }, { user_name: user_name }, {is_cancelled: false}]
-        });
+        let booking;
+        if (user_phone) {
+            booking = await Booking.findOne({
+                $and: [{ ride_id: blabla_ride_id }, { user_no: user_phone }, { is_cancelled: false }]
+            });
+            if (!booking) {
+                booking = await Booking.findOne({
+                    $and: [{ ride_id: blabla_ride_id }, { user_name: user_name }, { is_cancelled: false }]
+                });
+            }
+        }
         if (!booking) throw new Error("No Booking found");
         booking.is_cancelled = true;
         ride.seats = ride.seats! + booking.seats!;

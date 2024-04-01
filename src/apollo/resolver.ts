@@ -124,9 +124,10 @@ function constructQuery(filterBy: any, sortBy: string | number, sortOrder: strin
     // Handle individual column filters
     Object.entries(filterBy).forEach(([key, value]) => {
       if (key !== 'AND' && key !== 'OR' && value) {
-        if(isNaN(value as any)){
-        query[key] = { $regex: value, $options: 'i' };}
-        else{
+        if (isNaN(value as any)) {
+          query[key] = { $regex: value, $options: 'i' };
+        }
+        else {
           query[key] = value;
         }
       }
@@ -145,7 +146,12 @@ function constructSubQuery(condition: any) {
 
   Object.entries(condition).forEach(([key, value]) => {
     if (key !== 'AND' && key !== 'OR' && value) {
-      query[key] = { $regex: value, $options: 'i' };
+      if (isNaN(value as any)) {
+        query[key] = { $regex: value, $options: 'i' };
+      }
+      else {
+        query[key] = value;
+      }
     }
   });
 

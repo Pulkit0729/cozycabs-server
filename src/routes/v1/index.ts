@@ -19,7 +19,7 @@ router.post('/book', async (req, res) => {
         total = Number.parseInt(total);
         // Update ride with seats booked
         let ride = await Ride.findOne(
-            {ride_id: blabla_ride_id}
+            { ride_id: blabla_ride_id }
         );
         if (!ride) throw new Error("No ride found");
         ride.seats = ride.seats! - seats;
@@ -40,9 +40,9 @@ router.post('/book', async (req, res) => {
             status: "pending",
         });
         await booking.save();
-        res.json({success: true, booking});
+        res.json({ success: true, booking });
     } catch (error: any) {
-        logger.log({ level: "info", message:"Booking Error"+ error })
+        logger.log({ level: "info", message: "Booking Error" + error })
         res.json({ success: false, error: error });
     }
 
@@ -73,12 +73,26 @@ router.post('/cancel', async (req, res) => {
         ride.seats = ride.seats! + booking.seats!;
         await booking.save();
         await ride.save();
-        res.json({success: true, ride});
+        res.json({ success: true, ride });
     } catch (error: any) {
-        logger.log({ level: "info", message:"Cancel Error"+error })
-        res.json({success: false,  error: error });
+        logger.log({ level: "info", message: "Cancel Error" + error })
+        res.json({ success: false, error: error });
     }
 
 });
+router.post('/start', async (req, res) => {
+    try {
+        let { ride_no } = req.body;
+        let ride = await Ride.findOne({ ride_no: ride_no });
+        if (!ride) throw new Error(`No such ride`);
+        ride.status = 'active';
+        await ride.save();
+        let bookings = await Booking.find({ ride_id: ride.ride_id, is_cancelled: false });
+        res.json({ success: true, bookings });
+    } catch (error) {
+        logger.log({ level: "info", message: "Start Error" + error })
+        res.json({ success: false, error: error });
+    }
 
+})
 module.exports = router;

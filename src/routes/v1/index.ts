@@ -7,7 +7,7 @@ import logger from '../../logger/logger';
 const router = Router();
 router.post('/book', async (req, res) => {
     try {
-        const {
+        let {
             user_name, user_phone, blabla_ride_id, seats, total
         } = req.body;
         let user = await User.findOneAndUpdate(
@@ -15,10 +15,12 @@ router.post('/book', async (req, res) => {
             { name: user_name, phone: user_phone },
             { upsert: true, new: true }
         );
+        seats = Number.parseInt(seats);
+        total = Number.parseInt(total);
         // Update ride with seats booked
         let ride = await Ride.findOneAndUpdate(
             {ride_id: blabla_ride_id},
-            { $inc: { seats: -seats } }
+            { $inc: { seats: -Number.parseInt(seats) } }
         );
         if (!ride) throw new Error("No ride found");
         const booking = new Booking({

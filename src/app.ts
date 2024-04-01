@@ -25,7 +25,7 @@ export default async function App() {
     app.post("/", (_req: any, res: any) => {
         res.send("working");
     });
-    // app.use(require("./routes"));
+    app.use(require("./routes"));
 
     server.applyMiddleware({ app });
     app.listen(PORT, function () {

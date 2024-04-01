@@ -3,7 +3,9 @@ import User from '../../models/users';
 import Ride from '../../models/rides';
 import Booking from '../../models/bookings';
 import logger from '../../logger/logger';
+import makeRequest from '../../services/axios';
 
+const sendpulseUrl = 'https://events.sendpulse.com/events/id/e7f2456215644ca2ffbc925ab367cdf8/8582829';
 const router = Router();
 router.post('/book', async (req, res) => {
     try {
@@ -82,12 +84,27 @@ router.post('/cancel', async (req, res) => {
 });
 router.post('/start', async (req, res) => {
     try {
-        let { ride_no } = req.body;
+        let { ride_no, location_url } = req.body;
         let ride = await Ride.findOne({ ride_no: ride_no });
         if (!ride) throw new Error(`No such ride`);
         ride.status = 'active';
         await ride.save();
         let bookings = await Booking.find({ ride_id: ride.ride_id, is_cancelled: false });
+        bookings.forEach(async (booking) => {
+            let des = await makeRequest(sendpulseUrl, "post", {
+                phone: booking.user_no,
+                name: booking.user_name,
+                type: 'user',
+                event_type: 'ride_start',
+                from: booking.from,
+                to: booking.to,
+                driver: booking.driver_no,
+                location_url: location_url,
+                is_active: Date.now()
+            },
+                { "Content-Type": "application/json" }
+            )
+        })
         res.json({ success: true, bookings });
     } catch (error) {
         logger.log({ level: "info", message: "Start Error" + error })

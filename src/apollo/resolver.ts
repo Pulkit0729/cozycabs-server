@@ -1,3 +1,4 @@
+import { isBooleanObject } from "util/types";
 import Booking from "../models/bookings";
 import Driver from "../models/drivers";
 import Ride from "../models/rides";
@@ -124,7 +125,7 @@ function constructQuery(filterBy: any, sortBy: string | number, sortOrder: strin
     // Handle individual column filters
     Object.entries(filterBy).forEach(([key, value]) => {
       if (key !== 'AND' && key !== 'OR' && value) {
-        if (isNaN(value as any)) {
+        if (isNaN(value as any) && (typeof value != "boolean")) {
           query[key] = { $regex: value, $options: 'i' };
         }
         else {
@@ -146,7 +147,7 @@ function constructSubQuery(condition: any) {
 
   Object.entries(condition).forEach(([key, value]) => {
     if (key !== 'AND' && key !== 'OR' && value) {
-      if (isNaN(value as any)) {
+      if (isNaN(value as any) && (typeof value != "boolean")) {
         query[key] = { $regex: value, $options: 'i' };
       }
       else {

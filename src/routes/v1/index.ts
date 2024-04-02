@@ -9,7 +9,7 @@ const router = Router();
 router.post('/book', async (req, res) => {
     try {
         let {
-            subject, user_name, user_phone, blabla_ride_id, seats, total
+            subject, user_name, user_phone, blabla_ride_id, seats
         } = req.body;
         if (subject != null && subject != undefined && !String(subject).includes('accept')) return res.send({ success: false, subject })
         user_phone = user_phone.replace(/ /g, '')
@@ -19,13 +19,14 @@ router.post('/book', async (req, res) => {
             { name: user_name, phone: user_phone },
             { upsert: true, new: true }
         );
-        seats = Number.parseInt(seats);
-        total = Number.parseInt(total);
+
         // Update ride with seats booked
         let ride = await Ride.findOne(
             { ride_id: blabla_ride_id }
         );
         if (!ride) throw new Error("No ride found");
+        seats = Number.parseInt(seats);
+        let total = seats * ride.price!;
         ride.seats = ride.seats! - seats;
         await ride.save()
         const booking = new Booking({

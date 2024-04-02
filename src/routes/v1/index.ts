@@ -3,15 +3,17 @@ import User from '../../models/users';
 import Ride from '../../models/rides';
 import Booking from '../../models/bookings';
 import logger from '../../logger/logger';
-import makeRequest from '../../services/axios';
+import { eventType, sendToDriver, sendToUser } from '../../services/sendpulse';
 
-const sendpulseUrl = 'https://events.sendpulse.com/events/id/e7f2456215644ca2ffbc925ab367cdf8/8582829';
 const router = Router();
 router.post('/book', async (req, res) => {
     try {
         let {
-            user_name, user_phone, blabla_ride_id, seats, total
+            subject, user_name, user_phone, blabla_ride_id, seats, total
         } = req.body;
+        if (subject != null && subject != undefined && !String(subject).includes('accept')) return res.send({ success: false, subject })
+        user_phone = user_phone.replace(/ /g, '')
+        user_phone = '91' + user_phone.substr(user_phone.length - 10)
         let user = await User.findOneAndUpdate(
             { phone: user_phone },
             { name: user_name, phone: user_phone },
@@ -42,18 +44,23 @@ router.post('/book', async (req, res) => {
             status: "pending",
         });
         await booking.save();
-        res.json({ success: true, booking });
+        await sendToUser(eventType.book, JSON.parse(JSON.stringify(booking)));
+        await sendToDriver(eventType.book, JSON.parse(JSON.stringify(booking)), ride.driver_name);
+
+        return res.json({ success: true, booking });
     } catch (error: any) {
         logger.log({ level: "info", message: "Booking Error" + error })
-        res.json({ success: false, error: error });
+        return res.json({ success: false, error: error });
     }
 
 });
 router.post('/cancel', async (req, res) => {
     try {
         let {
-            user_name, blabla_ride_id, user_phone
+            subject, user_name, blabla_ride_id, user_phone
         } = req.body;
+        if (subject != null && subject != undefined && !String(subject).includes('cancel')) return res.send({ success: false, subject })
+
         // Update ride with seats booked
         let ride = await Ride.findOne(
             { ride_id: blabla_ride_id }
@@ -61,24 +68,28 @@ router.post('/cancel', async (req, res) => {
         if (!ride) throw new Error("No ride found");
         let booking;
         if (user_phone) {
+            user_phone = user_phone.replace(/ /g, '')
+            user_phone = '91' + user_phone.substr(user_phone.length - 10)
             booking = await Booking.findOne({
                 $and: [{ ride_id: blabla_ride_id }, { user_no: user_phone }, { is_cancelled: false }]
             });
-            if (!booking) {
-                booking = await Booking.findOne({
-                    $and: [{ ride_id: blabla_ride_id }, { user_name: user_name }, { is_cancelled: false }]
-                });
-            }
+        }
+        if (!booking) {
+            booking = await Booking.findOne({
+                $and: [{ ride_id: blabla_ride_id }, { user_name: user_name }, { is_cancelled: false }]
+            });
         }
         if (!booking) throw new Error("No Booking found");
         booking.is_cancelled = true;
         ride.seats = ride.seats! + booking.seats!;
         await booking.save();
         await ride.save();
-        res.json({ success: true, ride });
+        await sendToUser(eventType.cancel, JSON.parse(JSON.stringify(booking)));
+        await sendToDriver(eventType.cancel, JSON.parse(JSON.stringify(booking)), ride.driver_name);
+        return res.json({ success: true, ride });
     } catch (error: any) {
         logger.log({ level: "info", message: "Cancel Error" + error })
-        res.json({ success: false, error: error });
+        return res.json({ success: false, error: error });
     }
 
 });
@@ -93,20 +104,7 @@ router.post('/start', async (req, res) => {
         bookings.forEach(async (booking) => {
             booking.status = 'active';
             await booking.save();
-
-            let des = await makeRequest(sendpulseUrl, "post", {
-                phone: booking.user_no,
-                name: booking.user_name,
-                type: 'user',
-                event_type: 'ride_start',
-                from: booking.from,
-                to: booking.to,
-                driver: booking.driver_no,
-                location_url: location_url,
-                is_active: Date.now()
-            },
-                { "Content-Type": "application/json" }
-            )
+            let des = await sendToUser(eventType.ride_start, JSON.parse(JSON.stringify(booking)), location_url);
         })
         res.json({ success: true, bookings });
     } catch (error) {
@@ -127,17 +125,7 @@ router.post('/end', async (req, res) => {
             booking.is_paid = true;
             booking.status = 'end';
             await booking.save();
-            let des = await makeRequest(sendpulseUrl, "post", {
-                phone: booking.user_no,
-                name: booking.user_name,
-                type: 'user',
-                event_type: 'ride_end',
-                from: booking.from,
-                to: booking.to,
-                is_active: Date.now()
-            },
-                { "Content-Type": "application/json" }
-            )
+            let des = await sendToUser(eventType.ride_end, JSON.parse(JSON.stringify(booking)), null);
         })
         res.json({ success: true, bookings });
     } catch (error) {

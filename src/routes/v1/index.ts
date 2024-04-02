@@ -91,6 +91,9 @@ router.post('/start', async (req, res) => {
         await ride.save();
         let bookings = await Booking.find({ ride_id: ride.ride_id, is_cancelled: false });
         bookings.forEach(async (booking) => {
+            booking.status = 'active';
+            await booking.save();
+
             let des = await makeRequest(sendpulseUrl, "post", {
                 phone: booking.user_no,
                 name: booking.user_name,
@@ -100,6 +103,37 @@ router.post('/start', async (req, res) => {
                 to: booking.to,
                 driver: booking.driver_no,
                 location_url: location_url,
+                is_active: Date.now()
+            },
+                { "Content-Type": "application/json" }
+            )
+        })
+        res.json({ success: true, bookings });
+    } catch (error) {
+        logger.log({ level: "info", message: "Start Error" + error })
+        res.json({ success: false, error: error });
+    }
+
+})
+router.post('/end', async (req, res) => {
+    try {
+        let { ride_no } = req.body;
+        let ride = await Ride.findOne({ ride_no: ride_no });
+        if (!ride) throw new Error(`No such ride`);
+        ride.status = 'end';
+        await ride.save();
+        let bookings = await Booking.find({ ride_id: ride.ride_id, is_cancelled: false });
+        bookings.forEach(async (booking) => {
+            booking.is_paid = true;
+            booking.status = 'end';
+            await booking.save();
+            let des = await makeRequest(sendpulseUrl, "post", {
+                phone: booking.user_no,
+                name: booking.user_name,
+                type: 'user',
+                event_type: 'ride_end',
+                from: booking.from,
+                to: booking.to,
                 is_active: Date.now()
             },
                 { "Content-Type": "application/json" }

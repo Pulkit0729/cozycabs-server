@@ -32,7 +32,8 @@ export const resolvers = {
       return rides;
     },
     bookings: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
-      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
+      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder);
+      console.log(query);
       const bookings = await Booking.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
@@ -124,7 +125,7 @@ function constructQuery(filterBy: any, sortBy: string | number, sortOrder: strin
 
     // Handle individual column filters
     Object.entries(filterBy).forEach(([key, value]) => {
-      if (key !== 'AND' && key !== 'OR' && value) {
+      if (key !== 'AND' && key !== 'OR' && value != null) {
         if (isNaN(value as any) && (typeof value != "boolean")) {
           query[key] = { $regex: value, $options: 'i' };
         }
@@ -134,6 +135,8 @@ function constructQuery(filterBy: any, sortBy: string | number, sortOrder: strin
       }
     });
   }
+  console.log(query);
+  
   const sortOptions: any = {};
   if (sortBy) {
     sortOptions[sortBy] = sortOrder === 'ASC' ? 1 : -1;
@@ -146,7 +149,7 @@ function constructSubQuery(condition: any) {
   let query: any = {};
 
   Object.entries(condition).forEach(([key, value]) => {
-    if (key !== 'AND' && key !== 'OR' && value) {
+    if (key !== 'AND' && key !== 'OR' && value != null) {
       if (isNaN(value as any) && (typeof value != "boolean")) {
         query[key] = { $regex: value, $options: 'i' };
       }

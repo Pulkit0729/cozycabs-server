@@ -76,8 +76,9 @@ router.post('/cancel', async (req, res) => {
             });
         }
         if (!booking) {
+            let regex = new RegExp('^'+user_name, 'i');            
             booking = await Booking.findOne({
-                $and: [{ ride_id: blabla_ride_id }, { user_name: user_name }, { is_cancelled: false }]
+                $and: [{ ride_id: blabla_ride_id }, { user_name: {$regex: regex} }, { is_cancelled: false }]
             });
         }
         if (!booking) throw new Error("No Booking found");

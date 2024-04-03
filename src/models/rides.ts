@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
 
 const RideSchema = new mongoose.Schema({
-    ride_id: String,
+    ride_id: {
+        type: String,
+        unique: true,
+    },
     from: String,
     to: String,
     date: String,
@@ -10,9 +13,12 @@ const RideSchema = new mongoose.Schema({
     driver_name: String,
     seats: Number,
     price: Number,
-    ride_no: Number,
+    ride_no: {
+        type: Number,
+        unique: true,
+    },
     status: String,
 });
 
-const Ride= mongoose.model('Rides', RideSchema, 'rides');
+const Ride = mongoose.model('Rides', RideSchema, 'rides');
 export default Ride;

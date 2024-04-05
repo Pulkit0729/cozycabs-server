@@ -11,7 +11,7 @@ router.post('/book', async (req, res) => {
         let {
             subject, user_name, user_phone, blabla_ride_id, seats
         } = req.body;
-        if (subject != null && subject != undefined && !String(subject).toLowerCase().includes('accept')) return res.send({ success: false, subject })
+        if (subject != null && subject != undefined && !String(subject).toLowerCase().includes('accept') && !String(subject).toLowerCase().includes('new passenger for')) return res.send({ success: false, subject })
         user_phone = user_phone.replace(/ /g, '')
         user_phone = '91' + user_phone.substr(user_phone.length - 10)
         let user = await User.findOneAndUpdate(

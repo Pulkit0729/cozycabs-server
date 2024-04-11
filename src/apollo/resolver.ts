@@ -1,4 +1,3 @@
-import { isBooleanObject } from "util/types";
 import Booking from "../models/bookings";
 import Driver from "../models/drivers";
 import Ride from "../models/rides";

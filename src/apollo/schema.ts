@@ -12,6 +12,8 @@ export const typeDefs = gql`
     name: String!
     phone: String!
     email: String
+    car_name: String
+    car_no: String
   }
 
   type Ride {
@@ -54,6 +56,8 @@ export const typeDefs = gql`
     name: String!
     phone: String!
     email: String
+    car_name: String
+    car_no: String
   }
 
   input RideInput {
@@ -126,6 +130,8 @@ export const typeDefs = gql`
     name: String
     phone: String
     email: String
+    car_name: String
+    car_no: String
   }
 
   input RideFilter {

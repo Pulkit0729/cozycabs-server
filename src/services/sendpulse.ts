@@ -15,8 +15,17 @@ export const sendToUser = async (event: string, booking: {
   seats: any;
   time: any;
   total: any;
-  driver_no: any; user_no: any, user_name: any, from: any, to: any
-}, location_url?: any) => {
+  driver_no: any;
+  user_no: any,
+  user_name: any,
+  from: any,
+  to: any,
+},
+  driver?: {
+    car_name: string,
+    car_no: string
+  },
+  location_url?: any) => {
   await makeRequest(sendpulseUrl, "post", {
     phone: booking.user_no,
     name: booking.user_name,
@@ -29,6 +38,8 @@ export const sendToUser = async (event: string, booking: {
     time: booking.time,
     price: booking.total,
     driver_no: booking.driver_no,
+    car_name: driver?.car_name,
+    car_no: driver?.car_no,
     location_url: location_url,
     is_active: Date.now()
   },

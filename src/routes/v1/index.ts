@@ -4,6 +4,7 @@ import Ride from '../../models/rides';
 import Booking from '../../models/bookings';
 import logger from '../../logger/logger';
 import { eventType, sendToDriver, sendToUser } from '../../services/sendpulse';
+import Driver from '../../models/drivers';
 
 const router = Router();
 router.post('/book', async (req, res) => {
@@ -25,6 +26,8 @@ router.post('/book', async (req, res) => {
             { ride_id: blabla_ride_id }
         );
         if (!ride) throw new Error("No ride found");
+        let driver = await Driver.findOne({ phone: ride.driver_no });
+
         seats = Number.parseInt(seats);
         let total = seats * ride.price!;
         ride.seats = ride.seats! - seats;
@@ -45,7 +48,7 @@ router.post('/book', async (req, res) => {
             status: "pending",
         });
         await booking.save();
-        await sendToUser(eventType.book, JSON.parse(JSON.stringify(booking)));
+        await sendToUser(eventType.book, JSON.parse(JSON.stringify(booking)), driver!.toJSON());
         await sendToDriver(eventType.book, JSON.parse(JSON.stringify(booking)), ride.driver_name);
 
         return res.json({ success: true, booking });
@@ -76,9 +79,9 @@ router.post('/cancel', async (req, res) => {
             });
         }
         if (!booking) {
-            let regex = new RegExp('^'+user_name, 'i');            
+            let regex = new RegExp('^' + user_name, 'i');
             booking = await Booking.findOne({
-                $and: [{ ride_id: blabla_ride_id }, { user_name: {$regex: regex} }, { is_cancelled: false }]
+                $and: [{ ride_id: blabla_ride_id }, { user_name: { $regex: regex } }, { is_cancelled: false }]
             });
         }
         if (!booking) throw new Error("No Booking found");
@@ -127,7 +130,7 @@ router.post('/end', async (req, res) => {
             booking.is_paid = true;
             booking.status = 'end';
             await booking.save();
-            let des = await sendToUser(eventType.ride_end, JSON.parse(JSON.stringify(booking)), null);
+            let des = await sendToUser(eventType.ride_end, JSON.parse(JSON.stringify(booking)));
         })
         res.json({ success: true, bookings });
     } catch (error) {

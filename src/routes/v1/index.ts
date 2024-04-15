@@ -109,7 +109,7 @@ router.post('/start', async (req, res) => {
         bookings.forEach(async (booking) => {
             booking.status = 'active';
             await booking.save();
-            let des = await sendToUser(eventType.ride_start, JSON.parse(JSON.stringify(booking)), location_url);
+            let des = await sendToUser(eventType.ride_start, JSON.parse(JSON.stringify(booking)),undefined, location_url);
         })
         res.json({ success: true, bookings });
     } catch (error) {

@@ -1,6 +1,7 @@
 import Booking from "../models/bookings";
 import Driver from "../models/drivers";
 import Ride from "../models/rides";
+import TemplatedRide from "../models/templated_rides";
 import User from "../models/users";
 
 
@@ -21,6 +22,14 @@ export const resolvers = {
         .skip((page - 1) * perPage)
         .limit(perPage);
       return drivers;
+    },
+    templatedRides: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
+      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
+      const rides = await TemplatedRide.find(query)
+        .sort(sortOptions)
+        .skip((page - 1) * perPage)
+        .limit(perPage);
+      return rides;
     },
     rides: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
       let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
@@ -53,13 +62,42 @@ export const resolvers = {
       const newBook = new Booking(input);
       return newBook.save();
     },
+    addTemplatedRide: (_: any, { input }: any) => {
+      const newRide = new TemplatedRide(input);
+      return newRide.save();
+    },
     addRide: (_: any, { input }: any) => {
       const newRide = new Ride(input);
       return newRide.save();
     },
-    updateRide: async (_: any, { rideId, input }: any) => {
+    updateTemplatedRide: async (_: any, { id, input }: any) => {
       try {
-        const ride = await Ride.findOne({ride_id: rideId});
+        const templatedRide = await TemplatedRide.findById(id);
+        if (!templatedRide) {
+          throw new Error('Ride not found');
+        }
+
+        // Update templatedRide properties if provided in the input
+        if (input.time) {
+          templatedRide.time = input.time;
+        }
+        if (input.seats) {
+          templatedRide.seats = input.seats;
+        }
+        if (input.price) {
+          templatedRide.price = input.price;
+        }
+        // Save the updated templatedRide
+        await templatedRide.save();
+
+        return templatedRide;
+      } catch (error: any) {
+        throw new Error(`Failed to update templatedRide: ${error.message}`);
+      }
+    },
+    updateRide: async (_: any, { id, input }: any) => {
+      try {
+        const ride = await Ride.findById(id);
         if (!ride) {
           throw new Error('Ride not found');
         }
@@ -67,6 +105,9 @@ export const resolvers = {
         // Update ride properties if provided in the input
         if (input.status) {
           ride.status = input.status;
+        }
+        if (input.blabla_ride_id) {
+          ride.blabla_ride_id = input.blabla_ride_id;
         }
         if (input.seats) {
           ride.seats = input.seats;
@@ -135,7 +176,7 @@ function constructQuery(filterBy: any, sortBy: string | number, sortOrder: strin
     });
   }
   console.log(query);
-  
+
   const sortOptions: any = {};
   if (sortBy) {
     sortOptions[sortBy] = sortOrder === 'ASC' ? 1 : -1;

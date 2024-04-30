@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
 const RideSchema = new mongoose.Schema({
-    ride_id: {
+    blabla_ride_id: {
         type: String,
-        unique: true,
+        required: false
     },
     from: String,
     to: String,

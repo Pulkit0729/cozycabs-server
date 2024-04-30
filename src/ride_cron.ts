@@ -3,7 +3,7 @@ import TemplatedRide from './models/templated_rides';
 import Ride from './models/rides';
 import logger from './logger/logger';
 
-const Cron_String = process.env.CRON_STRING || "0 0 */3 * *";
+const Cron_String = process.env.CRON_STRING || "0 0 * * *";
 
 export function startCron() {
     cron.schedule(Cron_String, function () {
@@ -21,19 +21,22 @@ async function addRides() {
     templated_rides.forEach(async (templateRide, i) => {
         for (let index = 0; index < 3; index++) {
             let dateString = getFormattedDate(index);
-            let ride = new Ride({
-                from: templateRide.from,
-                to: templateRide.to,
-                date: dateString,
-                time: templateRide.time,
-                ride_no: noOfRides + 1 + i*3+index,
-                driver_no: templateRide.driver_no,
-                driver_name: templateRide.driver_name,
-                seats: templateRide.seats,
-                price: templateRide.price,
-                status: "pending",
-            });
-            await ride.save();
+            let existRide = await Ride.findOne({ where: { dateString: dateString, from: templateRide.from, to: templateRide.to, time: templateRide.time, driver_no: templateRide.driver_no } });
+            if (!existRide) {
+                let ride = new Ride({
+                    from: templateRide.from,
+                    to: templateRide.to,
+                    date: dateString,
+                    time: templateRide.time,
+                    ride_no: noOfRides + 1 + i * 3 + index,
+                    driver_no: templateRide.driver_no,
+                    driver_name: templateRide.driver_name,
+                    seats: templateRide.seats,
+                    price: templateRide.price,
+                    status: "pending",
+                });
+                await ride.save();
+            }
         }
 
     });

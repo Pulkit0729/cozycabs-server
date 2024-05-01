@@ -21,8 +21,8 @@ export async function addRides() {
     templated_rides.forEach(async (templateRide, i) => {
         for (let index = 0; index < 3; index++) {
             let dateString = getFormattedDate(index);
-            let existRide = await Ride.findOne({ where: { dateString: dateString, from: templateRide.from, to: templateRide.to, time: templateRide.time, driver_no: templateRide.driver_no } });
-            if (!existRide) {
+            let existRide = await Ride.findOne({ date: dateString, from: templateRide.from, to: templateRide.to, time: templateRide.time, driver_no: templateRide.driver_no });
+            if (!existRide?.id) {
                 let ride = new Ride({
                     from: templateRide.from,
                     to: templateRide.to,
@@ -45,7 +45,7 @@ export async function addRides() {
 function getFormattedDate(i: number) {
     let date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000);
     let day = Number(date.getDate()).toString();
-    let month = Number(date.getMonth()+1).toString();
+    let month = Number(date.getMonth() + 1).toString();
     let year = Number(date.getFullYear()).toString();
 
     let dateString = (day.length == 1 ? "0" + day : day) + "." + (month.length == 1 ? "0" + month : month) + "." + year;

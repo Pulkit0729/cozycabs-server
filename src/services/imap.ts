@@ -36,7 +36,7 @@ imap.once('ready', function () {
                     })
                 });
                 msg.once('end', function () {
-                    console.log(prefix + 'Finished');
+                    console.log('Finished');
                 });
             });
             f.once('error', function (err) {

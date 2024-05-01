@@ -45,7 +45,7 @@ export async function addRides() {
 function getFormattedDate(i: number) {
     let date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000);
     let day = Number(date.getDate()).toString();
-    let month = Number(date.getMonth()).toString();
+    let month = Number(date.getMonth()+1).toString();
     let year = Number(date.getFullYear()).toString();
 
     let dateString = (day.length == 1 ? "0" + day : day) + "." + (month.length == 1 ? "0" + month : month) + "." + year;

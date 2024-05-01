@@ -1,5 +1,6 @@
 import { parse } from 'node-html-parser';
 import { book, cancel } from './handlers';
+import logger from '../logger/logger';
 export async function handleBlabla(subject: string, message: string) {
     let name, babla_ride_id, seats, user_phone;
     // console.log(message);
@@ -29,7 +30,14 @@ export async function handleBlabla(subject: string, message: string) {
                     seats = element.innerHTML.replace('\n', "").trim().split(' ')[0];
                 };
             })
-            await book(user_phone!, name!, seats, undefined, babla_ride_id);
+            if (user_phone && name && seats) {
+                await book(user_phone, name, seats, undefined, babla_ride_id);
+            } else {
+                logger.log({
+                    level: 'error',
+                    message: "User phone, name seats required:" + user_phone, name, seats
+                })
+            }
             break;
         case subject.includes("New passenger for"):
             root.getElementsByTagName('a').forEach((element) => {
@@ -43,8 +51,14 @@ export async function handleBlabla(subject: string, message: string) {
                     seats = element.innerHTML.replace('\n', "").trim().split(' ')[0];
                 };
             })
-            await book(user_phone!, name!, seats, undefined, babla_ride_id);
-
+            if (user_phone && name && seats) {
+                await book(user_phone, name, seats, undefined, babla_ride_id);
+            } else {
+                logger.log({
+                    level: 'error',
+                    message: "User phone, name seats required:" + user_phone, name, seats
+                })
+            }
             break;
         case subject.includes("Cancellation for"):
             await cancel(undefined, undefined, name, babla_ride_id);
@@ -53,6 +67,6 @@ export async function handleBlabla(subject: string, message: string) {
         default:
             break;
     }
-    console.log(name, babla_ride_id, seats, user_phone);
+    logger.log({ level: "info", message: name! + babla_ride_id! + seats + user_phone });
 
 }

@@ -22,9 +22,7 @@ imap.once('ready', function () {
             console.log(_box.messages.total);
 
             var f = imap.seq.fetch(_box.messages.total + ':*', { bodies: '' });
-            f.on('message', function (msg, seqno) {
-                console.log('Message #%d', seqno);
-                var prefix = '(#' + seqno + ') ';
+            f.on('message', function (msg, _seqno) {
                 msg.on('body', stream => {
                     simpleParser(stream as unknown as Source, async (error: any, parsed) => {
                         if (error) throw error;
@@ -32,13 +30,10 @@ imap.once('ready', function () {
                         let subject = parsed.subject;
                         let message = parsed.html;
                         if (from?.includes("hello@blablacar.com") && subject && message) {
-                            handleBlabla(subject, message);
+                            await handleBlabla(subject, message);
                         }
 
                     })
-                });
-                msg.once('attributes', function (attrs) {
-                    console.log(prefix + 'Attributes: %s', inspect(attrs, false, 8));
                 });
                 msg.once('end', function () {
                     console.log(prefix + 'Finished');

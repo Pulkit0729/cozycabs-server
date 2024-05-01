@@ -5,6 +5,7 @@ import Booking from '../../models/bookings';
 import logger from '../../logger/logger';
 import { eventType, sendToDriver, sendToUser } from '../../services/sendpulse';
 import Driver from '../../models/drivers';
+import { addRides } from '../../ride_cron';
 
 const router = Router();
 router.post('/book', async (req, res) => {
@@ -151,4 +152,15 @@ router.post('/end', async (req, res) => {
     }
 
 })
+router.post('/publishrides', async (_req, res) => {
+    try {
+        await addRides();
+        res.json({ success: true, message: "Rides Published" });
+    } catch (error) {
+        logger.log({ level: "info", message: "Rides Published" + error })
+        res.json({ success: false, error: error });
+    }
+
+})
+
 module.exports = router;

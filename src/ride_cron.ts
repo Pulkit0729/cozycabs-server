@@ -13,8 +13,8 @@ export function startCron() {
 }
 
 
-async function addRides() {
-
+export async function addRides() {
+    logger.info("Adding Rides");
     let noOfRides = await Ride.countDocuments();
 
     let templated_rides = await TemplatedRide.find();

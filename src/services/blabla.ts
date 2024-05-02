@@ -23,7 +23,7 @@ export async function handleBlabla(subject: string, message: string) {
                 if (element.hasAttribute('href') && element.getAttribute('href')?.includes('tel')) {
                     let url = element.getAttribute('href');
                     logger.log("info", "url: " + url);
-                    user_phone = '91' + url?.split(":")[1].replace("%20", "").replace(" ", "").slice(-10);
+                    user_phone = '91' + url?.split(":")[1].replace("%20", "").replace(/ /g,'').slice(-10);
                 }
             })
             root.getElementsByTagName('p').forEach((element) => {
@@ -45,7 +45,7 @@ export async function handleBlabla(subject: string, message: string) {
                 if (element.hasAttribute('href') && element.getAttribute('href')?.includes('tel')) {
                     let url = element.getAttribute('href');
                     logger.log("info", "url: " + url);
-                    user_phone = '91' + url?.split(":")[1].replace("%20", "").replace(" ", "").slice(-10);
+                    user_phone = '91' + url?.split(":")[1].replace("%20", "").replace(/ /g,'').slice(-10);
                 }
             })
             root.getElementsByTagName('p').forEach((element) => {

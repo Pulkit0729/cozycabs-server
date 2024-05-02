@@ -10,7 +10,8 @@ export const imap = new Imap({
     host: 'imap.gmail.com',
     port: 993,
     tls: true,
-    tlsOptions: { rejectUnauthorized: false }
+    tlsOptions: { rejectUnauthorized: false },
+    keepalive: true,
 });
 
 imap.once('ready', function () {
@@ -53,7 +54,9 @@ imap.once('ready', function () {
 
 
 imap.once('error', function (err: any) {
-    console.log(err);
+    logger.log({ level: "error", message: "Imap error: " + err });
+    imap.connect();
+
 });
 
 imap.once('end', function () {

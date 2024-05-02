@@ -22,7 +22,8 @@ export async function handleBlabla(subject: string, message: string) {
             root.getElementsByTagName('a').forEach((element) => {
                 if (element.hasAttribute('href') && element.getAttribute('href')?.includes('tel')) {
                     let url = element.getAttribute('href');
-                    user_phone = '91' + url?.split(":")[1].replace("%20", "").slice(-10);
+                    logger.log("info", "url: " + url);
+                    user_phone = '91' + url?.split(":")[1].replace("%20", "").replace(" ", "").slice(-10);
                 }
             })
             root.getElementsByTagName('p').forEach((element) => {
@@ -43,7 +44,8 @@ export async function handleBlabla(subject: string, message: string) {
             root.getElementsByTagName('a').forEach((element) => {
                 if (element.hasAttribute('href') && element.getAttribute('href')?.includes('tel')) {
                     let url = element.getAttribute('href');
-                    user_phone = '91' + url?.split(":")[1].replace("%20", "").slice(-10);
+                    logger.log("info", "url: " + url);
+                    user_phone = '91' + url?.split(":")[1].replace("%20", "").replace(" ", "").slice(-10);
                 }
             })
             root.getElementsByTagName('p').forEach((element) => {

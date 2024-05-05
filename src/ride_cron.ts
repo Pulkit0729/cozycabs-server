@@ -26,6 +26,8 @@ export async function addRides() {
                 let ride = new Ride({
                     from: templateRide.from,
                     to: templateRide.to,
+                    from_address: templateRide.from_address,
+                    to_address: templateRide.to_address,
                     date: dateString,
                     time: templateRide.time,
                     ride_no: noOfRides + 1 + i * 3 + index,

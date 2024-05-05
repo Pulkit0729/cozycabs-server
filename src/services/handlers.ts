@@ -35,8 +35,8 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
         await ride.save()
         const booking = new Booking({
             ride_id: ride.id,
-            from: ride.from,
-            to: ride.to,
+            from: ride.from_address,
+            to: ride.to_address,
             date: ride.date,
             time: ride.time,
             driver_no: ride.driver_no,

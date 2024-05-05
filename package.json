@@ -28,6 +28,7 @@
     "express": "^4.19.2",
     "imap": "^0.8.19",
     "mailparser": "^3.7.1",
+    "migrate-mongo": "^11.0.0",
     "mongoose": "^8.2.4",
     "node-cron": "^3.0.3",
     "node-html-parser": "^6.1.13",

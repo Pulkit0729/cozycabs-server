@@ -7,6 +7,8 @@ const RideSchema = new mongoose.Schema({
     },
     from: String,
     to: String,
+    from_address: String,
+    to_address: String,
     date: String,
     time: String,
     driver_no: String,

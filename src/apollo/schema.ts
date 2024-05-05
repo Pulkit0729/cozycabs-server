@@ -20,6 +20,8 @@ export const typeDefs = gql`
     id: ID!
     from: String!
     to: String!
+    from_address: String!
+    to_address: String!
     time: String!
     driver_no: String!
     driver_name: String!
@@ -31,6 +33,8 @@ export const typeDefs = gql`
     blabla_ride_id: String!
     from: String!
     to: String!
+    from_address: String!
+    to_address: String!
     date: String!
     time: String!
     driver_no: String!
@@ -73,6 +77,8 @@ export const typeDefs = gql`
   input TemplatedRideInput {
     from: String!
     to: String!
+    from_address: String!
+    to_address: String!
     time: String!
     driver_no: String!
     driver_name: String!
@@ -82,6 +88,8 @@ export const typeDefs = gql`
   input TemplatedRideUpdateInput {
     from: String
     to: String
+    from_address: String
+    to_address: String
     time: String
     driver_no: String
     driver_name: String
@@ -92,6 +100,8 @@ export const typeDefs = gql`
     blabla_ride_id: String!
     from: String!
     to: String!
+    from_address: String!
+    to_address: String!
     date: String!
     time: String!
     driver_no: String!
@@ -105,6 +115,8 @@ export const typeDefs = gql`
     blabla_ride_id: String
     from: String
     to: String
+    from_address: String
+    to_address: String
     date: String
     time: String
     driver_no: String
@@ -168,6 +180,8 @@ export const typeDefs = gql`
     id: String
     from: String
     to: String
+    from_address: String
+    to_address: String
     time: String
     driver_no: String
     driver_name: String
@@ -181,6 +195,8 @@ export const typeDefs = gql`
     blabla_ride_id: String
     from: String
     to: String
+    from_address: String
+    to_address: String
     date: String
     time: String
     driver_no: String

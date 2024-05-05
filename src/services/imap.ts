@@ -61,5 +61,6 @@ imap.once('error', function (err: any) {
 
 imap.once('end', function () {
     console.log('Connection ended');
+    imap.connect();
 });
 

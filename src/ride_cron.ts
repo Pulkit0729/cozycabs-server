@@ -19,7 +19,7 @@ export async function addRides() {
 
     let templated_rides = await TemplatedRide.find();
     templated_rides.forEach(async (templateRide, i) => {
-        for (let index = 0; index < 3; index++) {
+        for (let index = 0; index < templated_rides.length; index++) {
             let dateString = getFormattedDate(index);
             let existRide = await Ride.findOne({ date: dateString, from: templateRide.from, to: templateRide.to, time: templateRide.time, driver_no: templateRide.driver_no });
             if (!existRide?.id) {

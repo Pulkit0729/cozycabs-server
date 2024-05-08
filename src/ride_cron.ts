@@ -23,6 +23,7 @@ export async function addRides() {
             let dateString = getFormattedDate(index);
             let existRide = await Ride.findOne({ date: dateString, from: templateRide.from, to: templateRide.to, time: templateRide.time, driver_no: templateRide.driver_no });
             if (!existRide) {
+                noOfRides++;
                 let ride = new Ride({
                     from: templateRide.from,
                     to: templateRide.to,
@@ -30,7 +31,7 @@ export async function addRides() {
                     to_address: templateRide.to_address,
                     date: dateString,
                     time: templateRide.time,
-                    ride_no: noOfRides + 1 + i * 3 + index,
+                    ride_no: noOfRides,
                     driver_no: templateRide.driver_no,
                     driver_name: templateRide.driver_name,
                     seats: templateRide.seats,

@@ -15,7 +15,7 @@ export function startCron() {
 
 export async function addRides() {
     logger.info("Adding Rides");
-    let noOfRides = await Ride.countDocuments();
+    let noOfRides = (await Ride.find().sort({ ride_no: -1 }).limit(1).exec())[0].ride_no!;
 
     let templated_rides = await TemplatedRide.find();
     templated_rides.forEach(async (templateRide) => {

@@ -6,6 +6,8 @@ const BookingSchema = new mongoose.Schema({
     to: String,
     date: String,
     time: String,
+    departure_time: String,
+    arrival_time: String,
     driver_no: String,
     user_no: String,
     user_name: String,

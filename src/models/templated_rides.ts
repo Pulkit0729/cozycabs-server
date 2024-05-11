@@ -6,6 +6,8 @@ const TemplatedRideSchema = new mongoose.Schema({
     from_address: String,
     to_address: String,
     time: String,
+    arrival_time: String,
+    departure_time: String,
     driver_no: String,
     driver_name: String,
     seats: Number,

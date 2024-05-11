@@ -1,6 +1,4 @@
 import { Router } from 'express';
-import User from '../../models/users';
-import Driver from '../../models/drivers';
 import Ride from '../../models/rides';
 import Booking from '../../models/bookings';
 import logger from '../../logger/logger';

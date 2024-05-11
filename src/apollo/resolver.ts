@@ -78,8 +78,11 @@ export const resolvers = {
         }
 
         // Update templatedRide properties if provided in the input
-        if (input.time) {
-          templatedRide.time = input.time;
+        if (input.arrival_time) {
+          templatedRide.time = input.arrival_time;
+        }
+        if (input.departure_time) {
+          templatedRide.time = input.departure_time;
         }
         if (input.seats) {
           templatedRide.seats = input.seats;

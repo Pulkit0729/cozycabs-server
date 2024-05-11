@@ -13,7 +13,8 @@ export const eventType = {
 export const sendToUser = async (event: string, booking: {
   date: any;
   seats: any;
-  time: any;
+  departure_time: any;
+  arrival_time: any;
   total: any;
   driver_no: any;
   user_no: any,
@@ -35,7 +36,8 @@ export const sendToUser = async (event: string, booking: {
     to: booking.to,
     date: booking.date,
     seats: booking.seats,
-    time: booking.time,
+    departure_time: booking.departure_time,
+    arrival_time: booking.arrival_time,
     price: booking.total,
     driver_no: booking.driver_no,
     car_name: driver?.car_name,
@@ -49,7 +51,8 @@ export const sendToUser = async (event: string, booking: {
 export const sendToDriver = async (event: string, booking: {
   date: any;
   seats: any;
-  time: any;
+  departure_time: any,
+  arrival_time: any,
   total: any;
   driver_no: any; user_no: any, user_name: any, from: any, to: any
 }, driver_name?: any) => {
@@ -62,7 +65,8 @@ export const sendToDriver = async (event: string, booking: {
     to: booking.to,
     date: booking.date,
     seats: booking.seats,
-    time: booking.time,
+    departure_time: booking.departure_time,
+    arrival_time: booking.arrival_time,
     user_phone: booking.user_no,
     name: booking.user_name,
     is_active: Date.now()

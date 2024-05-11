@@ -14,10 +14,10 @@ export const imap = new Imap({
     keepalive: true,
 });
 
-imap.once('ready', function () {
+imap.on('ready', function () {
     imap.openBox('INBOX', false, (err, _box) => {
         if (err) throw err;
-        console.log("Inbox Connnected")
+        console.log("Inbox Connnected");
         imap.on('mail', function () {
             console.log("New Mail Arrived");
             console.log(_box.messages.total);
@@ -53,13 +53,13 @@ imap.once('ready', function () {
 
 
 
-imap.once('error', function (err: any) {
+imap.on('error', function (err: any) {
     logger.log({ level: "error", message: "Imap error: " + err });
     imap.connect();
 
 });
 
-imap.once('end', function () {
+imap.on('end', function () {
     console.log('Connection ended');
     imap.connect();
 });

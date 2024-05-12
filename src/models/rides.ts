@@ -17,6 +17,7 @@ const RideSchema = new mongoose.Schema({
     driver_name: String,
     seats: Number,
     price: Number,
+    discounted_price: Number,
     ride_no: {
         type: Number,
         unique: true,

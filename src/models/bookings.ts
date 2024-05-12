@@ -13,6 +13,7 @@ const BookingSchema = new mongoose.Schema({
     user_name: String,
     seats: Number,
     total: Number,
+    discounted_total: Number,
     is_paid: Boolean,
     is_cancelled: Boolean,
     status: String,

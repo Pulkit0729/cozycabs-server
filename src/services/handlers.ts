@@ -31,7 +31,11 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
 
         seats = Number.parseInt(seats);
         let total = seats * ride.price!;
-        ride.seats = ride.seats! - seats;
+        let discounted_total = blabla_ride_id && blabla_ride_id.length == 36 ? total : seats * ride.discounted_price!;
+        if (!ride.seats || ride.seats == 0 || ride.seats < seats) {
+            throw Error("Please select valid no of seats");
+        }
+        ride.seats = ride.seats - seats;
         await ride.save()
         const booking = new Booking({
             ride_id: ride.id,
@@ -45,6 +49,7 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
             user_name: user_name,
             seats: seats,
             total: total,
+            discounted_total: discounted_total,
             is_paid: false,
             is_cancelled: false,
             status: "pending",

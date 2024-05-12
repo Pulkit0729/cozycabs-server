@@ -16,6 +16,7 @@ export const sendToUser = async (event: string, booking: {
   departure_time: any;
   arrival_time: any;
   total: any;
+  discounted_total: any;
   driver_no: any;
   user_no: any,
   user_name: any,
@@ -38,7 +39,7 @@ export const sendToUser = async (event: string, booking: {
     seats: booking.seats,
     departure_time: booking.departure_time,
     arrival_time: booking.arrival_time,
-    price: booking.total,
+    price: booking.discounted_total,
     driver_no: booking.driver_no,
     car_name: driver?.car_name,
     car_no: driver?.car_no,

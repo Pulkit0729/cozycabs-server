@@ -12,6 +12,7 @@ const TemplatedRideSchema = new mongoose.Schema({
     driver_name: String,
     seats: Number,
     price: Number,
+    discounted_price: Number,
 });
 
 const TemplatedRide = mongoose.model('TemplatedRides', TemplatedRideSchema, 'templatedRides');

@@ -29,6 +29,7 @@ export const typeDefs = gql`
     driver_name: String!
     seats: Int!
     price: Int!
+    discounted_price: Int!
   }
   type Ride {
     id: ID!
@@ -45,6 +46,7 @@ export const typeDefs = gql`
     driver_name: String!
     seats: Int!
     price: Int!
+    discounted_price: Int!
     ride_no: Int!
     status: String!
   }
@@ -63,6 +65,7 @@ export const typeDefs = gql`
     user_name: String!
     seats: Int!
     total: Int!
+    discounted_total: Int!
     is_paid: Boolean!
     is_cancelled: Boolean!
     status: String!
@@ -92,6 +95,7 @@ export const typeDefs = gql`
     driver_name: String!
     seats: Int!
     price: Int!
+    discounted_price: Int!
   }
   input TemplatedRideUpdateInput {
     from: String
@@ -105,6 +109,7 @@ export const typeDefs = gql`
     driver_name: String
     seats: Int
     price: Int
+    discounted_price: Int
   }
   input RideInput {
     blabla_ride_id: String!
@@ -120,6 +125,7 @@ export const typeDefs = gql`
     driver_name: String!
     seats: Int!
     price: Int!
+    discounted_price: Int!
     ride_no: Int!
     status: String!
   }
@@ -137,6 +143,7 @@ export const typeDefs = gql`
     driver_name: String
     seats: Int
     price: Int
+    discounted_price: Int
     ride_no: Int
     status: String
   }
@@ -153,6 +160,8 @@ export const typeDefs = gql`
     user_name: String!
     seats: Int!
     total: Int!
+    discounted_total: Int!
+
     is_paid: Boolean!
     is_cancelled: Boolean!
     status: String!
@@ -170,6 +179,7 @@ export const typeDefs = gql`
     user_name: String
     seats: Int
     total: Int
+    discounted_total: Int
     is_paid: Boolean
     is_cancelled: Boolean
     status: String
@@ -207,6 +217,7 @@ export const typeDefs = gql`
     driver_name: String
     seats: Int
     price: Int
+    discounted_price: Int
   }
 
   input RideFilter {
@@ -225,6 +236,7 @@ export const typeDefs = gql`
     driver_name: String
     seats: Int
     price: Int
+    discounted_price: Int
     ride_no: Int
     status: String
   }
@@ -244,6 +256,7 @@ export const typeDefs = gql`
     user_name: String
     seats: Int
     total: Int
+    discounted_total: Int
     is_paid: Boolean
     is_cancelled: Boolean
     status: String

@@ -90,6 +90,9 @@ export const resolvers = {
         if (input.price) {
           templatedRide.price = input.price;
         }
+        if (input.discounted_price) {
+          templatedRide.discounted_price = input.discounted_price;
+        }
         // Save the updated templatedRide
         await templatedRide.save();
 

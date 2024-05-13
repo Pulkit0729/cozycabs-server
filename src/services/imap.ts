@@ -14,53 +14,62 @@ export const imap = new Imap({
     keepalive: true,
 });
 
-imap.on('ready', function () {
-    imap.openBox('INBOX', false, (err, _box) => {
-        if (err) throw err;
-        console.log("Inbox Connnected");
-        imap.on('mail', function () {
-            console.log("New Mail Arrived");
-            console.log(_box.messages.total);
 
-            var f = imap.seq.fetch(_box.messages.total + ':*', { bodies: '' });
-            f.on('message', function (msg, _seqno) {
-                msg.on('body', stream => {
-                    simpleParser(stream as unknown as Source, async (error: any, parsed) => {
-                        if (error) throw error;
-                        let from = parsed.from?.value[0].address;
-                        let subject = parsed.subject;
-                        let message = parsed.html;
-                        if (from?.includes("hello@blablacar.com") && subject && message) {
-                            await handleBlabla(subject, message);
-                        }
 
-                    })
+
+export default function connect() {
+    imap.removeAllListeners();
+    imap.on('ready', function () {
+        logger.log({ level: "info", message: 'Connection was made Successfuly, inside ready block' });
+        imap.openBox('INBOX', false, (err, _box) => {
+            if (err) throw err;
+            logger.log({ level: "info", message: "Inbox Connnected" });
+            imap.on('mail', function () {
+                logger.log({ level: "info", message: "New Mail Arrived Total: " + _box.messages.total });
+                var f = imap.seq.fetch(_box.messages.total + ':*', { bodies: '' });
+                f.on('message', function (msg, _seqno) {
+                    logger.log({ level: "info", message: "Seq message " });
+                    msg.once('body', stream => {
+                        simpleParser(stream as unknown as Source, async (error: any, parsed) => {
+                            if (error) throw error;
+                            let from = parsed.from?.value[0].address;
+                            let subject = parsed.subject;
+                            let message = parsed.html;
+                            if (from?.includes("hello@blablacar.com") && subject && message) {
+                                await handleBlabla(subject, message);
+                            }
+
+                        })
+                    });
+                    msg.once('end', function () {
+                        logger.log({ level: "info", message: "Finished Message" });
+                    });
                 });
-                msg.once('end', function () {
-                    console.log('Finished');
+                f.once('error', function (err) {
+                    console.log('Fetch error: ' + err);
                 });
-            });
-            f.once('error', function (err) {
-                console.log('Fetch error: ' + err);
-            });
-            f.once('end', function () {
-                console.log('Done fetching all messages!');
-            });
+                f.once('end', function () {
+                    f.removeAllListeners();
+                    logger.log({ level: "info", message: 'Done fetching all messages!' });
+                });
 
+
+            });
         });
     });
-});
 
 
 
-imap.on('error', function (err: any) {
-    logger.log({ level: "error", message: "Imap error: " + err });
+    imap.on('error', function (err: any) {
+        logger.log({ level: "error", message: "Imap error: " + err });
+        connect();
+
+    });
+
+    imap.on('end', function () {
+        logger.log({ level: "info", message: 'Connection ended' });
+        connect();
+    });
+
     imap.connect();
-
-});
-
-imap.on('end', function () {
-    console.log('Connection ended');
-    imap.connect();
-});
-
+}

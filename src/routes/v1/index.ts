@@ -12,10 +12,11 @@ router.post('/book', async (req, res) => {
         let {
             user_name, user_phone, ride_no, seats
         } = req.body;
-        let booking = await book(user_phone, user_name, seats, ride_no)
+        let booking = await book(user_phone, user_name, seats, ride_no);
+        logger.log({ level: "info", message: "Booking Complted" + booking })
         return res.json({ success: true, booking });
     } catch (error: any) {
-        logger.log({ level: "info", message: "Booking Error" + error })
+        logger.log({ level: "error", message: "Booking Error" + error })
         return res.json({ success: false, error: error });
     }
 
@@ -28,9 +29,10 @@ router.post('/cancel', async (req, res) => {
 
         // Update ride with seats booked
         let ride = await cancel(user_phone, ride_id);
+        logger.log({ level: "info", message: "Cancel Done" + ride })
         return res.json({ success: true, ride });
     } catch (error: any) {
-        logger.log({ level: "info", message: "Cancel Error" + error })
+        logger.log({ level: "error", message: "Cancel Error" + error })
         return res.json({ success: false, error: error });
     }
 
@@ -48,9 +50,10 @@ router.post('/start', async (req, res) => {
             await booking.save();
             let des = await sendToUser(eventType.ride_start, JSON.parse(JSON.stringify(booking)), undefined, location_url);
         })
+        logger.log({ level: "info", message: "Start Ride" + ride })
         res.json({ success: true, bookings });
     } catch (error) {
-        logger.log({ level: "info", message: "Start Error" + error })
+        logger.log({ level: "error", message: "Start Error" + error })
         res.json({ success: false, error: error });
     }
 
@@ -68,10 +71,11 @@ router.post('/end', async (req, res) => {
             booking.status = 'end';
             await booking.save();
             let des = await sendToUser(eventType.ride_end, JSON.parse(JSON.stringify(booking)));
-        })
+        });
+        logger.log({ level: "error", message: "End Ride" + ride })
         res.json({ success: true, bookings });
     } catch (error) {
-        logger.log({ level: "info", message: "Start Error" + error })
+        logger.log({ level: "error", message: "End Error" + error })
         res.json({ success: false, error: error });
     }
 

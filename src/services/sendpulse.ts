@@ -8,6 +8,7 @@ export const eventType = {
   "ride_start": "ride_start",
   "ride_end": "ride_end",
   "book": "book",
+  "error": "error",
   "cancel": "cancel"
 }
 export const sendToUser = async (event: string, booking: {

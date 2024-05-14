@@ -8,7 +8,11 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
 
     try {
         user_phone = user_phone.replace(/ /g, '')
-        user_phone = '91' + user_phone.substr(user_phone.length - 10)
+        user_phone = '91' + user_phone.substr(user_phone.length - 10);
+
+        if (user_name == undefined || user_name.length == 0) {
+            user_name = user_phone;
+        }
         let user = await User.findOneAndUpdate(
             { phone: user_phone },
             { name: user_name, phone: user_phone },
@@ -28,7 +32,8 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
         }
         if (!ride) throw new Error("No ride found");
         let driver = await Driver.findOne({ phone: ride.driver_no });
-
+        let existingBooking = await Booking.findOne({ ride_id: ride.id, user_no: user_phone, is_cancelled: false });
+        if (existingBooking) throw new Error(`Booking already exists`);
         seats = Number.parseInt(seats);
         let total = seats * ride.price!;
         let discounted_total = blabla_ride_id && blabla_ride_id.length == 36 ? total : seats * ride.discounted_price!;
@@ -62,7 +67,26 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
         logger.log({
             level: 'error',
             message: "Error in booking:" + error
-        })
+        });
+        user_phone = user_phone.replace(/ /g, '')
+        user_phone = '91' + user_phone.substr(user_phone.length - 10);
+
+        if (user_name == undefined || user_name.length == 0) {
+            user_name = user_phone;
+        }
+        await sendToUser(eventType.error, {
+            date: undefined,
+            seats: undefined,
+            departure_time: undefined,
+            arrival_time: undefined,
+            total: undefined,
+            discounted_total: undefined,
+            driver_no: undefined,
+            user_no: user_phone,
+            user_name: undefined,
+            from: undefined,
+            to: undefined
+        });
     };
     return;
 }

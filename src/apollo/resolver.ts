@@ -181,8 +181,6 @@ function constructQuery(filterBy: any, sortBy: string | number, sortOrder: strin
       }
     });
   }
-  console.log(query);
-
   const sortOptions: any = {};
   if (sortBy) {
     sortOptions[sortBy] = sortOrder === 'ASC' ? 1 : -1;

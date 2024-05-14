@@ -41,7 +41,6 @@ export const resolvers = {
     },
     bookings: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
       let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder);
-      console.log(query);
       const bookings = await Booking.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)

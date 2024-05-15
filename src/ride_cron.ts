@@ -37,6 +37,7 @@ export async function addRides() {
                     driver_name: templateRide.driver_name,
                     seats: templateRide.seats,
                     price: templateRide.price,
+                    discounted_price: templateRide.discounted_price,
                     status: "pending",
                 });
                 await ride.save();

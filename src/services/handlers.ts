@@ -126,6 +126,7 @@ export async function cancel(user_phone?: string, ride_id?: string, user_name?: 
         await ride.save();
         await sendToUser(eventType.cancel, JSON.parse(JSON.stringify(booking)));
         await sendToDriver(eventType.cancel, JSON.parse(JSON.stringify(booking)), ride.driver_name);
+        await sendToAdmin(eventType.cancel, JSON.parse(JSON.stringify(booking)), "918059345289");
         await sendToAdmin(eventType.cancel, JSON.parse(JSON.stringify(booking)), "919996615466");
         return ride;
     } catch (error) {

@@ -76,3 +76,29 @@ export const sendToDriver = async (event: string, booking: {
     { "Content-Type": "application/json" }
   )
 }
+
+export const sendToAdmin = async (event: string, booking: {
+  date: any;
+  seats: any;
+  departure_time: any,
+  arrival_time: any,
+  total: any;
+  driver_no: any; user_no: any, user_name: any, from: any, to: any
+}, no: any) => {
+  await makeRequest(sendpulseUrl, "post", {
+    phone: no,
+    type: 'driver',
+    event_type: event,
+    from: booking.from,
+    to: booking.to,
+    date: booking.date,
+    seats: booking.seats,
+    departure_time: booking.departure_time,
+    arrival_time: booking.arrival_time,
+    user_phone: booking.user_no,
+    name: booking.user_name,
+    is_active: Date.now()
+  },
+    { "Content-Type": "application/json" }
+  )
+}

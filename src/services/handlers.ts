@@ -1,4 +1,4 @@
-import { eventType, sendToDriver, sendToUser } from './sendpulse';
+import { eventType, sendToAdmin, sendToDriver, sendToUser } from './sendpulse';
 import User from '../models/users';
 import Driver from '../models/drivers';
 import Ride from '../models/rides';
@@ -62,6 +62,8 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
         await booking.save();
         await sendToUser(eventType.book, JSON.parse(JSON.stringify(booking)), driver!.toJSON());
         await sendToDriver(eventType.book, JSON.parse(JSON.stringify(booking)), ride.driver_name);
+        await sendToAdmin(eventType.book, JSON.parse(JSON.stringify(booking)), "918059345289");
+        await sendToAdmin(eventType.book, JSON.parse(JSON.stringify(booking)), "919996615466");
         return booking;
     } catch (error) {
         logger.log({
@@ -124,6 +126,7 @@ export async function cancel(user_phone?: string, ride_id?: string, user_name?: 
         await ride.save();
         await sendToUser(eventType.cancel, JSON.parse(JSON.stringify(booking)));
         await sendToDriver(eventType.cancel, JSON.parse(JSON.stringify(booking)), ride.driver_name);
+        await sendToAdmin(eventType.cancel, JSON.parse(JSON.stringify(booking)), "919996615466");
         return ride;
     } catch (error) {
         logger.log({

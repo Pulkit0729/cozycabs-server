@@ -9,6 +9,7 @@ const BookingSchema = new mongoose.Schema({
     departure_time: String,
     arrival_time: String,
     driver_no: String,
+    channel: String,
     user_no: String,
     user_name: String,
     seats: Number,
@@ -19,5 +20,5 @@ const BookingSchema = new mongoose.Schema({
     status: String,
 });
 
-const Booking= mongoose.model('Bookings', BookingSchema, 'bookings');
+const Booking = mongoose.model('Bookings', BookingSchema, 'bookings');
 export default Booking;

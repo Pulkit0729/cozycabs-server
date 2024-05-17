@@ -37,6 +37,7 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
         seats = Number.parseInt(seats);
         let total = seats * ride.price!;
         let discounted_total = blabla_ride_id && blabla_ride_id.length == 36 ? total : seats * ride.discounted_price!;
+        let channel = blabla_ride_id && blabla_ride_id.length == 36 ? "blabla" : "bot";
         if (!ride.seats || ride.seats == 0 || ride.seats < seats) {
             throw Error("Please select valid no of seats");
         }
@@ -57,6 +58,7 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
             discounted_total: discounted_total,
             is_paid: false,
             is_cancelled: false,
+            channel: channel,
             status: "pending",
         });
         await booking.save();

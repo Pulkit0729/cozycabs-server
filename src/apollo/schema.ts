@@ -69,6 +69,7 @@ export const typeDefs = gql`
     is_paid: Boolean!
     is_cancelled: Boolean!
     status: String!
+    channel: String!
   }
 
   input UserInput {
@@ -161,7 +162,7 @@ export const typeDefs = gql`
     seats: Int!
     total: Int!
     discounted_total: Int!
-
+    channel: String!
     is_paid: Boolean!
     is_cancelled: Boolean!
     status: String!
@@ -180,6 +181,7 @@ export const typeDefs = gql`
     seats: Int
     total: Int
     discounted_total: Int
+    channel: String
     is_paid: Boolean
     is_cancelled: Boolean
     status: String
@@ -256,6 +258,7 @@ export const typeDefs = gql`
     user_name: String
     seats: Int
     total: Int
+    channel: String
     discounted_total: Int
     is_paid: Boolean
     is_cancelled: Boolean

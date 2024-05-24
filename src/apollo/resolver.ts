@@ -33,6 +33,8 @@ export const resolvers = {
     },
     rides: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
       let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
+      console.log(query, sortOptions);
+
       const rides = await Ride.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
@@ -169,16 +171,7 @@ function constructQuery(filterBy: any, sortBy: string | number, sortOrder: strin
     }
 
     // Handle individual column filters
-    Object.entries(filterBy).forEach(([key, value]) => {
-      if (key !== 'AND' && key !== 'OR' && value != null) {
-        if (isNaN(value as any) && (typeof value != "boolean")) {
-          query[key] = { $regex: value, $options: 'i' };
-        }
-        else {
-          query[key] = value;
-        }
-      }
-    });
+    query = { ...query, ...constructSubQuery(filterBy) }
   }
   const sortOptions: any = {};
   if (sortBy) {
@@ -193,8 +186,10 @@ function constructSubQuery(condition: any) {
 
   Object.entries(condition).forEach(([key, value]) => {
     if (key !== 'AND' && key !== 'OR' && value != null) {
-      if (isNaN(value as any) && (typeof value != "boolean")) {
+      if (isNaN(value as any) && (typeof value != "boolean" && key != "id")) {
         query[key] = { $regex: value, $options: 'i' };
+      } else if (key == "id") {
+        query["_id"] = value;
       }
       else {
         query[key] = value;

@@ -2,13 +2,13 @@ import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   type User {
-    id: ID!
+    id: String!
     name: String!
     phone: String!
   }
 
   type Driver {
-    id: ID!
+    id: String!
     name: String!
     phone: String!
     email: String
@@ -17,12 +17,11 @@ export const typeDefs = gql`
   }
 
   type TemplatedRide {
-    id: ID!
+    id: String!
     from: String!
     to: String!
     from_address: String!
     to_address: String!
-    time: String!
     arrival_time: String,
     departure_time: String,
     driver_no: String!
@@ -32,14 +31,13 @@ export const typeDefs = gql`
     discounted_price: Int!
   }
   type Ride {
-    id: ID!
+    id: String!
     blabla_ride_id: String
     from: String!
     to: String!
     from_address: String!
     to_address: String!
     date: String!
-    time: String!
     arrival_time: String,
     departure_time: String,
     driver_no: String!
@@ -52,12 +50,11 @@ export const typeDefs = gql`
   }
 
   type Booking {
-    id: ID!
+    id: String!
     ride_id: String!
     from: String!
     to: String!
     date: String!
-    time: String!
     arrival_time: String,
     departure_time: String,
     driver_no: String!
@@ -89,7 +86,6 @@ export const typeDefs = gql`
     to: String!
     from_address: String!
     to_address: String!
-    time: String
     arrival_time: String!
     departure_time: String!
     driver_no: String!
@@ -103,7 +99,6 @@ export const typeDefs = gql`
     to: String
     from_address: String
     to_address: String
-    time: String
     arrival_time: String
     departure_time: String
     driver_no: String
@@ -119,7 +114,6 @@ export const typeDefs = gql`
     from_address: String!
     to_address: String!
     date: String!
-    time: String
     arrival_time: String!
     departure_time: String!
     driver_no: String!
@@ -137,7 +131,6 @@ export const typeDefs = gql`
     from_address: String
     to_address: String
     date: String
-    time: String
     arrival_time: String,
     departure_time: String,
     driver_no: String
@@ -153,7 +146,6 @@ export const typeDefs = gql`
     from: String!
     to: String!
     date: String!
-    time: String
     arrival_time: String!
     departure_time: String!
     driver_no: String!
@@ -172,7 +164,6 @@ export const typeDefs = gql`
     from: String
     to: String
     date: String
-    time: String
     arrival_time: String
     departure_time: String
     driver_no: String
@@ -214,7 +205,6 @@ export const typeDefs = gql`
     to: String
     from_address: String
     to_address: String
-    time: String
     arrival_time: String
     departure_time: String
     driver_no: String
@@ -234,7 +224,6 @@ export const typeDefs = gql`
     from_address: String
     to_address: String
     date: String
-    time: String
     arrival_time: String
     departure_time: String
     driver_no: String
@@ -254,7 +243,6 @@ export const typeDefs = gql`
     from: String
     to: String
     date: String
-    time: String
     arrival_time: String
     departure_time: String
     driver_no: String

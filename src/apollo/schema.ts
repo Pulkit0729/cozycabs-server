@@ -190,6 +190,7 @@ export const typeDefs = gql`
   input UserFilter {
     AND: [UserFilter]
     OR: [UserFilter]
+    id: String
     name: String
     phone: String
   }
@@ -197,6 +198,7 @@ export const typeDefs = gql`
   input DriverFilter {
     AND: [DriverFilter]
     OR: [DriverFilter]
+    id: String
     name: String
     phone: String
     email: String
@@ -225,6 +227,7 @@ export const typeDefs = gql`
   input RideFilter {
     AND: [RideFilter]
     OR: [RideFilter]
+    id: String
     blabla_ride_id: String
     from: String
     to: String
@@ -246,6 +249,7 @@ export const typeDefs = gql`
   input BookingFilter {
     AND: [BookingFilter]
     OR: [BookingFilter]
+    id: String
     ride_id: String
     from: String
     to: String

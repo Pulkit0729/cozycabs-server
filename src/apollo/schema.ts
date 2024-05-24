@@ -33,7 +33,7 @@ export const typeDefs = gql`
   }
   type Ride {
     id: ID!
-    blabla_ride_id: String!
+    blabla_ride_id: String
     from: String!
     to: String!
     from_address: String!
@@ -113,7 +113,7 @@ export const typeDefs = gql`
     discounted_price: Int
   }
   input RideInput {
-    blabla_ride_id: String!
+    blabla_ride_id: String
     from: String!
     to: String!
     from_address: String!

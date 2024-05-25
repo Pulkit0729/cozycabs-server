@@ -33,8 +33,6 @@ export const resolvers = {
     },
     rides: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
       let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
-      console.log(query, sortOptions);
-
       const rides = await Ride.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
@@ -118,6 +116,9 @@ export const resolvers = {
         }
         if (input.seats) {
           ride.seats = input.seats;
+        }
+        if (input.price) {
+          ride.price = input.price;
         }
         // Save the updated ride
         await ride.save();

@@ -3,7 +3,6 @@ import { book, cancel } from './handlers';
 import logger from '../logger/logger';
 export async function handleBlabla(subject: string, message: string) {
     let name, babla_ride_id, seats, user_phone;
-    // console.log(message);
 
     const root = parse(message);
     root.getElementsByTagName('a').forEach((element) => {

@@ -46,7 +46,7 @@ export default function connect() {
                     });
                 });
                 f.once('error', function (err) {
-                    console.log('Fetch error: ' + err);
+                    logger.error('Fetch error: ' + err);
                 });
                 f.once('end', function () {
                     f.removeAllListeners();

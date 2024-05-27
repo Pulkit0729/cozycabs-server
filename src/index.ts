@@ -12,6 +12,6 @@ import connect from "./services/imap";
 connectMongoose(() => {
   let app = App();
   startCron();
-  connect();
+  // connect();
   return app;
 });

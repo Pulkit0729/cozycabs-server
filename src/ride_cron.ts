@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import TemplatedRide from './models/templated_rides';
 import Ride from './models/rides';
 import logger from './logger/logger';
+import Driver, { IDriver } from './models/drivers';
 
 const Cron_String = process.env.CRON_STRING || "0 0 * * *";
 
@@ -25,7 +26,7 @@ export async function addRides() {
     templated_rides.forEach(async (templateRide) => {
         for (let index = 0; index < 3; index++) {
             let dateString = getFormattedDate(index);
-            let existRide = await Ride.findOne({ date: dateString, from: templateRide.from, to: templateRide.to, departure_time: templateRide.departure_time, driver_no: templateRide.driver_no });
+            let existRide = await Ride.findOne({ date: dateString, from: templateRide.from, to: templateRide.to, departure_time: templateRide.departure_time, driver: templateRide.driver! });
             if (!existRide) {
                 noOfRides++;
                 let ride = new Ride({
@@ -37,8 +38,7 @@ export async function addRides() {
                     departure_time: templateRide.departure_time,
                     arrival_time: templateRide.arrival_time,
                     ride_no: noOfRides,
-                    driver_no: templateRide.driver_no,
-                    driver_name: templateRide.driver_name,
+                    driver: templateRide.driver,
                     seats: templateRide.seats,
                     price: templateRide.price,
                     discounted_price: templateRide.discounted_price,

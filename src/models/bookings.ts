@@ -1,17 +1,25 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
-const BookingSchema = new mongoose.Schema({
-    ride_id: String,
-    from: String,
-    to: String,
-    date: Date,
-    time: String,
-    departure_time: String,
-    arrival_time: String,
-    driver_no: String,
+export interface IBooking {
+    id: String,
+    ride: Types.ObjectId,
+    user: Types.ObjectId,
     channel: String,
-    user_no: String,
-    user_name: String,
+    seats: number,
+    total: number,
+    discounted_total: number,
+    is_paid: Boolean,
+    is_cancelled: Boolean,
+    status: String,
+}
+const BookingSchema = new mongoose.Schema<IBooking>({
+    ride: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Rides'
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Users'
+    },
+    channel: String ,
     seats: Number,
     total: Number,
     discounted_total: Number,

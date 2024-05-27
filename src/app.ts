@@ -2,15 +2,19 @@ import express from "express";
 import logger from "./logger/logger";
 import { ApolloServer } from "apollo-server-express";
 import { typeDefs } from "./apollo/schema";
-import { resolvers } from "./apollo/resolver";
+import { userResolvers, userTypeDef } from "./apollo/user";
+import { driverResolvers, driverTypeDefs } from "./apollo/driver";
+import { bookingResolvers, bookingTypeDefs } from "./apollo/booking";
+import { rideResolvers, rideTypeDefs } from "./apollo/ride";
+import { templateResolvers, templateTypeDefs } from "./apollo/templateRide";
 
 const cors = require("cors");
 const PORT = process.env.API_PORT || 3000;
 
 export default async function App() {
     const server = new ApolloServer({
-        typeDefs,
-        resolvers,
+        typeDefs: [typeDefs, userTypeDef, driverTypeDefs, bookingTypeDefs, rideTypeDefs, templateTypeDefs],
+        resolvers: [userResolvers, driverResolvers, bookingResolvers, templateResolvers, rideResolvers],
     });
     await server.start();
 
@@ -22,7 +26,7 @@ export default async function App() {
     //   app.use(cors({ origin: /\*|http:\/\/localhost:3000|http:\/\/localhost:3001|https:\/\/app.alapi.co|https:\/\/link.alapi.co|https:\/\/app.testalapi.co|https:\/\/link.testalapi.co/, credentials: true }));
     app.use(cors())
 
-    app.post("/", (_req: any, res: any) => {
+    app.get("/", (_req: any, res: any) => {
         res.send("working");
     });
     app.use(require("./routes"));

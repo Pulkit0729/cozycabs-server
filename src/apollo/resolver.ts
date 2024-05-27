@@ -4,8 +4,38 @@ import Ride from "../models/rides";
 import TemplatedRide from "../models/templated_rides";
 import User from "../models/users";
 
+import { GraphQLScalarType, Kind } from 'graphql';
+
+const dateScalar = new GraphQLScalarType({
+  name: 'Date',
+  description: 'Date custom scalar type',
+  serialize(value) {
+    if (value instanceof Date) {
+      return value.toLocaleString().split(',')[0]; // Convert outgoing Date to integer for JSON
+    }
+    throw Error('GraphQL Date Scalar serializer expected a `Date` object');
+  },
+  parseValue(value) {
+    if (typeof value === 'number') {
+      return new Date(value); // Convert incoming integer to Date
+    }
+    if (typeof value === 'string' && !isNaN(parseFloat(value))) {
+      return new Date(parseFloat(value));
+    }
+    throw new Error('GraphQL Date Scalar parser expected a `number`');
+  },
+  parseLiteral(ast) {
+    if (ast.kind === Kind.INT) {
+      // Convert hard-coded AST string to integer and then to Date
+      return new Date(parseInt(ast.value, 10));
+    }
+    // Invalid hard-coded value (not an integer)
+    return null;
+  },
+})
 
 export const resolvers = {
+  Date: dateScalar,
   Query: {
     users: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
       let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
@@ -186,7 +216,7 @@ function constructSubQuery(condition: any) {
   let query: any = {};
 
   Object.entries(condition).forEach(([key, value]) => {
-    if (key !== 'AND' && key !== 'OR' && value != null) {
+    if (key !== 'AND' && key !== 'OR' && isValueDefined(value)) {
       if (isNaN(value as any) && (typeof value != "boolean" && key != "id")) {
         query[key] = { $regex: value, $options: 'i' };
       } else if (key == "id") {
@@ -199,4 +229,8 @@ function constructSubQuery(condition: any) {
   });
 
   return query;
+}
+
+function isValueDefined(value: any) {
+  return value != null && value !== undefined && value != "" && value !== "null"
 }

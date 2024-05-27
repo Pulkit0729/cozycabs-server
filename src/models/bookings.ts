@@ -4,7 +4,7 @@ const BookingSchema = new mongoose.Schema({
     ride_id: String,
     from: String,
     to: String,
-    date: String,
+    date: Date,
     time: String,
     departure_time: String,
     arrival_time: String,

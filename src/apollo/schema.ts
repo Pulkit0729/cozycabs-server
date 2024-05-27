@@ -1,6 +1,8 @@
 import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
+  scalar Date
+
   type User {
     id: String!
     name: String!
@@ -37,7 +39,7 @@ export const typeDefs = gql`
     to: String!
     from_address: String!
     to_address: String!
-    date: String!
+    date: Date!
     arrival_time: String,
     departure_time: String,
     driver_no: String!
@@ -54,7 +56,7 @@ export const typeDefs = gql`
     ride_id: String!
     from: String!
     to: String!
-    date: String!
+    date: Date!
     arrival_time: String,
     departure_time: String,
     driver_no: String!
@@ -113,7 +115,7 @@ export const typeDefs = gql`
     to: String!
     from_address: String!
     to_address: String!
-    date: String!
+    date: Date!
     arrival_time: String!
     departure_time: String!
     driver_no: String!
@@ -130,7 +132,7 @@ export const typeDefs = gql`
     to: String
     from_address: String
     to_address: String
-    date: String
+    date: Date
     arrival_time: String,
     departure_time: String,
     driver_no: String
@@ -145,7 +147,7 @@ export const typeDefs = gql`
     ride_id: String!
     from: String!
     to: String!
-    date: String!
+    date: Date!
     arrival_time: String!
     departure_time: String!
     driver_no: String!
@@ -163,7 +165,7 @@ export const typeDefs = gql`
     ride_id: String
     from: String
     to: String
-    date: String
+    date: Date
     arrival_time: String
     departure_time: String
     driver_no: String
@@ -223,7 +225,7 @@ export const typeDefs = gql`
     to: String
     from_address: String
     to_address: String
-    date: String
+    date: Date
     arrival_time: String
     departure_time: String
     driver_no: String
@@ -242,7 +244,7 @@ export const typeDefs = gql`
     ride_id: String
     from: String
     to: String
-    date: String
+    date: Date
     arrival_time: String
     departure_time: String
     driver_no: String

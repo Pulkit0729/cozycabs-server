@@ -9,7 +9,7 @@ const RideSchema = new mongoose.Schema({
     to: String,
     from_address: String,
     to_address: String,
-    date: String,
+    date: Date,
     time: String,
     arrival_time: String,
     departure_time: String,

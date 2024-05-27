@@ -4,18 +4,18 @@ import { simpleParser, Source } from 'mailparser';
 import logger from '../logger/logger';
 import { handleBlabla } from './blabla';
 
+const email = process.env.EMAIL!
+const password = process.env.PASSWORD!
+
 export const imap = new Imap({
-    user: 'pulkit0729@gmail.com',
-    password: 'itnj odfu yscu qilr',
+    user: email,
+    password: password,
     host: 'imap.gmail.com',
     port: 993,
     tls: true,
     tlsOptions: { rejectUnauthorized: false },
     keepalive: true,
 });
-
-
-
 
 export default function connect() {
     imap.removeAllListeners();

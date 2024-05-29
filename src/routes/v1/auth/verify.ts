@@ -18,20 +18,20 @@ router.post('/otp', async (req, res) => {
     const user = await getUserFromPhone(formattedPhone);
     let flowType = flowTypes.login;
     if (!user || !user?.phoneVerificationId) throw new Error("Invalid phone or Otp");
-    let isVerified = await verifyOTP(user.phoneVerificationId, otp);
+    let isVerified = await verifyOTP(user.phoneVerificationId, parseInt(otp));
     if (!isVerified) throw new Error("Invalid phone or Otp");
     const token = issueJWT(user.id);
     let payload: any = {
       token,
       phone
     }
-    if (!user.phoneConfirmed) {
+    if (!user.phoneConfirmed || !user.name) {
       user.phoneConfirmed = true;
       user.markModified('phoneConfirmed');
       await user.save();
       flowType = flowTypes.createUser;
     } else {
-      payload = { ...payload, name: user.name, email: user.email };
+      payload = { ...payload, name: user.name, email: user.email, phone: user.phone};
       flowType = flowTypes.login;
     }
     payload.flowType = flowType;

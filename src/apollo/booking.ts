@@ -2,9 +2,9 @@ import { GraphQLScalarType, Kind } from 'graphql';
 import Booking from "../models/bookings";
 import { IRide } from "../models/rides";
 import { IUser } from "../models/users";
-import { constructQuery } from "../utils/apollo.util";
 
 import { gql } from "apollo-server-express";
+import { constructQuery } from '../utils/apollo.util';
 
 const dateScalar = new GraphQLScalarType({
   name: 'Date',

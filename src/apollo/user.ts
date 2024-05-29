@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express";
 import User from "../models/users";
-import { constructQuery } from "../utils/apollo.util";
+import {constructQuery} from "../utils/apollo.util";
 
 export const userTypeDef = gql`
 type User {

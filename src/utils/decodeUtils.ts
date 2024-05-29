@@ -10,7 +10,7 @@ export function getIdPass(header:any) {
 
 export function getBearerToken(header:any) {
     const authHeader = header["authorization" ];    
-    const decodedAuth = base64url.decode(authHeader.slice(6));
+    const decodedAuth = authHeader.slice(6);
     return decodedAuth.trim();
 }
 

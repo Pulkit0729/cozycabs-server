@@ -13,7 +13,7 @@ router.put("/", authMiddle, async (req, res) => {
     await User.updateOne({ _id: user.id }, { $set: { ...userInfo } });
     return res.json({
       success: true,
-      msg: "Info Updated Successfully",
+      user: user,
     });
   } catch (error: any) {
     logger.error(`Update userInfo API, error: ${error.message} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`

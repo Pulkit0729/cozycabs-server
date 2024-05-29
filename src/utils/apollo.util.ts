@@ -1,5 +1,5 @@
 
-function constructQuery(filterBy: any, sortBy: string | number, sortOrder: string) {
+export function constructQuery(filterBy: any, sortBy: string | number, sortOrder: string) {
   let query: any = {};
   if (filterBy) {
     if (filterBy.AND) {
@@ -27,7 +27,7 @@ function constructQuery(filterBy: any, sortBy: string | number, sortOrder: strin
 }
 
 
-function constructSubQuery(condition: any) {
+export function constructSubQuery(condition: any) {
   let query: any = {};
 
   Object.entries(condition).forEach(([key, value]) => {
@@ -46,7 +46,7 @@ function constructSubQuery(condition: any) {
   return query;
 }
 
-function isValueDefined(value: any) {
+export function isValueDefined(value: any) {
   let res1 = value != null;
   let res2 = value != undefined
   let res3 = (typeof value == "boolean" || value !="");

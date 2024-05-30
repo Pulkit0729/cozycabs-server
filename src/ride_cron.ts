@@ -15,7 +15,11 @@ export function startCron() {
 
 export async function addRides() {
     logger.info("Adding Rides");
-    let noOfRides = (await Ride.find().sort({ ride_no: -1 }).limit(1).exec())[0].ride_no!;
+    let noOfRides = 1;
+    try {
+        noOfRides = (await Ride.find().sort({ ride_no: -1 }).limit(1).exec())[0].ride_no!;
+    } catch (error) {
+    }
 
     let templated_rides = await TemplatedRide.find();
     templated_rides.forEach(async (templateRide) => {
@@ -48,10 +52,5 @@ export async function addRides() {
 
 function getFormattedDate(i: number) {
     let date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000);
-    let day = Number(date.getDate()).toString();
-    let month = Number(date.getMonth() + 1).toString();
-    let year = Number(date.getFullYear()).toString();
-
-    let dateString = (day.length == 1 ? "0" + day : day) + "." + (month.length == 1 ? "0" + month : month) + "." + year;
-    return dateString;
+    return new Date(date.toISOString().split("T")[0]);
 }

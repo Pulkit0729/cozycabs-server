@@ -27,7 +27,14 @@ const dateScalar = new GraphQLScalarType({
   parseLiteral(ast) {
     if (ast.kind === Kind.INT) {
       // Convert hard-coded AST string to integer and then to Date
-      return new Date(parseInt(ast.value, 10));
+      let date = new Date(parseInt(ast.value, 10));
+      date.setHours(5, 30);
+      return date;
+    }
+    if (ast.kind === Kind.STRING) {
+      let date = new Date(parseInt(ast.value, 10));
+      date.setHours(5, 30);
+      return date;
     }
     // Invalid hard-coded value (not an integer)
     return null;
@@ -144,7 +151,7 @@ export const resolvers = {
         if (input.blabla_ride_id) {
           ride.blabla_ride_id = input.blabla_ride_id;
         }
-        if (input.seats) {
+        if (input.seats != false) {
           ride.seats = input.seats;
         }
         if (input.price) {
@@ -217,7 +224,7 @@ function constructSubQuery(condition: any) {
 
   Object.entries(condition).forEach(([key, value]) => {
     if (key !== 'AND' && key !== 'OR' && isValueDefined(value)) {
-      if (isNaN(value as any) && (typeof value != "boolean" && key != "id")) {
+      if (isNaN(value as any) && typeof value != "boolean" && key != "id" && typeof value != "object") {
         query[key] = { $regex: value, $options: 'i' };
       } else if (key == "id") {
         query["_id"] = value;
@@ -232,5 +239,9 @@ function constructSubQuery(condition: any) {
 }
 
 function isValueDefined(value: any) {
-  return value != null && value !== undefined && value != "" && value !== "null"
+  let res1 = value != null;
+  let res2 = value != undefined
+  let res3 = (typeof value == "boolean" || value !="");
+  let res4 = value != "null";
+  return res1 && res2 && res3 && res4;
 }

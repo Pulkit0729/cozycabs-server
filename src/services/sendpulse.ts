@@ -29,6 +29,7 @@ export const sendToUser = async (event: string, booking: {
     car_no: string
   },
   location_url?: any) => {
+  let date = booking.date.split('T')[0];
   await makeRequest(sendpulseUrl, "post", {
     phone: booking.user_no,
     name: booking.user_name,
@@ -36,7 +37,7 @@ export const sendToUser = async (event: string, booking: {
     event_type: event,
     from: booking.from,
     to: booking.to,
-    date: booking.date,
+    date: date,
     seats: booking.seats,
     departure_time: booking.departure_time,
     arrival_time: booking.arrival_time,
@@ -58,6 +59,8 @@ export const sendToDriver = async (event: string, booking: {
   total: any;
   driver_no: any; user_no: any, user_name: any, from: any, to: any
 }, driver_name?: any) => {
+  let date = booking.date.split('T')[0];
+
   await makeRequest(sendpulseUrl, "post", {
     phone: booking.driver_no,
     driver_name: driver_name,
@@ -65,7 +68,7 @@ export const sendToDriver = async (event: string, booking: {
     event_type: event,
     from: booking.from,
     to: booking.to,
-    date: booking.date,
+    date: date,
     seats: booking.seats,
     departure_time: booking.departure_time,
     arrival_time: booking.arrival_time,
@@ -85,13 +88,15 @@ export const sendToAdmin = async (event: string, booking: {
   total: any;
   driver_no: any; user_no: any, user_name: any, from: any, to: any
 }, no: any) => {
+  let date = booking.date.split('T')[0];
+
   await makeRequest(sendpulseUrl, "post", {
     phone: no,
     type: 'driver',
     event_type: event,
     from: booking.from,
     to: booking.to,
-    date: booking.date,
+    date: date,
     seats: booking.seats,
     departure_time: booking.departure_time,
     arrival_time: booking.arrival_time,

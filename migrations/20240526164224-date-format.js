@@ -20,7 +20,7 @@ module.exports = {
     // Example:
     // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
     await db.collection('rides').find().forEach((mydoc) => { db.collection('rides').updateOne(mydoc, { $set: { date: mydoc.dateOld }, $unset: { dateOld: mydoc.date } }) });
-    await db.collection('bookings').find().forEach((mydoc) => { db.collection('bookings').updateOne(mydoc, { $set: { date: mydoc.dateOld, $unset: { dateOld: mydoc.date } } }) });
+    await db.collection('bookings').find().forEach((mydoc) => { db.collection('bookings').updateOne(mydoc, { $set: { date: mydoc.dateOld }, $unset: { dateOld: mydoc.date } }) });
 
   }
 };

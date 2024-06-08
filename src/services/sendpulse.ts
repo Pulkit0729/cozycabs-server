@@ -57,6 +57,7 @@ export const sendToDriver = async (event: string, booking: {
   departure_time: any,
   arrival_time: any,
   total: any;
+  discounted_total: any;
   driver_no: any; user_no: any, user_name: any, from: any, to: any
 }, driver_name?: any) => {
   let date = booking.date.split('T')[0];
@@ -69,6 +70,7 @@ export const sendToDriver = async (event: string, booking: {
     from: booking.from,
     to: booking.to,
     date: date,
+    price: booking.discounted_total,
     seats: booking.seats,
     departure_time: booking.departure_time,
     arrival_time: booking.arrival_time,
@@ -85,6 +87,7 @@ export const sendToAdmin = async (event: string, booking: {
   seats: any;
   departure_time: any,
   arrival_time: any,
+  discounted_total: any;
   total: any;
   driver_no: any; user_no: any, user_name: any, from: any, to: any
 }, no: any) => {
@@ -98,6 +101,7 @@ export const sendToAdmin = async (event: string, booking: {
     to: booking.to,
     date: date,
     seats: booking.seats,
+    price: booking.discounted_total,
     departure_time: booking.departure_time,
     arrival_time: booking.arrival_time,
     user_phone: booking.user_no,

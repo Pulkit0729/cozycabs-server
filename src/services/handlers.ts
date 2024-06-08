@@ -4,6 +4,7 @@ import Driver from '../models/drivers';
 import Ride from '../models/rides';
 import Booking from '../models/bookings';
 import logger from '../logger/logger';
+import Admin from '../models/admin';
 export async function book(user_phone: string, user_name: string, seats: any, ride_no?: string, blabla_ride_id?: string) {
 
     try {
@@ -64,8 +65,10 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
         await booking.save();
         await sendToUser(eventType.book, JSON.parse(JSON.stringify(booking)), driver!.toJSON());
         await sendToDriver(eventType.book, JSON.parse(JSON.stringify(booking)), ride.driver_name);
-        await sendToAdmin(eventType.book, JSON.parse(JSON.stringify(booking)), "918059345289");
-        await sendToAdmin(eventType.book, JSON.parse(JSON.stringify(booking)), "919996615466");
+        let admins = await Admin.find();
+        for (let admin of admins) {
+            await sendToAdmin(eventType.book, JSON.parse(JSON.stringify(booking)), admin.phone);
+        }
         return booking;
     } catch (error) {
         logger.log({
@@ -128,8 +131,10 @@ export async function cancel(user_phone?: string, ride_id?: string, user_name?: 
         await ride.save();
         await sendToUser(eventType.cancel, JSON.parse(JSON.stringify(booking)));
         await sendToDriver(eventType.cancel, JSON.parse(JSON.stringify(booking)), ride.driver_name);
-        await sendToAdmin(eventType.cancel, JSON.parse(JSON.stringify(booking)), "918059345289");
-        await sendToAdmin(eventType.cancel, JSON.parse(JSON.stringify(booking)), "919996615466");
+        let admins = await Admin.find();
+        for (let admin of admins) {
+            await sendToAdmin(eventType.cancel, JSON.parse(JSON.stringify(booking)), admin.phone);
+        }
         return ride;
     } catch (error) {
         logger.log({

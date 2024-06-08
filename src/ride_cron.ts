@@ -21,7 +21,7 @@ export async function addRides() {
     } catch (error) {
     }
 
-    let templated_rides = await TemplatedRide.find();
+    let templated_rides = await TemplatedRide.find().sort({ time: 1 }).exec();
     templated_rides.forEach(async (templateRide) => {
         for (let index = 0; index < 3; index++) {
             let dateString = getFormattedDate(index);

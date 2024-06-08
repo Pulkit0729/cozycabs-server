@@ -24,11 +24,12 @@ router.post('/book', async (req, res) => {
 router.post('/cancel', async (req, res) => {
     try {
         let {
-            ride_id, user_phone
+            booking_id
         } = req.body;
-
+        let booking = await Booking.findById(booking_id);
+        if (!booking) throw new Error(`Booking not found`);
         // Update ride with seats booked
-        let ride = await cancel(user_phone, ride_id);
+        let ride = await cancel(booking.user_no!, booking.ride_id!);
         logger.log({ level: "info", message: "Cancel Done" + ride })
         return res.json({ success: true, ride });
     } catch (error: any) {

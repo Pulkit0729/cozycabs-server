@@ -157,6 +157,9 @@ export const resolvers = {
         if (input.price) {
           ride.price = input.price;
         }
+        if (input.discounted_price) {
+          ride.discounted_price = input.discounted_price;
+        }
         // Save the updated ride
         await ride.save();
 

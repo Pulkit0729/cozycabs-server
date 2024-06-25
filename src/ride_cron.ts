@@ -34,6 +34,8 @@ export async function addRides() {
                     to: templateRide.to,
                     from_address: templateRide.from_address,
                     to_address: templateRide.to_address,
+                    from_location: templateRide.from_location,
+                    to_location: templateRide.to_location,
                     date: dateString,
                     departure_time: templateRide.departure_time,
                     arrival_time: templateRide.arrival_time,

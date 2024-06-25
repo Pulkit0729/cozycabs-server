@@ -26,7 +26,7 @@ const BookingSchema = new mongoose.Schema<IBooking>({
     is_paid: Boolean,
     is_cancelled: Boolean,
     status: String,
-});
+}, { timestamps: true });
 
 const Booking = mongoose.model('Bookings', BookingSchema, 'bookings');
 export default Booking;

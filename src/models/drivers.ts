@@ -11,6 +11,10 @@ export interface IDriver {
     emailConfirmed: Boolean,
     phoneConfirmed: Boolean,
     phoneVerificationId: number,
+    fcm: {
+        value: String,
+        timestamp: Date
+    }
 }
 const DriverSchema = new mongoose.Schema<IDriver>({
     name: String,
@@ -21,7 +25,11 @@ const DriverSchema = new mongoose.Schema<IDriver>({
     emailConfirmed: Boolean,
     phoneConfirmed: Boolean,
     phoneVerificationId: Number,
-});
+    fcm: {
+        value: String,
+        timestamp: Date
+    }
+},  { timestamps: true });
 
 const Driver = mongoose.model('Drivers', DriverSchema, 'drivers');
 export default Driver;

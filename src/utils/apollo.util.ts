@@ -1,3 +1,4 @@
+import { isValidObjectId } from "mongoose";
 
 export function constructQuery(filterBy: any, sortBy: string | number, sortOrder: string) {
   let query: any = {};
@@ -32,7 +33,7 @@ export function constructSubQuery(condition: any) {
 
   Object.entries(condition).forEach(([key, value]) => {
     if (key !== 'AND' && key !== 'OR' && isValueDefined(value)) {
-      if (isNaN(value as any) && typeof value != "boolean" && key != "id" && typeof value != "object") {
+      if (isNaN(value as any) && typeof value != "boolean" && key != "id" && key != "status" && typeof value != "object" && !isValidObjectId(value)) {
         query[key] = { $regex: value, $options: 'i' };
       } else if (key == "id") {
         query["_id"] = value;
@@ -49,7 +50,7 @@ export function constructSubQuery(condition: any) {
 export function isValueDefined(value: any) {
   let res1 = value != null;
   let res2 = value != undefined
-  let res3 = (typeof value == "boolean" || value !="");
+  let res3 = (typeof value == "boolean" || value != "");
   let res4 = value != "null";
   return res1 && res2 && res3 && res4;
 }

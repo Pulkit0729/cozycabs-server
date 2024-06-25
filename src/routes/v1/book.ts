@@ -5,6 +5,9 @@ import { getRide } from '../../dal/ride.dal';
 import Booking from '../../models/bookings';
 import { searchBooking } from '../../dal/booking.dal';
 import authMiddle from '../../middlewares/authMiddle';
+import { passengerAddedNotification } from '../../utils/notifications';
+import { IRide } from '../../models/rides';
+import { sendNotification } from '../../services/firebase';
 
 const router = Router();
 
@@ -37,7 +40,14 @@ router.post('/', authMiddle, async (req, res) => {
             is_cancelled: false,
             status: "pending",
         });
-        await booking.save(); logger.log({ level: "info", message: "Booking Complted" + booking })
+        await booking.save();
+        
+        let driverFcm = ride.driver.fcm?.value;
+        if (driverFcm) {
+            let message = passengerAddedNotification(driverFcm.toString(), ride as unknown as IRide, user);
+            await sendNotification(message);
+        }
+        logger.log({ level: "info", message: "Booking Complted" + booking })
         return res.json({ success: true, booking });
     } catch (error: any) {
         logger.error(`Book error: ${error.message} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`

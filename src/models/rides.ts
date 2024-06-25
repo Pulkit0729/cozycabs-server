@@ -1,10 +1,13 @@
 import mongoose, { Types } from 'mongoose';
+import { ILocation } from './templated_rides';
 
 export interface IRide {
     id: String,
     blabla_ride_id: String,
     from: String,
+    from_location: ILocation,
     to: String,
+    to_location: ILocation,
     from_address: String,
     to_address: String,
     date: String,
@@ -21,12 +24,11 @@ export interface IRide {
 }
 
 const RideSchema = new mongoose.Schema<IRide>({
-    blabla_ride_id: {
-        type: String,
-        required: false
-    },
+    blabla_ride_id: String,
     from: String,
     to: String,
+    from_location: Object,
+    to_location: Object,
     from_address: String,
     to_address: String,
     date: Date,
@@ -45,7 +47,7 @@ const RideSchema = new mongoose.Schema<IRide>({
     },
     status: String,
     location_url: String,
-});
+}, { timestamps: true });
 
 const Ride = mongoose.model('Rides', RideSchema, 'rides');
 export default Ride;

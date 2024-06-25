@@ -16,24 +16,24 @@ router.post('/otp', async (req, res) => {
     const driver = await getDriverFromPhone(formattedPhone);
     let flowType = flowTypes.login;
     if (!driver || !driver?.phoneVerificationId) throw new Error("Invalid phone or Otp");
-    let isVerified = await verifyOTP(driver.phoneVerificationId, otp);
+    let isVerified = await verifyOTP(driver.phoneVerificationId, parseInt(otp));
     if (!isVerified) throw new Error("Invalid phone or Otp");
     const token = issueJWT(driver.id);
     let payload: any = {
       token,
       phone
     }
-    if (!driver.phoneConfirmed) {
+    if (!driver.phoneConfirmed  || !driver.name) {
       driver.markModified('phoneConfirmed');
       driver.phoneConfirmed = true;
       await driver.save();
       flowType = flowTypes.createUser;
     } else {
-      payload = { ...payload, name: driver.name, email: driver.email };
+      payload = { ...payload, user: driver };
       flowType = flowTypes.login;
     }
     payload.flowType = flowType;
-    return res.status(200).json({ success: false, data: payload });
+    return res.status(200).json({ success: true, data: payload });
   } catch (error: any) {
     logger.error(`OTP API, error: ${error.message}, phone: ${phone} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
     );

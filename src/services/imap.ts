@@ -6,11 +6,12 @@ import { handleBlabla } from './blabla';
 
 const email = process.env.EMAIL!
 const password = process.env.PASSWORD!
+const host = process.env.IMAP_HOST!
 
 export const imap = new Imap({
     user: email,
     password: password,
-    host: 'imap.gmail.com',
+    host: host,
     port: 993,
     tls: true,
     tlsOptions: { rejectUnauthorized: false },

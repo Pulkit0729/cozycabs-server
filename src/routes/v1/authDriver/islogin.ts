@@ -8,12 +8,7 @@ userRouter.get("/", driverAuthMiddle, async (req, res) => {
     res.status(200).json({
         success: true,
         auth: true,
-        user: {
-            name: user.name,
-            email: user.email,
-            companyName: user.companyName,
-            userId: user._id,
-        },
+        user: user,
     });
 });
 

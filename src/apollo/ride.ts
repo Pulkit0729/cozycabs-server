@@ -11,6 +11,8 @@ export const rideTypeDefs = gql`
     to: String!
     from_address: String!
     to_address: String!
+    from_location: Location!
+    to_location: Location!
     date: Date!
     arrival_time: String
     departure_time: String
@@ -28,6 +30,8 @@ export const rideTypeDefs = gql`
     to: String!
     from_address: String!
     to_address: String!
+    from_location: LocationInput!
+    to_location: LocationInput!
     date: Date!
     arrival_time: String!
     departure_time: String!
@@ -45,6 +49,8 @@ export const rideTypeDefs = gql`
     to: String
     from_address: String
     to_address: String
+    from_location: LocationInput
+    to_location: LocationInput
     date: Date
     arrival_time: String
     departure_time: String
@@ -66,6 +72,8 @@ export const rideTypeDefs = gql`
     to: String
     from_address: String
     to_address: String
+    from_location: LocationInput
+    to_location: LocationInput
     date: Date
     arrival_time: String
     departure_time: String

@@ -4,13 +4,14 @@ import { IDriver } from "../models/drivers";
 import { constructQuery } from "../utils/apollo.util";
 
 export const templateTypeDefs = gql`
-
   type TemplatedRide {
     id: String!
     from: String!
     to: String!
     from_address: String!
     to_address: String!
+    from_location: Location
+    to_location: Location
     arrival_time: String
     departure_time: String
     driver: Driver
@@ -24,6 +25,8 @@ export const templateTypeDefs = gql`
     to: String!
     from_address: String!
     to_address: String!
+    from_location: LocationInput!
+    to_location: LocationInput!
     arrival_time: String!
     departure_time: String!
     driver: String!
@@ -36,6 +39,8 @@ export const templateTypeDefs = gql`
     to: String
     from_address: String
     to_address: String
+    from_location: LocationInput
+    to_location: LocationInput
     arrival_time: String
     departure_time: String
     driver: String
@@ -52,6 +57,8 @@ export const templateTypeDefs = gql`
     to: String
     from_address: String
     to_address: String
+    from_location: LocationInput
+    to_location: LocationInput
     arrival_time: String
     departure_time: String
     driver: String

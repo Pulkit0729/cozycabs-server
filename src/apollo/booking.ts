@@ -11,13 +11,16 @@ const dateScalar = new GraphQLScalarType({
   description: 'Date custom scalar type',
   serialize(value) {
     if (value instanceof Date) {
-      return value.toLocaleString().split(',')[0]; // Convert outgoing Date to integer for JSON
+      return value.getTime(); // Convert outgoing Date to integer for JSON
     }
     throw Error('GraphQL Date Scalar serializer expected a `Date` object');
   },
   parseValue(value) {
     if (typeof value === 'number') {
       return new Date(value); // Convert incoming integer to Date
+    }
+    if (typeof value === 'string' && value.indexOf('-') != -1) {
+      return new Date(value);
     }
     if (typeof value === 'string' && !isNaN(parseFloat(value))) {
       return new Date(parseFloat(value));
@@ -47,8 +50,8 @@ export const bookingTypeDefs = gql`
     ride: Ride
     user: User
     seats: Int!
-    total: Int!
-    discounted_total: Int!
+    total: Float!
+    discounted_total: Float!
     is_paid: Boolean!
     is_cancelled: Boolean!
     status: String!
@@ -58,8 +61,8 @@ export const bookingTypeDefs = gql`
     ride: String!
     user: String!
     seats: Int!
-    total: Int!
-    discounted_total: Int!
+    total: Float!
+    discounted_total: Float!
     channel: String!
     is_paid: Boolean!
     is_cancelled: Boolean!
@@ -69,8 +72,8 @@ export const bookingTypeDefs = gql`
     ride: String
     user: String
     seats: Int
-    total: Int
-    discounted_total: Int
+    total: Float
+    discounted_total: Float
     channel: String
     is_paid: Boolean
     is_cancelled: Boolean
@@ -84,9 +87,9 @@ export const bookingTypeDefs = gql`
     ride: String
     user: String
     seats: Int
-    total: Int
+    total: Float
     channel: String
-    discounted_total: Int
+    discounted_total: Float
     is_paid: Boolean
     is_cancelled: Boolean
     status: String
@@ -101,7 +104,7 @@ export const bookingResolvers = {
       const bookings = await Booking.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
-        .limit(perPage).populate<{ ride: IRide }>('ride').populate<{ user: IUser }>('user');
+        .limit(perPage).populate<{ ride: IRide }>({ path: 'ride' ,  populate: { path: 'driver' }}).populate<{ user: IUser }>('user');
       return bookings;
     },
   },

@@ -8,7 +8,7 @@ const AdminSchema = new mongoose.Schema({
     },
     type: String,
 
-});
+}, { timestamps: true });
 
 const Admin = mongoose.model('Admins', AdminSchema, 'admins');
 export default Admin;

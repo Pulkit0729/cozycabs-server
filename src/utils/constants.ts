@@ -6,6 +6,8 @@ export enum flowTypes {
 export enum RideStatus {
     pending = 'pending',
     active = 'active',
-    end = 'end',
-    cancel = 'cancel',
+    ended = 'ended',
+    cancelled = 'cancelled',
 }
+
+export const rideStatusConfigKey = 'rideStatusConfigKey';

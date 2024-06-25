@@ -1,7 +1,8 @@
 import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
-  scalar Date
+scalar Date
+
 type Query {
     users(
       filterBy: UserFilter

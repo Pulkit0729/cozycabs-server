@@ -31,7 +31,7 @@ router.post('/otp', async (req, res) => {
       await user.save();
       flowType = flowTypes.createUser;
     } else {
-      payload = { ...payload, name: user.name, email: user.email, phone: user.phone};
+      payload = { ...payload, user: user };
       flowType = flowTypes.login;
     }
     payload.flowType = flowType;

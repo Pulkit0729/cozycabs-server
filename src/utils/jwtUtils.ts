@@ -14,7 +14,8 @@ export function issueJWT(userId: String) {
   const payload = {
     sub: _id,
     iat: Date.now(),
-    exp: Math.floor(Date.now() / 1000) + 2 * 60 * 60,
+    expiresIn: '10h'
+    // exp: Math.floor(Date.now() / 1000) + 10 * 60 * 60,
   };
 
   return jwt.sign(payload, PRIV_KEY, { algorithm: "RS256" });

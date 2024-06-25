@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { getRide } from '../../../dal/ride.dal';
+import { cancelRide, getRide } from '../../../dal/ride.dal';
 import logger from '../../../logger/logger';
-import { getBookingsFromRide } from '../../../dal/booking.dal';
+import { cancelBookings, getBookingsFromRide } from '../../../dal/booking.dal';
+import driverAuthMiddle from '../../../middlewares/driverAuthMiddle';
 
 const router = Router();
 router.get('/', async (req, res) => {

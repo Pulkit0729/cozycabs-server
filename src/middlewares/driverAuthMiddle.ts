@@ -22,7 +22,7 @@ export default async function driverAuthMiddle(
     if (!driver || !driver.phoneConfirmed) {
       throw new Error("Unauthorized");
     }
-    req.body = { ...req.body, auth: true, driver: driver };
+    req.body = { ...req.body, auth: true, user: driver };
     next();
   } catch (error: any) {
     logger.error(`authMiddleware, error: ${error.message}`);

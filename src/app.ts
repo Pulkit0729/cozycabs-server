@@ -7,13 +7,14 @@ import { driverResolvers, driverTypeDefs } from "./apollo/driver";
 import { bookingResolvers, bookingTypeDefs } from "./apollo/booking";
 import { rideResolvers, rideTypeDefs } from "./apollo/ride";
 import { templateResolvers, templateTypeDefs } from "./apollo/templateRide";
+import { locationTypeDefs } from "./apollo/location";
 
 const cors = require("cors");
 const PORT = process.env.API_PORT || 3000;
 
 export default async function App() {
     const server = new ApolloServer({
-        typeDefs: [typeDefs, userTypeDef, driverTypeDefs, bookingTypeDefs, rideTypeDefs, templateTypeDefs],
+        typeDefs: [typeDefs, locationTypeDefs, userTypeDef, driverTypeDefs, bookingTypeDefs, rideTypeDefs, templateTypeDefs],
         resolvers: [userResolvers, driverResolvers, bookingResolvers, templateResolvers, rideResolvers],
     });
     await server.start();

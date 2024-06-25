@@ -10,6 +10,10 @@ export interface IUser {
     phoneVerificationId: number,
     salt: String,
     hash: String,
+    fcm: {
+        value: String,
+        timestamp: Date
+    }
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
@@ -28,7 +32,11 @@ const UserSchema = new mongoose.Schema<IUser>({
     salt: String,
     hash: String,
     phoneVerificationId: Number,
-});
+    fcm: {
+        value: String,
+        timestamp: Date
+    }
+}, { timestamps: true });
 
 
 const User = mongoose.model('Users', UserSchema, 'users');

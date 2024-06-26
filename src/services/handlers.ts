@@ -5,8 +5,8 @@ import Ride from '../models/rides';
 import Booking from '../models/bookings';
 import logger from '../logger/logger';
 import Admin from '../models/admin';
-export async function book(user_phone: string, user_name: string, seats: any, ride_no?: string, blabla_ride_id?: string) {
 
+export async function bookFromBlabla(user_phone: string, user_name: string, seats: any, blabla_ride_id?: string) {
     try {
         user_phone = user_phone.replace(/ /g, '')
         user_phone = '91' + user_phone.substr(user_phone.length - 10);
@@ -19,26 +19,47 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
             { name: user_name, phone: user_phone },
             { upsert: true, new: true }
         );
+        let ride = await Ride.findOne(
+            { blabla_ride_id: blabla_ride_id }
+        );
+        if (!ride) throw new Error("No ride found");
+        let bookings = await Booking.find({ user_no: user_phone, is_cancelled: false });
+        if (bookings.length > 0) {
+            await sendToUser(eventType.booking_exists, { user_no: user_phone, user_name, from: ride.from_address, to: ride.to_address, departure_time: ride.departure_time, arrival_time: ride.arrival_time });
+            let admins = await Admin.find();
+            for (let admin of admins) {
+                await sendToAdmin(eventType.booking_exists, { user_no: user_phone, user_name, from: ride.from_address, to: ride.to_address, departure_time: ride.departure_time, arrival_time: ride.arrival_time }, admin.phone);
+            }
+
+        } else {
+            await book(user_phone, user_name, seats, ride.ride_no?.toString()!, 'blabla', seats * ride.price!);
+        }
+    } catch (error) {
+        logger.error(error);
+    }
+
+}
+
+export async function book(user_phone: string, user_name: string, seats: any, ride_no: string, channel: string, total?: number) {
+
+    try {
+        let user = await User.findOneAndUpdate(
+            { phone: user_phone },
+            { name: user_name, phone: user_phone },
+            { upsert: true, new: true }
+        );
 
         // Update ride with seats booked
-        let ride;
-        if (ride_no) {
-            ride = await Ride.findOne(
-                { ride_no: Number(ride_no) }
-            );
-        } else if (blabla_ride_id) {
-            ride = await Ride.findOne(
-                { blabla_ride_id: blabla_ride_id }
-            );
-        }
+        let ride = await Ride.findOne(
+            { ride_no: Number(ride_no) }
+        );
+
+
         if (!ride) throw new Error("No ride found");
         let driver = await Driver.findOne({ phone: ride.driver_no });
         let existingBooking = await Booking.findOne({ ride_id: ride.id, user_no: user_phone, is_cancelled: false });
         if (existingBooking) throw new Error(`Booking already exists`);
         seats = Number.parseInt(seats);
-        let total = seats * ride.price!;
-        let discounted_total = blabla_ride_id && blabla_ride_id.length == 36 ? total : seats * ride.discounted_price!;
-        let channel = blabla_ride_id && blabla_ride_id.length == 36 ? "blabla" : "bot";
         if (!ride.seats || ride.seats == 0 || ride.seats < seats) {
             throw Error("Please select valid no of seats");
         }
@@ -55,8 +76,8 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
             user_no: user_phone,
             user_name: user_name,
             seats: seats,
-            total: total,
-            discounted_total: discounted_total,
+            total: seats * ride.price!,
+            discounted_total: total ?? ride.discounted_price! * seats,
             is_paid: false,
             is_cancelled: false,
             channel: channel,

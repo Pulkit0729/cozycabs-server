@@ -12,7 +12,7 @@ router.post('/book', async (req, res) => {
         let {
             user_name, user_phone, ride_no, seats
         } = req.body;
-        let booking = await book(user_phone, user_name, seats, ride_no);
+        let booking = await book(user_phone, user_name, seats, ride_no, 'bot');
         logger.log({ level: "info", message: "Booking Complted" + booking })
         return res.json({ success: true, booking });
     } catch (error: any) {

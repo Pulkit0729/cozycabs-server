@@ -8,21 +8,22 @@ export const eventType = {
   "ride_start": "ride_start",
   "ride_end": "ride_end",
   "book": "book",
+  "booking_exists": "booking_exists",
   "error": "error",
   "cancel": "cancel"
 }
 export const sendToUser = async (event: string, booking: {
-  date: any;
-  seats: any;
-  departure_time: any;
-  arrival_time: any;
-  total: any;
-  discounted_total: any;
-  driver_no: any;
-  user_no: any,
-  user_name: any,
-  from: any,
-  to: any,
+  date?: any;
+  seats?: any;
+  departure_time?: any;
+  arrival_time?: any;
+  total?: any;
+  discounted_total?: any;
+  driver_no?: any;
+  user_no?: any,
+  user_name?: any,
+  from?: any,
+  to?: any,
 },
   driver?: {
     car_name: string,
@@ -83,13 +84,13 @@ export const sendToDriver = async (event: string, booking: {
 }
 
 export const sendToAdmin = async (event: string, booking: {
-  date: any;
-  seats: any;
-  departure_time: any,
-  arrival_time: any,
-  discounted_total: any;
-  total: any;
-  driver_no: any; user_no: any, user_name: any, from: any, to: any
+  date?: any;
+  seats?: any;
+  departure_time?: any,
+  arrival_time?: any,
+  discounted_total?: any;
+  total?: any;
+  driver_no?: any; user_no?: any, user_name?: any, from?: any, to?: any
 }, no: any) => {
   let date = booking.date.split('T')[0];
 

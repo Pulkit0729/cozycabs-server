@@ -1,5 +1,5 @@
 import { parse } from 'node-html-parser';
-import { book, cancel } from './handlers';
+import { book, bookFromBlabla, cancel } from './handlers';
 import logger from '../logger/logger';
 export async function handleBlabla(subject: string, message: string) {
     let name, babla_ride_id, seats, user_phone;
@@ -22,7 +22,7 @@ export async function handleBlabla(subject: string, message: string) {
                 if (element.hasAttribute('href') && element.getAttribute('href')?.includes('tel')) {
                     let url = element.getAttribute('href');
                     logger.log("info", "url: " + url);
-                    user_phone = '91' + url?.split(":")[1].replace(/%20/g, "").replace(/ /g,'').slice(-10);
+                    user_phone = '91' + url?.split(":")[1].replace(/%20/g, "").replace(/ /g, '').slice(-10);
                 }
             })
             root.getElementsByTagName('p').forEach((element) => {
@@ -31,7 +31,7 @@ export async function handleBlabla(subject: string, message: string) {
                 };
             })
             if (user_phone && name && seats) {
-                await book(user_phone, name, seats, undefined, babla_ride_id);
+                await bookFromBlabla(user_phone, name, seats, babla_ride_id);
             } else {
                 logger.log({
                     level: 'error',
@@ -44,7 +44,7 @@ export async function handleBlabla(subject: string, message: string) {
                 if (element.hasAttribute('href') && element.getAttribute('href')?.includes('tel')) {
                     let url = element.getAttribute('href');
                     logger.log("info", "url: " + url);
-                    user_phone = '91' + url?.split(":")[1].replace(/%20/g, "").replace(/ /g,'').slice(-10);
+                    user_phone = '91' + url?.split(":")[1].replace(/%20/g, "").replace(/ /g, '').slice(-10);
                 }
             })
             root.getElementsByTagName('p').forEach((element) => {
@@ -53,7 +53,7 @@ export async function handleBlabla(subject: string, message: string) {
                 };
             })
             if (user_phone && name && seats) {
-                await book(user_phone, name, seats, undefined, babla_ride_id);
+                await bookFromBlabla(user_phone, name, seats, babla_ride_id);
             } else {
                 logger.log({
                     level: 'error',

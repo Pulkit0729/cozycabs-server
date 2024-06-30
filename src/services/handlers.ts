@@ -43,6 +43,8 @@ export async function bookFromBlabla(user_phone: string, user_name: string, seat
 export async function book(user_phone: string, user_name: string, seats: any, ride_no: string, channel: string, total?: number) {
 
     try {
+        user_phone = user_phone.replace(/ /g, '')
+        user_phone = '91' + user_phone.substr(user_phone.length - 10);
         let user = await User.findOneAndUpdate(
             { phone: user_phone },
             { name: user_name, phone: user_phone },

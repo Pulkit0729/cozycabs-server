@@ -45,6 +45,10 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
     try {
         user_phone = user_phone.replace(/ /g, '')
         user_phone = '91' + user_phone.substr(user_phone.length - 10);
+
+        if (user_name == undefined || user_name.length == 0) {
+            user_name = user_phone;
+        }
         let user = await User.findOneAndUpdate(
             { phone: user_phone },
             { name: user_name, phone: user_phone },

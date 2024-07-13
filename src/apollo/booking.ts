@@ -6,7 +6,7 @@ import { IUser } from "../models/users";
 import gql from "graphql-tag";
 import { constructQuery } from '../utils/apollo.util';
 import { or, shield } from 'graphql-shield';
-import { isAdmin, isUserAuthenticated } from '../utils/permission.util';
+import { isAdmin, isDriverAuthenticated, isUserAuthenticated } from '../utils/permission.util';
 
 const dateScalar = new GraphQLScalarType({
   name: 'Date',
@@ -142,7 +142,7 @@ export const bookingResolvers = {
 
 export const bookingPermissions = shield({
   Query: {
-    bookings: or(isUserAuthenticated, isAdmin),
+    bookings: or(isUserAuthenticated, isDriverAuthenticated, isAdmin),
   },
   Mutation: {
     addBooking: or(isUserAuthenticated, isAdmin),

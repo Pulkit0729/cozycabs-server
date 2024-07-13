@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express";
+import gql from "graphql-tag";
 
 export const typeDefs = gql`
 scalar Date
@@ -39,19 +39,29 @@ type Query {
       page: Int
       perPage: Int
     ):[Booking]
+    promos(
+      filterBy: PromoFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [Promo]
   }
   enum SortOrder {
     ASC
     DESC
   }
   type Mutation {
-    addUser(input: UserInput!): User
-    addDriver(input: DriverInput!): Driver
-    addTemplatedRide(input: TemplatedRideInput!): TemplatedRide
-    addRide(input: RideInput!): Ride
+    addUser(input: UserInput): User
+    addDriver(input: DriverInput): Driver
+    addTemplatedRide(input: TemplatedRideInput): TemplatedRide
+    addRide(input: RideInput): Ride
+    addBooking(input: BookingInput): Booking
+    addPromo(input: PromoInput): Promo
+
     updateTemplatedRide(id: String!, input: TemplatedRideUpdateInput!): TemplatedRide
     updateRide(id: String!, input: RideUpdateInput!): Ride
-    addBooking(input: BookingUpdateInput!): Booking
-    updateBooking(bookingId: String!, input: BookingInput!): Booking
+    updateBooking(bookingId: String!, input: BookingUpdateInput!): Booking
+    updatePromo(promoId: String!, input: PromoUpdateInput!): Promo 
   }
 `;

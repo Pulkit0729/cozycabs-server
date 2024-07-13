@@ -1,6 +1,7 @@
 import { Message } from "firebase-admin/messaging";
 import { IRide } from "../models/rides";
 import { IUser } from "../models/users";
+import { NavigationStatus } from "./constants";
 
 
 export const createRideStatusNotification = (fcm: string, ride: IRide) => {
@@ -8,6 +9,41 @@ export const createRideStatusNotification = (fcm: string, ride: IRide) => {
         "body": `Your ride from ${ride.from} to ${ride.to} is ${ride.status}`,
         "title": `Ride ${ride.status}`,
     };
+    return createNotification(fcm, notification);
+}
+export const createRideNavStatusNotification = (fcm: string, ride: IRide, navstatus: String) => {
+    let notification;
+    switch (navstatus) {
+        case NavigationStatus.none:
+            break;
+        case NavigationStatus.goToPickup:
+            notification = {
+                "body": `Please reach pick up location 5 min prior.`,
+                "title": `Drive on his way`,
+            };
+            break;
+        case NavigationStatus.reachedPickup:
+            notification = {
+                "body": `Your driver is waiting at the pickup location`,
+                "title": `Driver Arrived`,
+            };
+            break;
+        case NavigationStatus.goToDrop:
+            notification = {
+                "body": `Your ride from ${ride.from} to ${ride.to} is stated`,
+                "title": `Ride ${ride.status}`,
+            };
+            break;
+        case NavigationStatus.reachedDrop:
+            notification = {
+                "body": `Your have reached the end of the ride`,
+                "title": `Ride ${ride.status}`,
+            };
+            break;
+        default:
+            return;
+    }
+
     return createNotification(fcm, notification);
 }
 

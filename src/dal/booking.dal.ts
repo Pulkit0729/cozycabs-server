@@ -1,10 +1,11 @@
 import Booking from "../models/bookings";
+import { IDriver } from "../models/drivers";
 import { IRide } from "../models/rides";
 import { IUser } from "../models/users";
 import { RideStatus } from "../utils/constants";
 
 export async function getBooking(id: string) {
-  return await Booking.findOne({ _id: id }).populate<{ ride: IRide }>('ride').populate<{ driver: IUser }>('user').then((booking) => {
+  return await Booking.findOne({ _id: id }).populate<{ride: any}>({path: 'ride', populate: 'driver'}).then((booking) => {
     return booking;
   });
 }

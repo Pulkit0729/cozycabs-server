@@ -8,6 +8,7 @@ import authMiddle from '../../middlewares/authMiddle';
 import { passengerAddedNotification } from '../../utils/notifications';
 import { IRide } from '../../models/rides';
 import { sendNotification } from '../../services/firebase';
+import { RideStatus } from '../../utils/constants';
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.post('/', authMiddle, async (req, res) => {
             user, ride_id, seats
         } = req.body;
         let ride = await getRide(ride_id);
-        if (!ride) throw new Error(`Ride ${ride_id} does not exist`);
+        if (!ride || [RideStatus.cancelled, RideStatus.ended].includes(ride.status as any)) throw new Error(`Ride ${ride_id} does not exist`);
 
         let existingBooking = await searchBooking({ ride_id: ride.id, user: user.id, is_cancelled: false });
         if (existingBooking) throw new Error(`Booking already exists`);
@@ -41,7 +42,7 @@ router.post('/', authMiddle, async (req, res) => {
             status: "pending",
         });
         await booking.save();
-        
+
         let driverFcm = ride.driver.fcm?.value;
         if (driverFcm) {
             let message = passengerAddedNotification(driverFcm.toString(), ride as unknown as IRide, user);

@@ -10,6 +10,7 @@ export interface IUser {
     phoneVerificationId: number,
     salt: String,
     hash: String,
+    promotions: [String],
     fcm: {
         value: String,
         timestamp: Date
@@ -32,6 +33,12 @@ const UserSchema = new mongoose.Schema<IUser>({
     salt: String,
     hash: String,
     phoneVerificationId: Number,
+    promotions: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Promos' // I want to save an array of tags coming in from the request body
+        }
+    ],
     fcm: {
         value: String,
         timestamp: Date

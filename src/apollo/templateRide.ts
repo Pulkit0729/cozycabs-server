@@ -1,7 +1,9 @@
-import { gql } from "apollo-server-express";
+import gql from "graphql-tag";
 import TemplatedRide from "../models/templated_rides";
 import { IDriver } from "../models/drivers";
 import { constructQuery } from "../utils/apollo.util";
+import { isAdmin } from "../utils/permission.util";
+import { shield } from "graphql-shield";
 
 export const templateTypeDefs = gql`
   type TemplatedRide {
@@ -118,3 +120,14 @@ export const templateResolvers = {
 
     },
 };
+
+
+export const templateRidePermissions = shield({
+    Query: {
+        templatedRides: isAdmin,
+    },
+    Mutation: {
+        addTemplatedRide: isAdmin,
+        updateTemplatedRide: isAdmin,
+    },
+});

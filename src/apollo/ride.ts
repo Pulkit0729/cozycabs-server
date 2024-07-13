@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express";
+import gql from "graphql-tag";
 import { IDriver } from "../models/drivers";
 import Ride from "../models/rides";
 import { constructQuery } from "../utils/apollo.util";

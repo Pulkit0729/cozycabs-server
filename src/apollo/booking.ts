@@ -3,8 +3,10 @@ import Booking from "../models/bookings";
 import { IRide } from "../models/rides";
 import { IUser } from "../models/users";
 
-import { gql } from "apollo-server-express";
+import gql from "graphql-tag";
 import { constructQuery } from '../utils/apollo.util';
+import { or, shield } from 'graphql-shield';
+import { isAdmin, isUserAuthenticated } from '../utils/permission.util';
 
 const dateScalar = new GraphQLScalarType({
   name: 'Date',
@@ -43,7 +45,7 @@ const dateScalar = new GraphQLScalarType({
     return null;
   },
 })
-export const bookingTypeDefs = gql`
+export const bookingTypeDefs = gql(`
 
   type Booking {
     id: String!
@@ -93,7 +95,7 @@ export const bookingTypeDefs = gql`
     is_paid: Boolean
     is_cancelled: Boolean
     status: String
-  }`
+  }`);
 
 export const bookingResolvers = {
   Date: dateScalar,
@@ -104,7 +106,7 @@ export const bookingResolvers = {
       const bookings = await Booking.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
-        .limit(perPage).populate<{ ride: IRide }>({ path: 'ride' ,  populate: { path: 'driver' }}).populate<{ user: IUser }>('user');
+        .limit(perPage).populate<{ ride: IRide }>({ path: 'ride', populate: { path: 'driver' } }).populate<{ user: IUser }>('user');
       return bookings;
     },
   },
@@ -137,5 +139,15 @@ export const bookingResolvers = {
     }
   },
 };
+
+export const bookingPermissions = shield({
+  Query: {
+    bookings: or(isUserAuthenticated, isAdmin),
+  },
+  Mutation: {
+    addBooking: or(isUserAuthenticated, isAdmin),
+    updateBooking: or(isUserAuthenticated, isAdmin),
+  },
+});
 
 

@@ -1,6 +1,8 @@
-import { gql } from "apollo-server-express";
+import gql from "graphql-tag";
 import User from "../models/users";
-import {constructQuery} from "../utils/apollo.util";
+import { constructQuery } from "../utils/apollo.util";
+import { or, rule, shield } from "graphql-shield";
+import { isAdmin, isUserAuthenticated } from "../utils/permission.util";
 
 export const userTypeDef = gql`
 type User {
@@ -26,8 +28,6 @@ type User {
     phone: String
   }`
 
-
-
 export const userResolvers = {
   Query: {
     users: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
@@ -46,5 +46,16 @@ export const userResolvers = {
     }
   },
 };
+
+
+export const userPermissions = shield({
+  Query: {
+    users: or(isUserAuthenticated, isAdmin),
+  },
+  Mutation: {
+    addUser: or(isUserAuthenticated, isAdmin),
+  },
+})
+
 
 

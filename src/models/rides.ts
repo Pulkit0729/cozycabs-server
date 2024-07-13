@@ -21,6 +21,7 @@ export interface IRide {
     ride_no: number,
     location_url: String | undefined,
     status: String,
+    navigationStatus: String,
 }
 
 const RideSchema = new mongoose.Schema<IRide>({
@@ -47,6 +48,7 @@ const RideSchema = new mongoose.Schema<IRide>({
     },
     status: String,
     location_url: String,
+    navigationStatus: String,
 }, { timestamps: true });
 
 const Ride = mongoose.model('Rides', RideSchema, 'rides');

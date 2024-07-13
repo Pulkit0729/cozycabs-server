@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { ILocation } from './templated_rides';
 
 
 export interface IDriver {
@@ -14,7 +15,9 @@ export interface IDriver {
     fcm: {
         value: String,
         timestamp: Date
-    }
+    },
+    currentLocation: ILocation
+
 }
 const DriverSchema = new mongoose.Schema<IDriver>({
     name: String,
@@ -28,8 +31,10 @@ const DriverSchema = new mongoose.Schema<IDriver>({
     fcm: {
         value: String,
         timestamp: Date
-    }
-},  { timestamps: true });
+    },
+    currentLocation: Object,
+
+}, { timestamps: true });
 
 const Driver = mongoose.model('Drivers', DriverSchema, 'drivers');
 export default Driver;

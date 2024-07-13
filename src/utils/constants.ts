@@ -10,4 +10,13 @@ export enum RideStatus {
     cancelled = 'cancelled',
 }
 
+export enum NavigationStatus {
+    goToPickup = "goToPickup",
+    goToDrop = "goToDrop",
+    none = "none",
+    reachedPickup = "reachedPickup",
+    reachedDrop = "reachedDrop",
+}
+
+
 export const rideStatusConfigKey = 'rideStatusConfigKey';

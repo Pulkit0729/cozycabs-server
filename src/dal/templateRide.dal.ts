@@ -1,4 +1,4 @@
-import TemplatedRide from "../models/templated_rides";
+import TemplatedRide from "../models/templatedRides";
 
 export async function getUniqueFromToPlaces() {
     const from = await TemplatedRide.distinct('from');

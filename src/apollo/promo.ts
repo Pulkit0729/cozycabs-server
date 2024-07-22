@@ -86,10 +86,10 @@ export const promoResolvers = {
 
 export const prmoPermissions = shield({
   Query: {
-    promos: or(isUserAuthenticated, isAdmin),
+    promos: isAdmin,
   },
   Mutation: {
-    addPromo: or(isUserAuthenticated, isAdmin),
-    updatePromo: or(isUserAuthenticated, isAdmin),
+    addPromo: isAdmin,
+    updatePromo: isAdmin,
   },
 });

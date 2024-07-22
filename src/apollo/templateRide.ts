@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import TemplatedRide from "../models/templated_rides";
+import TemplatedRide from "../models/templatedRides";
 import { IDriver } from "../models/drivers";
 import { constructQuery } from "../utils/apollo.util";
 import { isAdmin } from "../utils/permission.util";

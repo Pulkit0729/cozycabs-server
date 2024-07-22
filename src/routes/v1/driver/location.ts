@@ -2,7 +2,7 @@ import { Router } from "express";
 import Driver, { IDriver } from "../../../models/drivers";
 import { Document } from "mongoose";
 import driverAuthMiddle from "../../../middlewares/driverAuthMiddle";
-import { ILocation } from "../../../models/templated_rides";
+import { ILocation } from "../../../models/templatedRides";
 import { Types } from "mongoose";
 import logger from "../../../logger/logger";
 

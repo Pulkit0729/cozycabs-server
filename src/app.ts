@@ -14,6 +14,7 @@ import { prmoPermissions, promoResolvers, promoTypeDefs } from "./apollo/promo";
 import apolloMiddleware from "./middlewares/apolloMiddle";
 import { applyMiddleware } from "graphql-middleware";
 import { buildSubgraphSchema } from "@apollo/subgraph/dist/buildSubgraphSchema";
+import { userPrmoPermissions, userPromoResolvers, userpromoTypeDefs } from "./apollo/userPromo";
 
 const cors = require("cors");
 const PORT = process.env.API_PORT || 3000;
@@ -28,6 +29,7 @@ export default async function App() {
                 { typeDefs: rideTypeDefs, resolvers: rideResolvers },
                 { typeDefs: templateTypeDefs, resolvers: templateResolvers },
                 { typeDefs: promoTypeDefs, resolvers: promoResolvers },
+                { typeDefs: userpromoTypeDefs, resolvers: userPromoResolvers },
                 { typeDefs: locationTypeDefs },
                 { typeDefs }]),
             userPermissions,
@@ -35,6 +37,7 @@ export default async function App() {
             bookingPermissions,
             templateRidePermissions,
             prmoPermissions,
+            userPrmoPermissions
         ),
     });
     await server.start();
@@ -45,7 +48,7 @@ export default async function App() {
     app.use(express.json());
 
     //   app.use(cors({ origin: /\*|http:\/\/localhost:3000|http:\/\/localhost:3001|https:\/\/app.alapi.co|https:\/\/link.alapi.co|https:\/\/app.testalapi.co|https:\/\/link.testalapi.co/, credentials: true }));
-    app.use(cors())
+    app.use(cors({origin: "*"}))
 
     app.get("/", (_req: any, res: any) => {
         res.send("working");
@@ -53,12 +56,10 @@ export default async function App() {
     app.use(require("./routes"));
     app.use(
         '/graphql',
-        cors(),
+        // cors(),
         express.json(),
         expressMiddleware(server, {
             context: apolloMiddleware,
-
-
         },),
     );
 

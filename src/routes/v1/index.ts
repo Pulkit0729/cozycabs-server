@@ -54,5 +54,6 @@ router.use('/cancel', require('./cancel'));
 router.use('/metadata', require('./metadata'));
 router.use('/search', require('./search'));
 router.use('/ride', require('./ride'));
+router.use('/promo', require('./promo'));
 
 module.exports = router;

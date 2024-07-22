@@ -17,7 +17,7 @@ router.post('/', authMiddle, async (req, res) => {
         } = req.body;
         let booking = await getBooking(booking_id);
         if (!booking) throw new Error(`Booking ${booking_id} not found`);
-        if (booking.user.id != user.id) throw new Error(`Unauthenticated booking cancellation`);
+        if (booking.user.toString() != user._id) throw new Error(`Unauthenticated booking cancellation`);
         let ride = await getRide(booking.ride.id.toString());
         if (!ride) throw new Error(`Ride does not exist`);
         ride.seats = ride.seats + booking.seats;

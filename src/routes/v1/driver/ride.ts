@@ -1,4 +1,4 @@
-import { ILocation } from './../../../models/templated_rides';
+import { ILocation } from '../../../models/templatedRides';
 import Router from "express";
 import driverAuthMiddle from "../../../middlewares/driverAuthMiddle";
 import { getRide } from "../../../dal/ride.dal";

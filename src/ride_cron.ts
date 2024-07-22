@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import TemplatedRide from './models/templated_rides';
+import TemplatedRide from './models/templatedRides';
 import Ride from './models/rides';
 import logger from './logger/logger';
 import Driver, { IDriver } from './models/drivers';

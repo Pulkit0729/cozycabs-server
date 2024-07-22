@@ -10,11 +10,8 @@ export interface IPromo {
     percentage: Number,
     maximum_discount: Number,
     minimum_amount: Number,
-
-
-
 }
-const PromoSchema = new mongoose.Schema({
+export const PromoSchema = new mongoose.Schema({
     name: String,
     description: String,
     type: String,

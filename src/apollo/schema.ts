@@ -46,6 +46,13 @@ type Query {
       page: Int
       perPage: Int
     ): [Promo]
+    userPromos(
+      filterBy: UserPromoFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [UserPromo]
   }
   enum SortOrder {
     ASC
@@ -58,6 +65,7 @@ type Query {
     addRide(input: RideInput): Ride
     addBooking(input: BookingInput): Booking
     addPromo(input: PromoInput): Promo
+    addUserPromo(input: UserPromoInput): UserPromo
 
     updateTemplatedRide(id: String!, input: TemplatedRideUpdateInput!): TemplatedRide
     updateRide(id: String!, input: RideUpdateInput!): Ride

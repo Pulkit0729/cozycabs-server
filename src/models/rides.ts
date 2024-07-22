@@ -1,5 +1,5 @@
 import mongoose, { Types } from 'mongoose';
-import { ILocation } from './templated_rides';
+import { ILocation } from './templatedRides';
 
 export interface IRide {
     id: String,

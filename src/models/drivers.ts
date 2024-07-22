@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { ILocation } from './templated_rides';
+import { ILocation } from './templatedRides';
 
 
 export interface IDriver {

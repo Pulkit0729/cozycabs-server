@@ -9,18 +9,11 @@ import { getUserPromoByUser } from "../dal/userPromo.dal";
 import logger from "../logger/logger";
 import UserPromos from "../models/userPromos";
 
-export const userpromoTypeDefs = gql`
-  type UserPromo {
+export const userpromosTypeDefs = gql`
+  type UserPromos {
     id: String!
-    name: String!
-    description: String!
-    type: String
-    terms_and_conditions: [String]
-    off_amount: Float
-    percentage: Float
-    maximum_discount: Float
-    minimum_amount: Float
-    valid_upto: Date
+    userId: String!
+    referredFrom: String
   }
   
   input UserPromoInput {
@@ -30,12 +23,12 @@ export const userpromoTypeDefs = gql`
 }
   input UserPromoFilter {
     userId: String
-    rideId: String
+    promoId: String
     name: String
   }
     `
 
-export const userPromoResolvers = {
+export const userPromosResolvers = {
     Query: {
         userPromos: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
             let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
@@ -75,6 +68,7 @@ export const userPromoResolvers = {
                     let userPromos = userPromo.promos;
                     userPromos.push({
                         ...promo,
+                        isReferral: false,
                         valid_upto: validDays,
                         created_date: new Date()
                     });

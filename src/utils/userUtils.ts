@@ -1,6 +1,6 @@
 import crypto, { BinaryLike } from "crypto";
 import { issueJWT } from "./jwtUtils";
-import { mailOptions,verifyMail } from "./mail";
+import { mailOptions, verifyMail } from "./mail";
 import ejs from "ejs";
 import path from "path";
 import User from "../models/users"
@@ -22,8 +22,8 @@ export async function createUser(
   email: String,
   password: string,
   firstName: String,
-  lastName :String,
-  phoneNumber :String
+  lastName: String,
+  phoneNumber: String
 ) {
   const newUser: any = new User({
     ...createNewUserObj(email, password, firstName, lastName, phoneNumber),
@@ -34,7 +34,7 @@ export async function createUser(
   });
   if (!user) {
     await newUser.save();
-  } else if (!!user && !user.emailConfirmed  ) {
+  } else if (!!user && !user.emailConfirmed) {
     await User.deleteOne({ _id: user._id });
     await newUser.save();
   } else {
@@ -47,10 +47,11 @@ export function createNewUserObj(
   email: String,
   password: BinaryLike,
   firstName: String,
-  lastName :String,
-  phoneNumber : String
+  lastName: String,
+  phoneNumber: String
 ) {
   const saltHash = genPassword(password);
+  const referralCode = genReferralCode();
 
   const userObj = {
     firstName: firstName,
@@ -58,9 +59,10 @@ export function createNewUserObj(
     email: email,
     salt: saltHash.salt,
     hash: saltHash.hash,
-    phoneNumber : phoneNumber,
+    phoneNumber: phoneNumber,
     emailConfirmed: false,
     phoneConfirmed: false,
+    referralCode: referralCode
   };
   return userObj;
 }
@@ -77,11 +79,11 @@ export function genPassword(password: BinaryLike) {
   };
 }
 
-
+export function genReferralCode() {
+  return crypto.randomBytes(6).toString("hex").toLocaleUpperCase();
+}
 
 export async function sendVerifEmail(userId: any, email: String) {
-  
-
   const emailjwt = issueJWT(userId);
   const url = `${process.env.SERVER_URL}/v1/auth/verify/${emailjwt}`;
   const u = userId;
@@ -98,7 +100,7 @@ export async function sendVerifEmail(userId: any, email: String) {
     data
   );
   verifyMail(mailOption);
-  
+
 }
 
 export async function sendResetPasswordEmail(
@@ -125,7 +127,7 @@ export async function updateUserConfirm(id: string) {
   const user: any = await User.findOne({
     _id: new mongoose.Types.ObjectId(id),
   });
-  
+
   user.emailConfirmed = true;
   await user.save();
   return user;

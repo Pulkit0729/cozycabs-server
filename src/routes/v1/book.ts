@@ -21,7 +21,7 @@ router.post('/', authMiddle, async (req, res) => {
         let ride = await getRide(ride_id);
         if (!ride || [RideStatus.cancelled, RideStatus.ended].includes(ride.status as any)) throw new Error(`Ride ${ride_id} does not exist`);
 
-        let existingBooking = await searchBooking({ ride_id: ride.id, user: user.id, is_cancelled: false });
+        let existingBooking = await searchBooking({ ride: ride.id, user: user.id, is_cancelled: false });
         if (existingBooking) throw new Error(`Booking already exists`);
         seats = Number.parseInt(seats);
         let total = seats * ride.price!;

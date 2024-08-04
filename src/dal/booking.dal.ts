@@ -1,4 +1,4 @@
-import Booking from "../models/bookings";
+import Booking, { IBooking, IBookingFilter } from "../models/bookings";
 import { IDriver } from "../models/drivers";
 import { IRide } from "../models/rides";
 import { IUser } from "../models/users";
@@ -13,7 +13,7 @@ export async function getBookingsFromRide(rideId: string, cancelled: boolean = f
   return await Booking.find({ ride: rideId, is_cancelled: cancelled }).populate<{ ride: IRide }>('ride').populate<{ user: IUser }>('user').exec();
 }
 
-export async function searchBooking(filters: any) {
+export async function searchBooking(filters: IBookingFilter) {
   return await Booking.findOne(filters).populate<{ ride: IRide }>('ride').populate<{ user: IUser }>('user').then((booking) => {
     return booking;
   });

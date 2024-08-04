@@ -10,6 +10,7 @@ type User {
     name: String!
     phone: String!
     email: String
+    referralCode: String
     emailConfirmed: Boolean
     phoneConfirmed: Boolean
   }

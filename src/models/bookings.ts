@@ -12,6 +12,20 @@ export interface IBooking {
     is_cancelled: Boolean,
     status: String,
 }
+
+export interface IBookingFilter {
+    id?: String,
+    ride?: Types.ObjectId,
+    user?: Types.ObjectId,
+    channel?: String,
+    seats?: number,
+    total?: number,
+    discounted_total?: number,
+    is_paid?: Boolean,
+    is_cancelled?: Boolean,
+    status?: String,
+}
+
 const BookingSchema = new mongoose.Schema<IBooking>({
     ride: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Rides'

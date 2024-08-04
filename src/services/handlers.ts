@@ -23,17 +23,17 @@ export async function bookFromBlabla(user_phone: string, user_name: string, seat
             { blabla_ride_id: blabla_ride_id }
         );
         if (!ride) throw new Error("No ride found");
-        let bookings = await Booking.find({ user_no: user_phone, is_cancelled: false });
-        if (bookings.length > 0) {
-            await sendToUser(eventType.booking_exists, { user_no: user_phone, user_name, date: ride.date?.toString(),  from: ride.from_address, to: ride.to_address, departure_time: ride.departure_time, arrival_time: ride.arrival_time });
-            let admins = await Admin.find();
-            for (let admin of admins) {
-                await sendToAdmin(eventType.booking_exists, { user_no: user_phone, date: ride.date?.toString(), user_name, from: ride.from_address, to: ride.to_address, departure_time: ride.departure_time, arrival_time: ride.arrival_time }, admin.phone);
-            }
+        // let bookings = await Booking.find({ user_no: user_phone, is_cancelled: false });
+        // if (bookings.length > 0) {
+        //     await sendToUser(eventType.booking_exists, { user_no: user_phone, user_name, date: ride.date?.toString(),  from: ride.from_address, to: ride.to_address, departure_time: ride.departure_time, arrival_time: ride.arrival_time });
+        //     let admins = await Admin.find();
+        //     for (let admin of admins) {
+        //         await sendToAdmin(eventType.booking_exists, { user_no: user_phone, date: ride.date?.toString(), user_name, from: ride.from_address, to: ride.to_address, departure_time: ride.departure_time, arrival_time: ride.arrival_time }, admin.phone);
+        //     }
 
-        } else {
-            await book(user_phone, user_name, seats, ride.ride_no?.toString()!, 'blabla', seats * ride.price!);
-        }
+        // } else {
+        await book(user_phone, user_name, seats, ride.ride_no?.toString()!, 'blabla', seats * ride.price!);
+        // }
     } catch (error) {
         logger.error(error);
     }

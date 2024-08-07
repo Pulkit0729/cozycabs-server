@@ -1,5 +1,5 @@
 import crypto, { BinaryLike } from "crypto";
-import { issueJWT } from "./jwtUtils";
+import { issueJWT } from "./jwt.util";
 import { mailOptions, verifyMail } from "./mail";
 import ejs from "ejs";
 import path from "path";
@@ -51,7 +51,7 @@ export function createNewUserObj(
   phoneNumber: String
 ) {
   const saltHash = genPassword(password);
-  const referralCode = genReferralCode();
+  const referralCode = genreferralCode();
 
   const userObj = {
     firstName: firstName,
@@ -79,7 +79,7 @@ export function genPassword(password: BinaryLike) {
   };
 }
 
-export function genReferralCode() {
+export function genreferralCode() {
   return crypto.randomBytes(6).toString("hex").toLocaleUpperCase();
 }
 

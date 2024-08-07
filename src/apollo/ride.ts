@@ -9,58 +9,58 @@ export const rideTypeDefs = gql`
     blabla_ride_id: String
     from: String!
     to: String!
-    from_address: String!
-    to_address: String!
-    from_location: Location!
-    to_location: Location!
+    fromAddress: String!
+    toAddress: String!
+    fromLocation: Location!
+    toLocation: Location!
     date: Date!
-    arrival_time: String
-    departure_time: String
+    arrivalTime: String
+    departureTime: String
     driver: Driver
     seats: Int!
     price: Int!
-    discounted_price: Int!
-    ride_no: Int!
+    discountedPrice: Int!
+    rideNo: Int!
     status: String!
-    location_url: String
+    locationUrl: String
   }
   input RideInput {
     blabla_ride_id: String
     from: String!
     to: String!
-    from_address: String!
-    to_address: String!
-    from_location: LocationInput!
-    to_location: LocationInput!
+    fromAddress: String!
+    toAddress: String!
+    fromLocation: LocationInput!
+    toLocation: LocationInput!
     date: Date!
-    arrival_time: String!
-    departure_time: String!
+    arrivalTime: String!
+    departureTime: String!
     driver: String!
     seats: Int!
     price: Int!
-    discounted_price: Int!
-    ride_no: Int!
+    discountedPrice: Int!
+    rideNo: Int!
     status: String!
-    location_url: String
+    locationUrl: String
   }
   input RideUpdateInput {
     blabla_ride_id: String
     from: String
     to: String
-    from_address: String
-    to_address: String
-    from_location: LocationInput
-    to_location: LocationInput
+    fromAddress: String
+    toAddress: String
+    fromLocation: LocationInput
+    toLocation: LocationInput
     date: Date
-    arrival_time: String
-    departure_time: String
+    arrivalTime: String
+    departureTime: String
     driver: String
     seats: Int
     price: Int
-    discounted_price: Int
-    ride_no: Int
+    discountedPrice: Int
+    rideNo: Int
     status: String
-    location_url: String
+    locationUrl: String
   }
   
   input RideFilter {
@@ -70,20 +70,20 @@ export const rideTypeDefs = gql`
     blabla_ride_id: String
     from: String
     to: String
-    from_address: String
-    to_address: String
-    from_location: LocationInput
-    to_location: LocationInput
+    fromAddress: String
+    toAddress: String
+    fromLocation: LocationInput
+    toLocation: LocationInput
     date: Date
-    arrival_time: String
-    departure_time: String
+    arrivalTime: String
+    departureTime: String
     driver: String
     seats: Int
     price: Int
-    discounted_price: Int
-    ride_no: Int
+    discountedPrice: Int
+    rideNo: Int
     status: String
-    location_url: String
+    locationUrl: String
   }`;
 
 export const rideResolvers = {

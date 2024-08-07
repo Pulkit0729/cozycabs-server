@@ -7,36 +7,36 @@ export interface ILocation {
 export interface ITemplateRide {
     id: String,
     from: String,
-    from_location: ILocation,
+    fromLocation: ILocation,
     to: String,
-    to_location: ILocation,
-    from_address: String,
-    to_address: String,
+    toLocation: ILocation,
+    fromAddress: String,
+    toAddress: String,
     time: String,
-    arrival_time: String,
-    departure_time: String,
+    arrivalTime: String,
+    departureTime: String,
     driver: String,
     seats: number,
     price: number,
-    discounted_price: number,
+    discountedPrice: number,
 }
 
 const TemplatedRideSchema = new mongoose.Schema({
     from: String,
     to: String,
-    from_address: String,
-    to_address: String,
+    fromAddress: String,
+    toAddress: String,
     time: String,
-    arrival_time: String,
-    departure_time: String,
+    arrivalTime: String,
+    departureTime: String,
     driver: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Drivers'
     },
-    from_location: Object,
-    to_location: Object,
+    fromLocation: Object,
+    toLocation: Object,
     seats: Number,
     price: Number,
-    discounted_price: Number,
+    discountedPrice: Number,
 }, { timestamps: true });
 
 const TemplatedRide = mongoose.model('TemplatedRides', TemplatedRideSchema, 'templatedRides');

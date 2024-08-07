@@ -1,6 +1,6 @@
 import Router from "express";
-import { issueJWT, verifyJWT } from "../../../utils/jwtUtils";
-import { genReferralCode, updateUserConfirm } from "../../../utils/userUtils";
+import { issueJWT, verifyJWT } from "../../../utils/jwt.util";
+import { genreferralCode, updateUserConfirm } from "../../../utils/user.util";
 import { getUserFromPhone } from "../../../dal/user.dal";
 import logger from "../../../logger/logger";
 import { flowTypes } from "../../../utils/constants";
@@ -27,7 +27,7 @@ router.post('/otp', async (req, res) => {
     }
     if (!user.phoneConfirmed || !user.name) {
       user.phoneConfirmed = true;
-      user.referralCode = genReferralCode();
+      user.referralCode = genreferralCode();
       user.markModified('phoneConfirmed');
       user.markModified('referralCode');
       await user.save();

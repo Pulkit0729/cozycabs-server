@@ -22,7 +22,7 @@ router.post('/', authMiddle, async (req, res) => {
         if (!ride) throw new Error(`Ride does not exist`);
         ride.seats = ride.seats + booking.seats;
         await ride.save()
-        booking.is_cancelled = true;
+        booking.isCancelled = true;
         await booking.save();
 
         let driverFcm = ride.driver.fcm?.value;

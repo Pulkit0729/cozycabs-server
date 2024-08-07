@@ -1,6 +1,6 @@
 
-import { getIdPass } from "../../../utils/decodeUtils";
-import { createUser, sendVerifEmail} from "../../../utils/userUtils"
+import { getIdPass } from "../../../utils/decode.util";
+import { createUser, sendVerifEmail} from "../../../utils/user.util"
 
 import express from "express";
 

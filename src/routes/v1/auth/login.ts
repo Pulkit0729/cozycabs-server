@@ -1,8 +1,8 @@
 import Router from "express";
-import { getIdPass } from "../../../utils/decodeUtils";
-import { createUser, validPassword } from "../../../utils/userUtils";
-import { issueJWT, jwtOptions } from "../../../utils/jwtUtils";
-import { getUserFromEmail } from "../../../utils/userUtils";
+import { getIdPass } from "../../../utils/decode.util";
+import { createUser, validPassword } from "../../../utils/user.util";
+import { issueJWT, jwtOptions } from "../../../utils/jwt.util";
+import { getUserFromEmail } from "../../../utils/user.util";
 import { getUserFromPhone } from "../../../dal/user.dal";
 import User from "../../../models/users";
 import logger from "../../../logger/logger";

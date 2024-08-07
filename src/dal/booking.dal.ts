@@ -10,7 +10,7 @@ export async function getBooking(id: string) {
   });
 }
 export async function getBookingsFromRide(rideId: string, cancelled: boolean = false) {
-  return await Booking.find({ ride: rideId, is_cancelled: cancelled }).populate<{ ride: IRide }>('ride').populate<{ user: IUser }>('user').exec();
+  return await Booking.find({ ride: rideId, isCancelled: cancelled }).populate<{ ride: IRide }>('ride').populate<{ user: IUser }>('user').exec();
 }
 
 export async function searchBooking(filters: IBookingFilter) {
@@ -26,7 +26,7 @@ export async function getBookings(filters: any) {
 }
 
 export async function cancelBookings(rideId: string) {
-  return await Booking.updateMany({ ride: rideId }, { is_cancelled: true });
+  return await Booking.updateMany({ ride: rideId }, { isCancelled: true });
 }
 export async function updateBookings(rideId: string, status: RideStatus) {
   return await Booking.updateMany({ ride: rideId }, { status: status });

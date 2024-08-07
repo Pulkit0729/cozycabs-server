@@ -10,10 +10,26 @@ import logger from "../logger/logger";
 import UserPromos from "../models/userPromos";
 
 export const userpromosTypeDefs = gql`
+
+  type UserPromo {
+    id: String!
+    name: String!
+    description: String!
+    type: String
+    source: String
+    termsAndConditions: [String]
+    offAmount: Float
+    percentage: Float
+    maximumDiscount: Float
+    minimumAmount: Float
+    validUpto: Date,
+  }
+
   type UserPromos {
     id: String!
     userId: String!
-    referredFrom: String
+    referred_from: String
+    promos: [UserPromo]
   }
   
   input UserPromoInput {
@@ -56,8 +72,8 @@ export const userPromosResolvers = {
                         promos: [
                             {
                                 ...promo,
-                                valid_upto: validDays,
-                                created_date: new Date()
+                                validUpto: validDays,
+                                createdDate: new Date()
                             }
                         ]
 
@@ -69,8 +85,8 @@ export const userPromosResolvers = {
                     userPromos.push({
                         ...promo,
                         isReferral: false,
-                        valid_upto: validDays,
-                        created_date: new Date()
+                        validUpto: validDays,
+                        createdDate: new Date()
                     });
                     userPromo.promos = userPromos;
                     userPromo.markModified('promos');

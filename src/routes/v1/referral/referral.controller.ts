@@ -28,7 +28,7 @@ export class ReferralController {
         res: Response) {
         const { user, referralCode } = req.body;
         try {
-            const booking = await searchBooking({ user: user.id, is_cancelled: false });
+            const booking = await searchBooking({ user: user.id, isCancelled: false });
             if (booking) throw new Error('User is already a customer');
             const referalUser = await searchUser({ referralCode: referralCode });
             if (referalUser == null || referalUser.id == user.id) throw new Error('Invalid referral code');
@@ -42,8 +42,8 @@ export class ReferralController {
             let promo = await searchPromo({ name: 'NEW50', source: PromoSources.REFERRAL });
             if (!promo) throw new Error('No promotion found');
             let userPromo = await UserPromoControlller.addPromoToUser(user, promo as any, 365);
-            userPromo.referredFrom = referralCode;
-            userPromo.markModified('referredFrom');
+            userPromo.referred_from = referralCode;
+            userPromo.markModified('referred_from');
             await userPromo?.save();
             return res.json({ success: true, userPromos: userPromos });
 

@@ -10,32 +10,35 @@ export const promoTypeDefs = gql`
     name: String!
     description: String!
     type: String
-    terms_and_conditions: [String]
-    off_amount: Float
+    source: String
+    termsAndConditions: [String]
+    offAmount: Float
     percentage: Float
-    maximum_discount: Float
-    minimum_amount: Float
+    maximumDiscount: Float
+    minimumAmount: Float
   }
   
   input PromoInput {
     name: String!
     description: String!
     type: String!
-    terms_and_conditions: [String]
-    off_amount: Float!
+    source: String!
+    termsAndConditions: [String]
+    offAmount: Float!
     percentage: Float!
-    maximum_discount: Float!
-    minimum_amount: Float!
+    maximumDiscount: Float!
+    minimumAmount: Float!
   }
   input PromoUpdateInput {
     name: String
     description: String
     type: String
-    terms_and_conditions: [String]
-    off_amount: Float
+    source: String
+    termsAndConditions: [String]
+    offAmount: Float
     percentage: Float
-    maximum_discount: Float
-    minimum_amount: Float
+    maximumDiscount: Float
+    minimumAmount: Float
   }
   input PromoFilter {
     AND: [PromoFilter]
@@ -44,11 +47,12 @@ export const promoTypeDefs = gql`
     name: String
     description: String
     type: String
-    terms_and_conditions: [String]
-    off_amount: Float
+    source: String
+    termsAndConditions: [String]
+    offAmount: Float
     percentage: Float
-    maximum_discount: Float
-    minimum_amount: Float
+    maximumDiscount: Float
+    minimumAmount: Float
   }`
 
 export const promoResolvers = {

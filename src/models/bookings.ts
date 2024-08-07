@@ -7,9 +7,9 @@ export interface IBooking {
     channel: String,
     seats: number,
     total: number,
-    discounted_total: number,
-    is_paid: Boolean,
-    is_cancelled: Boolean,
+    discountedTotal: number,
+    isPaid: Boolean,
+    isCancelled: Boolean,
     status: String,
 }
 
@@ -20,9 +20,9 @@ export interface IBookingFilter {
     channel?: String,
     seats?: number,
     total?: number,
-    discounted_total?: number,
-    is_paid?: Boolean,
-    is_cancelled?: Boolean,
+    discountedTotal?: number,
+    isPaid?: Boolean,
+    isCancelled?: Boolean,
     status?: String,
 }
 
@@ -36,9 +36,9 @@ const BookingSchema = new mongoose.Schema<IBooking>({
     channel: String ,
     seats: Number,
     total: Number,
-    discounted_total: Number,
-    is_paid: Boolean,
-    is_cancelled: Boolean,
+    discountedTotal: Number,
+    isPaid: Boolean,
+    isCancelled: Boolean,
     status: String,
 }, { timestamps: true });
 

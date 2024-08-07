@@ -1,8 +1,8 @@
 import { getDriver } from "../dal/driver.dal";
 import { getUser } from "../dal/user.dal";
 import logger from "../logger/logger";
-import { getApiKey, getBearerToken } from "../utils/decodeUtils";
-import { verifyJWT } from "../utils/jwtUtils";
+import { getApiKey, getBearerToken } from "../utils/decode.util";
+import { verifyJWT } from "../utils/jwt.util";
 
 export default async function apolloMiddleware({ req }: { req: any }): Promise<any> {
 

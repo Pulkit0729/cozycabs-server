@@ -12,3 +12,43 @@ export async function getUserPromoByUser(userId: string) {
   });
 }
 
+
+export async function getValidUserPromoByUser(userId: string) {
+  return await UserPromos.aggregate(
+    [
+      {
+        $match: {
+          userId: userId
+        }
+      },
+      {
+        $unwind: {
+          path: "$promos",
+          includeArrayIndex: "string",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $match: {
+          "promos.validUpto": {
+            $gt: new Date()
+          }
+        }
+      },
+      {
+        $group:
+        {
+          _id: "$_id",
+          userId: {
+            $first: "$userId"
+          },
+          promos: {
+            $push: "$promos"
+          }
+
+        }
+      }
+    ]
+  );
+}
+

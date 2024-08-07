@@ -2,18 +2,19 @@ import mongoose from 'mongoose';
 
 
 export interface IUserPromo {
+    id: String,
     name: String,
     description: String,
     type: String,
     source: String,
     isReferral: Boolean,
-    terms_and_conditions: any[]
-    off_amount: Number,
+    termsAndConditions: any[]
+    offAmount: Number,
     percentage: Number,
-    maximum_discount: Number,
-    minimum_amount: Number,
-    valid_upto: Date,
-    created_date: Date,
+    maximumDiscount: Number,
+    minimumAmount: Number,
+    validUpto: Date,
+    createdDate: Date,
 }
 
 export const UserPromoSchema = new mongoose.Schema<IUserPromo>({
@@ -22,23 +23,23 @@ export const UserPromoSchema = new mongoose.Schema<IUserPromo>({
     type: String,
     source: String,
     isReferral: Boolean,
-    terms_and_conditions: [
+    termsAndConditions: [
         {
             type: String
         }
     ],
-    off_amount: Number,
+    offAmount: Number,
     percentage: Number,
-    maximum_discount: Number,
-    minimum_amount: Number,
-    valid_upto: Date,
-    created_date: Date,
+    maximumDiscount: Number,
+    minimumAmount: Number,
+    validUpto: Date,
+    createdDate: Date,
 });
 
 export interface IUserPromos {
     id: String,
     userId: String,
-    referredFrom: String,
+    referred_from: String,
     promos: [IUserPromo],
     usedPromos: [],
     expiredPromos: []
@@ -46,7 +47,7 @@ export interface IUserPromos {
 
 const UserPromosSchema = new mongoose.Schema<IUserPromos>({
     userId: String,
-    referredFrom: String,
+    referred_from: String,
     promos: [UserPromoSchema],
     usedPromos: [],
     expiredPromos: []

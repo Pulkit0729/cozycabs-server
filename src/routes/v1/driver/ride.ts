@@ -2,7 +2,7 @@ import { ILocation } from '../../../models/templatedRides';
 import Router from "express";
 import driverAuthMiddle from "../../../middlewares/driverAuthMiddle";
 import { getRide } from "../../../dal/ride.dal";
-import { NavigationStatus, RideStatus } from "../../../utils/constants";
+import { navigationStatus, RideStatus } from "../../../utils/constants";
 import logger from "../../../logger/logger";
 import { cancelBookings, getBookingsFromRide, updateBookings } from "../../../dal/booking.dal";
 import { createRideNavStatusNotification, createRideStatusNotification } from "../../../utils/notifications";

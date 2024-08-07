@@ -18,7 +18,7 @@ export async function addRides() {
     logger.info("Adding Rides");
     let noOfRides = 1;
     try {
-        noOfRides = (await Ride.find().sort({ ride_no: -1 }).limit(1).exec())[0].ride_no!;
+        noOfRides = (await Ride.find().sort({ rideNo: -1 }).limit(1).exec())[0].rideNo!;
     } catch (error) {
     }
 
@@ -26,24 +26,24 @@ export async function addRides() {
     templated_rides.forEach(async (templateRide) => {
         for (let index = 0; index < 3; index++) {
             let dateString = getFormattedDate(index);
-            let existRide = await Ride.findOne({ date: dateString, from: templateRide.from, to: templateRide.to, departure_time: templateRide.departure_time, driver: templateRide.driver! });
+            let existRide = await Ride.findOne({ date: dateString, from: templateRide.from, to: templateRide.to, departureTime: templateRide.departureTime, driver: templateRide.driver! });
             if (!existRide) {
                 noOfRides++;
                 let ride = new Ride({
                     from: templateRide.from,
                     to: templateRide.to,
-                    from_address: templateRide.from_address,
-                    to_address: templateRide.to_address,
-                    from_location: templateRide.from_location,
-                    to_location: templateRide.to_location,
+                    fromAddress: templateRide.fromAddress,
+                    toAddress: templateRide.toAddress,
+                    fromLocation: templateRide.fromLocation,
+                    toLocation: templateRide.toLocation,
                     date: dateString,
-                    departure_time: templateRide.departure_time,
-                    arrival_time: templateRide.arrival_time,
-                    ride_no: noOfRides,
+                    departureTime: templateRide.departureTime,
+                    arrivalTime: templateRide.arrivalTime,
+                    rideNo: noOfRides,
                     driver: templateRide.driver,
                     seats: templateRide.seats,
                     price: templateRide.price,
-                    discounted_price: templateRide.discounted_price,
+                    discountedPrice: templateRide.discountedPrice,
                     status: "pending",
                 });
                 await ride.save();

@@ -18,7 +18,7 @@ export const eventType = {
 }
 export const sendToUser = async (event: string, booking: IBooking, ride: IRide, user: IUser,
   driver: IDriver,
-  location_url?: any) => {
+  locationUrl?: any) => {
   let date = ride.date.split('T')[0];
   await makeRequest(sendpulseUrl, "post", {
     phone: user.phone,
@@ -29,13 +29,13 @@ export const sendToUser = async (event: string, booking: IBooking, ride: IRide, 
     to: ride.to,
     date: date,
     seats: booking.seats,
-    departure_time: ride.departure_time,
-    arrival_time: ride.arrival_time,
-    price: booking.discounted_total,
+    departureTime: ride.departureTime,
+    arrivalTime: ride.arrivalTime,
+    price: booking.discountedTotal,
     driver_no: driver.phone,
-    car_name: driver?.car_name,
-    car_no: driver?.car_no,
-    location_url: location_url,
+    carName: driver?.carName,
+    carNo: driver?.carNo,
+    locationUrl: locationUrl,
     is_active: Date.now()
   },
     { "Content-Type": "application/json" }
@@ -52,10 +52,10 @@ export const sendToDriver = async (event: string, booking: IBooking, ride: IRide
     from: ride.from,
     to: ride.to,
     date: date,
-    price: booking.discounted_total,
+    price: booking.discountedTotal,
     seats: booking.seats,
-    departure_time: ride.departure_time,
-    arrival_time: ride.arrival_time,
+    departureTime: ride.departureTime,
+    arrivalTime: ride.arrivalTime,
     user_phone: user.phone,
     name: user.name,
     is_active: Date.now()
@@ -87,9 +87,9 @@ export const sendToAdmin = async (event: string, booking: IBooking, ride: IRide,
     to: ride.to,
     date: date,
     seats: booking.seats,
-    price: booking.discounted_total,
-    departure_time: ride.departure_time,
-    arrival_time: ride.arrival_time,
+    price: booking.discountedTotal,
+    departureTime: ride.departureTime,
+    arrivalTime: ride.arrivalTime,
     user_phone: user.phone,
     name: user.name,
     is_active: Date.now()

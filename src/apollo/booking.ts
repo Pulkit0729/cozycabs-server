@@ -53,9 +53,9 @@ export const bookingTypeDefs = gql(`
     user: User
     seats: Int!
     total: Float!
-    discounted_total: Float!
-    is_paid: Boolean!
-    is_cancelled: Boolean!
+    discountedTotal: Float!
+    isPaid: Boolean!
+    isCancelled: Boolean!
     status: String!
     channel: String!
   }
@@ -64,10 +64,10 @@ export const bookingTypeDefs = gql(`
     user: String!
     seats: Int!
     total: Float!
-    discounted_total: Float!
+    discountedTotal: Float!
     channel: String!
-    is_paid: Boolean!
-    is_cancelled: Boolean!
+    isPaid: Boolean!
+    isCancelled: Boolean!
     status: String!
   }
   input BookingUpdateInput {
@@ -75,10 +75,10 @@ export const bookingTypeDefs = gql(`
     user: String
     seats: Int
     total: Float
-    discounted_total: Float
+    discountedTotal: Float
     channel: String
-    is_paid: Boolean
-    is_cancelled: Boolean
+    isPaid: Boolean
+    isCancelled: Boolean
     status: String
   }
 
@@ -91,9 +91,9 @@ export const bookingTypeDefs = gql(`
     seats: Int
     total: Float
     channel: String
-    discounted_total: Float
-    is_paid: Boolean
-    is_cancelled: Boolean
+    discountedTotal: Float
+    isPaid: Boolean
+    isCancelled: Boolean
     status: String
   }`);
 
@@ -123,11 +123,11 @@ export const bookingResolvers = {
         }
 
         // Update booking properties if provided in the input
-        if (input.is_paid) {
-          booking.is_paid = input.is_paid;
+        if (input.isPaid) {
+          booking.isPaid = input.isPaid;
         }
-        if (input.is_cancelled) {
-          booking.is_cancelled = input.is_cancelled;
+        if (input.isCancelled) {
+          booking.isCancelled = input.isCancelled;
         }
         // Save the updated booking
         await booking.save();

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { getPromo } from "../../../dal/promo.dal";
 import { getUser } from "../../../dal/user.dal";
-import { getUserPromoByUser } from "../../../dal/userPromo.dal";
+import { getUserPromoByUser, getValidUserPromoByUser } from "../../../dal/userPromo.dal";
 import UserPromos from "../../../models/userPromos";
 import logger from "../../../logger/logger";
 import { IUser } from "../../../models/users";
@@ -39,8 +39,8 @@ export class UserPromoControlller {
                 promos: [
                     {
                         ...JSON.parse(JSON.stringify(promo)),
-                        valid_upto: currentDate,
-                        created_date: new Date()
+                        validUpto: currentDate,
+                        createdDate: new Date()
                     }
                 ]
 
@@ -52,13 +52,27 @@ export class UserPromoControlller {
 
             userPromos.push({
                 ...JSON.parse(JSON.stringify(promo)),
-                valid_upto: currentDate,
-                created_date: new Date()
+                validUpto: currentDate,
+                createdDate: new Date()
             });
             userPromo.set('promos', userPromos);
             userPromo.markModified('promos');
             await userPromo.save();
         }
         return userPromo;
+    }
+
+    static async getUserPromos(req: Request, res: Response) {
+        const { user } = req.body;
+        try {
+            const userPromo = await getValidUserPromoByUser(user.id);
+            return res.status(200).json({ success: true, data: userPromo[0] });
+
+        } catch (error: any) {
+            logger.error(`Promo API, error: ${error.message} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
+            );
+            return res.send({ success: false, message: "Unable to fetch Promo" });
+        }
+
     }
 }

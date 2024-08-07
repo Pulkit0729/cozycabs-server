@@ -21,11 +21,11 @@ router.post('/', authMiddle, async (req, res) => {
         let ride = await getRide(ride_id);
         if (!ride || [RideStatus.cancelled, RideStatus.ended].includes(ride.status as any)) throw new Error(`Ride ${ride_id} does not exist`);
 
-        let existingBooking = await searchBooking({ ride: ride.id, user: user.id, is_cancelled: false });
+        let existingBooking = await searchBooking({ ride: ride.id, user: user.id, isCancelled: false });
         if (existingBooking) throw new Error(`Booking already exists`);
         seats = Number.parseInt(seats);
         let total = seats * ride.price!;
-        let discounted_total = seats * ride.discounted_price!;
+        let discountedTotal = seats * ride.discountedPrice!;
         if (!ride.seats || ride.seats == 0 || ride.seats < seats) {
             throw Error("Please select valid no of seats");
         }
@@ -36,9 +36,9 @@ router.post('/', authMiddle, async (req, res) => {
             user: user.id,
             seats: seats,
             total: total,
-            discounted_total: discounted_total,
-            is_paid: false,
-            is_cancelled: false,
+            discountedTotal: discountedTotal,
+            isPaid: false,
+            isCancelled: false,
             status: "pending",
         });
         await booking.save();

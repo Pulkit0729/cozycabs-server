@@ -1,5 +1,5 @@
 
-import { getIdPass } from "../../../utils/decodeUtils";
+import { getIdPass } from "../../../utils/decode.util";
 
 import express from "express";
 

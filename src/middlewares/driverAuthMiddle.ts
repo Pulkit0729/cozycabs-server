@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-import { verifyJWT } from "../utils/jwtUtils";
-import { getBearerToken } from "../utils/decodeUtils";
+import { verifyJWT } from "../utils/jwt.util";
+import { getBearerToken } from "../utils/decode.util";
 import logger from "../logger/logger";
 import { getDriver } from "../dal/driver.dal";
 

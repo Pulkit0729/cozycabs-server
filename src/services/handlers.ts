@@ -5,7 +5,7 @@ import Ride, { IRide } from '../models/rides';
 import Booking from '../models/bookings';
 import logger from '../logger/logger';
 import Admin from '../models/admin';
-export async function book(user_phone: string, user_name: string, seats: any, ride_no?: string, blabla_ride_id?: string) {
+export async function book(user_phone: string, user_name: string, seats: any, rideNo?: string, blabla_ride_id?: string) {
 
     try {
         user_phone = user_phone.replace(/ /g, '')
@@ -22,9 +22,9 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
 
         // Update ride with seats booked
         let ride;
-        if (ride_no) {
+        if (rideNo) {
             ride = await Ride.findOne(
-                { ride_no: Number(ride_no) }
+                { rideNo: Number(rideNo) }
             ).populate<{ driver: IDriver }>('driver');;
         } else if (blabla_ride_id) {
             ride = await Ride.findOne(
@@ -32,11 +32,11 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
             ).populate<{ driver: IDriver }>('driver');;
         }
         if (!ride) throw new Error("No ride found");
-        let existingBooking = await Booking.findOne({ ride_id: ride.id, user_no: user_phone, is_cancelled: false });
+        let existingBooking = await Booking.findOne({ ride_id: ride.id, user_no: user_phone, isCancelled: false });
         if (existingBooking) throw new Error(`Booking already exists`);
         seats = Number.parseInt(seats);
         let total = seats * ride.price!;
-        let discounted_total = blabla_ride_id && blabla_ride_id.length == 36 ? total : seats * ride.discounted_price!;
+        let discountedTotal = blabla_ride_id && blabla_ride_id.length == 36 ? total : seats * ride.discountedPrice!;
         let channel = blabla_ride_id && blabla_ride_id.length == 36 ? "blabla" : "bot";
         if (!ride.seats || ride.seats == 0 || ride.seats < seats) {
             throw Error("Please select valid no of seats");
@@ -48,9 +48,9 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
             user: user.id,
             seats: seats,
             total: total,
-            discounted_total: discounted_total,
-            is_paid: false,
-            is_cancelled: false,
+            discountedTotal: discountedTotal,
+            isPaid: false,
+            isCancelled: false,
             channel: channel,
             status: "pending",
         });
@@ -103,10 +103,10 @@ export async function cancel(user_phone?: string, ride_id?: string, user_name?: 
         }
         if (!user) throw new Error("No user found");
         let booking = await Booking.findOne({
-            $and: [{ user: user.id }, { is_cancelled: false }]
+            $and: [{ user: user.id }, { isCancelled: false }]
         });
         if (!booking) throw new Error("No Booking found");
-        booking.is_cancelled = true;
+        booking.isCancelled = true;
         ride.seats = ride.seats! + booking.seats!;
         await booking.save();
         await ride.save();

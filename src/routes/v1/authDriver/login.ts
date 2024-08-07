@@ -1,10 +1,10 @@
 import Router from "express";
-import { getIdPass } from "../../../utils/decodeUtils";
-import { issueJWT, jwtOptions } from "../../../utils/jwtUtils";
+import { getIdPass } from "../../../utils/decode.util";
+import { issueJWT, jwtOptions } from "../../../utils/jwt.util";
 import { getDriverFromEmail, getDriverFromPhone } from "../../../dal/driver.dal";
 import Driver from "../../../models/drivers";
 import logger from "../../../logger/logger";
-import { validPassword } from "../../../utils/userUtils";
+import { validPassword } from "../../../utils/user.util";
 import { sendOTP } from "../../../services/mcentral";
 
 

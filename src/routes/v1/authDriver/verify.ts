@@ -1,5 +1,5 @@
 import Router from "express";
-import { issueJWT, verifyJWT } from "../../../utils/jwtUtils";
+import { issueJWT, verifyJWT } from "../../../utils/jwt.util";
 import { getDriverFromPhone } from "../../../dal/driver.dal";
 import logger from "../../../logger/logger";
 import { flowTypes } from "../../../utils/constants";

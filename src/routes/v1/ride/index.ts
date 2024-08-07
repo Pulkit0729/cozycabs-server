@@ -27,11 +27,11 @@ router.get('/navigation', async (req, res) => {
             let ride = await getRide(id as string);
             if (!ride) throw new Error('Invalid Ride ID');
 
-            return res.status(200).json({ success: true, data: { navigationStatus: ride?.navigationStatus, currentLocation: ride?.driver.currentLocation, from_location: ride.from_location, to_location: ride.to_location } });
+            return res.status(200).json({ success: true, data: { navigationStatus: ride?.navigationStatus, currentLocation: ride?.driver.currentLocation, fromLocation: ride.fromLocation, toLocation: ride.toLocation } });
         } else if (bookingId) {
             let booking = await getBooking(bookingId as string);
             if (!booking) throw new Error('Invalid booking ID');
-            return res.status(200).json({ success: true, data: { navigationStatus: booking.ride?.navigationStatus, currentLocation: booking?.ride.driver.currentLocation, from_location: booking.ride.from_location, to_location: booking.ride.to_location } });
+            return res.status(200).json({ success: true, data: { navigationStatus: booking.ride?.navigationStatus, currentLocation: booking?.ride.driver.currentLocation, fromLocation: booking.ride.fromLocation, toLocation: booking.ride.toLocation } });
         }
         throw new Error('Invalid booking ID');
 

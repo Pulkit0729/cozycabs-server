@@ -17,10 +17,10 @@ export interface IPromoFilter {
     type?: String,
     source?: String,
     description?: String,
-    off_amount?: Number,
+    offAmount?: Number,
     percentage?: Number,
-    maximum_discount?: Number,
-    minimum_amount?: Number,
+    maximumDiscount?: Number,
+    minimumAmount?: Number,
 }
 export interface IPromo {
     id: String,
@@ -28,11 +28,11 @@ export interface IPromo {
     type: String,
     source: String,
     description: String,
-    terms_and_conditions: [String],
-    off_amount: Number,
+    termsAndConditions: [String],
+    offAmount: Number,
     percentage: Number,
-    maximum_discount: Number,
-    minimum_amount: Number,
+    maximumDiscount: Number,
+    minimumAmount: Number,
 }
 export const PromoSchema = new mongoose.Schema<IPromo>({
     name: String,
@@ -43,15 +43,15 @@ export const PromoSchema = new mongoose.Schema<IPromo>({
     source: {
         type: String, enum: PromoSources
     },
-    terms_and_conditions: [
+    termsAndConditions: [
         {
             type: String
         }
     ],
-    off_amount: Number,
+    offAmount: Number,
     percentage: Number,
-    maximum_discount: Number,
-    minimum_amount: Number,
+    maximumDiscount: Number,
+    minimumAmount: Number,
 
 }, { timestamps: true });
 

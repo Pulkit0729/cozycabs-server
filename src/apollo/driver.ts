@@ -10,8 +10,8 @@ export const driverTypeDefs = gql`
     name: String!
     phone: String!
     email: String
-    car_name: String
-    car_no: String
+    carName: String
+    carNo: String
     emailConfirmed: Boolean
     phoneConfirmed: Boolean
   }
@@ -20,8 +20,8 @@ export const driverTypeDefs = gql`
     name: String!
     phone: String!
     email: String
-    car_name: String
-    car_no: String
+    carName: String
+    carNo: String
   }
   input DriverFilter {
     AND: [DriverFilter]
@@ -30,8 +30,8 @@ export const driverTypeDefs = gql`
     name: String
     phone: String
     email: String
-    car_name: String
-    car_no: String
+    carName: String
+    carNo: String
   }`
 
 export const driverResolvers = {

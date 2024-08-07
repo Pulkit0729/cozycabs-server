@@ -10,45 +10,45 @@ export const templateTypeDefs = gql`
     id: String!
     from: String!
     to: String!
-    from_address: String!
-    to_address: String!
-    from_location: Location
-    to_location: Location
-    arrival_time: String
-    departure_time: String
+    fromAddress: String!
+    toAddress: String!
+    fromLocation: Location
+    toLocation: Location
+    arrivalTime: String
+    departureTime: String
     driver: Driver
     seats: Int!
     price: Int!
-    discounted_price: Int!
+    discountedPrice: Int!
   }
 
   input TemplatedRideInput {
     from: String!
     to: String!
-    from_address: String!
-    to_address: String!
-    from_location: LocationInput!
-    to_location: LocationInput!
-    arrival_time: String!
-    departure_time: String!
+    fromAddress: String!
+    toAddress: String!
+    fromLocation: LocationInput!
+    toLocation: LocationInput!
+    arrivalTime: String!
+    departureTime: String!
     driver: String!
     seats: Int!
     price: Int!
-    discounted_price: Int!
+    discountedPrice: Int!
   }
   input TemplatedRideUpdateInput {
     from: String
     to: String
-    from_address: String
-    to_address: String
-    from_location: LocationInput
-    to_location: LocationInput
-    arrival_time: String
-    departure_time: String
+    fromAddress: String
+    toAddress: String
+    fromLocation: LocationInput
+    toLocation: LocationInput
+    arrivalTime: String
+    departureTime: String
     driver: String
     seats: Int
     price: Int
-    discounted_price: Int
+    discountedPrice: Int
   }
   
   input TemplatedRideFilter {
@@ -57,16 +57,16 @@ export const templateTypeDefs = gql`
     id: String
     from: String
     to: String
-    from_address: String
-    to_address: String
-    from_location: LocationInput
-    to_location: LocationInput
-    arrival_time: String
-    departure_time: String
+    fromAddress: String
+    toAddress: String
+    fromLocation: LocationInput
+    toLocation: LocationInput
+    arrivalTime: String
+    departureTime: String
     driver: String
     seats: Int
     price: Int
-    discounted_price: Int
+    discountedPrice: Int
   }  `
 
 export const templateResolvers = {
@@ -94,11 +94,11 @@ export const templateResolvers = {
                 }
 
                 // Update templatedRide properties if provided in the input
-                if (input.arrival_time) {
-                    templatedRide.time = input.arrival_time;
+                if (input.arrivalTime) {
+                    templatedRide.time = input.arrivalTime;
                 }
-                if (input.departure_time) {
-                    templatedRide.time = input.departure_time;
+                if (input.departureTime) {
+                    templatedRide.time = input.departureTime;
                 }
                 if (input.seats) {
                     templatedRide.seats = input.seats;
@@ -106,8 +106,8 @@ export const templateResolvers = {
                 if (input.price) {
                     templatedRide.price = input.price;
                 }
-                if (input.discounted_price) {
-                    templatedRide.discounted_price = input.discounted_price;
+                if (input.discountedPrice) {
+                    templatedRide.discountedPrice = input.discountedPrice;
                 }
                 // Save the updated templatedRide
                 await templatedRide.save();

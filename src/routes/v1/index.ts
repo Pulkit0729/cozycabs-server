@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import logger from '../../logger/logger';
-import { addRides } from '../../ride_cron';
+import { addRides } from '../../rideCron';
 import { createRideStatusNotification } from '../../utils/notifications';
 import { sendNotification } from '../../services/firebase';
 import { Message } from 'firebase-admin/messaging';

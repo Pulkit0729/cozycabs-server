@@ -40,7 +40,7 @@ export async function bookFromBlabla(user_phone: string, user_name: string, seat
 
 }
 
-export async function book(user_phone: string, user_name: string, seats: any, ride_no: string, channel: string, total?: number) {
+export async function book(user_phone: string, user_name: string, seats: any, ride_no: string, channel: string, total?: number, pickup_time?: string) {
 
     try {
         user_phone = user_phone.replace(/ /g, '')
@@ -90,6 +90,9 @@ export async function book(user_phone: string, user_name: string, seats: any, ri
             status: "pending",
         });
         await booking.save();
+        if (pickup_time) {
+            booking.departure_time = pickup_time;
+        }
         await sendToUser(eventType.book, JSON.parse(JSON.stringify(booking)), driver!.toJSON());
         await sendToDriver(eventType.book, JSON.parse(JSON.stringify(booking)), ride.driver_name);
         let admins = await Admin.find();

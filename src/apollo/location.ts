@@ -1,11 +1,12 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 export const locationTypeDefs = gql`
-    type Location {
-        type: String!
-        coordinates: [Float]
-        }
-    input LocationInput {
-        type: String!
-        coordinates: [Float]
-        }`
+  type Location {
+    type: string!
+    coordinates: [Float]
+  }
+  input LocationInput {
+    type: string!
+    coordinates: [Float]
+  }
+`;

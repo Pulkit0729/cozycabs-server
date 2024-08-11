@@ -1,12 +1,16 @@
 import { GraphQLScalarType, Kind } from 'graphql';
-import Booking from "../models/bookings";
-import { IRide } from "../models/rides";
-import { IUser } from "../models/users";
+import Booking from '../models/bookings';
+import { IRide } from '../models/rides';
+import { IUser } from '../models/users';
 
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 import { constructQuery } from '../utils/apollo.util';
 import { or, shield } from 'graphql-shield';
-import { isAdmin, isDriverAuthenticated, isUserAuthenticated } from '../utils/permission.util';
+import {
+  isAdmin,
+  isDriverAuthenticated,
+  isUserAuthenticated,
+} from '../utils/permission.util';
 
 const dateScalar = new GraphQLScalarType({
   name: 'Date',
@@ -32,23 +36,23 @@ const dateScalar = new GraphQLScalarType({
   parseLiteral(ast) {
     if (ast.kind === Kind.INT) {
       // Convert hard-coded AST string to integer and then to Date
-      let date = new Date(parseInt(ast.value, 10));
+      const date = new Date(parseInt(ast.value, 10));
       date.setHours(5, 30);
       return date;
     }
     if (ast.kind === Kind.STRING) {
-      let date = new Date(parseInt(ast.value, 10));
+      const date = new Date(parseInt(ast.value, 10));
       date.setHours(5, 30);
       return date;
     }
     // Invalid hard-coded value (not an integer)
     return null;
   },
-})
+});
 export const bookingTypeDefs = gql(`
 
   type Booking {
-    id: String!
+    id: string!
     ride: Ride
     user: User
     seats: Int!
@@ -56,57 +60,68 @@ export const bookingTypeDefs = gql(`
     discountedTotal: Float!
     isPaid: Boolean!
     isCancelled: Boolean!
-    status: String!
-    channel: String!
+    status: string!
+    channel: string!
   }
   input BookingInput {
-    ride: String!
-    user: String!
+    ride: string!
+    user: string!
     seats: Int!
     total: Float!
     discountedTotal: Float!
-    channel: String!
+    channel: string!
     isPaid: Boolean!
     isCancelled: Boolean!
-    status: String!
+    status: string!
   }
   input BookingUpdateInput {
-    ride: String
-    user: String
+    ride: string
+    user: string
     seats: Int
     total: Float
     discountedTotal: Float
-    channel: String
+    channel: string
     isPaid: Boolean
     isCancelled: Boolean
-    status: String
+    status: string
   }
 
   input BookingFilter {
     AND: [BookingFilter]
     OR: [BookingFilter]
-    id: String
-    ride: String
-    user: String
+    id: string
+    ride: string
+    user: string
     seats: Int
     total: Float
-    channel: String
+    channel: string
     discountedTotal: Float
     isPaid: Boolean
     isCancelled: Boolean
-    status: String
+    status: string
   }`);
 
 export const bookingResolvers = {
   Date: dateScalar,
   Query: {
-
-    bookings: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
-      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder);
+    bookings: async (
+      _: any,
+      { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any
+    ) => {
+      const { query, sortOptions } = constructQuery(
+        filterBy,
+        sortBy,
+        sortOrder
+      );
       const bookings = await Booking.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
-        .limit(perPage).populate<{ ride: IRide }>({ path: 'ride', populate: { path: 'driver' } }).populate<{ user: IUser }>('user');
+        .limit(perPage)
+        .populate<{ ride: IRide }>({
+          path: 'ride',
+          populate: { path: 'driver' },
+        })
+        .populate<{ user: IUser }>('user');
       return bookings;
     },
   },
@@ -136,7 +151,7 @@ export const bookingResolvers = {
       } catch (error: any) {
         throw new Error(`Failed to update ride: ${error.message}`);
       }
-    }
+    },
   },
 };
 
@@ -149,5 +164,3 @@ export const bookingPermissions = shield({
     updateBooking: or(isUserAuthenticated, isAdmin),
   },
 });
-
-

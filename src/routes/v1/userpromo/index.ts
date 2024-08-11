@@ -1,6 +1,6 @@
-import Router from "express";
-import { UserPromoControlller } from "./userpromo.controller";
-import authMiddle from "../../../middlewares/authMiddle";
+import Router from 'express';
+import { UserPromoControlller } from './userpromo.controller';
+import authMiddle from '../../../middlewares/authMiddle';
 const router = Router();
 
 router.post('/', UserPromoControlller.addPromo);

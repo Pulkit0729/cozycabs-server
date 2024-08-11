@@ -1,13 +1,11 @@
-import Router from "express";
-import { issueJWT, verifyJWT } from "../../../utils/jwt.util";
-import { getDriverFromPhone } from "../../../dal/driver.dal";
-import logger from "../../../logger/logger";
-import { flowTypes } from "../../../utils/constants";
-import { verifyOTP } from "../../../services/mcentral";
-
+import Router from 'express';
+import { issueJWT, verifyJWT } from '../../../utils/jwt.util';
+import { getDriverFromPhone } from '../../../dal/driver.dal';
+import logger from '../../../logger/logger';
+import { flowTypes } from '../../../utils/constants';
+import { verifyOTP } from '../../../services/external/mcentral';
 
 const router = Router();
-
 
 router.post('/otp', async (req, res) => {
   const { otp, phone } = req.body;
@@ -15,15 +13,19 @@ router.post('/otp', async (req, res) => {
   try {
     const driver = await getDriverFromPhone(formattedPhone);
     let flowType = flowTypes.login;
-    if (!driver || !driver?.phoneVerificationId) throw new Error("Invalid phone or Otp");
-    let isVerified = await verifyOTP(driver.phoneVerificationId, parseInt(otp));
-    if (!isVerified) throw new Error("Invalid phone or Otp");
+    if (!driver || !driver?.phoneVerificationId)
+      throw new Error('Invalid phone or Otp');
+    const isVerified = await verifyOTP(
+      driver.phoneVerificationId,
+      parseInt(otp)
+    );
+    if (!isVerified) throw new Error('Invalid phone or Otp');
     const token = issueJWT(driver.id);
     let payload: any = {
       token,
-      phone
-    }
-    if (!driver.phoneConfirmed  || !driver.name) {
+      phone,
+    };
+    if (!driver.phoneConfirmed || !driver.name) {
       driver.markModified('phoneConfirmed');
       driver.phoneConfirmed = true;
       await driver.save();
@@ -35,19 +37,18 @@ router.post('/otp', async (req, res) => {
     payload.flowType = flowType;
     return res.status(200).json({ success: true, data: payload });
   } catch (error: any) {
-    logger.error(`OTP API, error: ${error.message}, phone: ${phone} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
+    logger.error(
+      `OTP API, error: ${error.message}, phone: ${phone} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
     );
     return res.json({ success: false, message: error.message });
   }
+});
 
-})
-
-
-router.get("/:token", async (req, res) => {
+router.get('/:token', async (req, res) => {
   const token = req.params.token;
 
   try {
-    const verify: any = verifyJWT(token);
+    verifyJWT(token);
     // const driver = await updateDriverConfirm(verify.sub);
     // console.log(driver);
 
@@ -56,12 +57,12 @@ router.get("/:token", async (req, res) => {
     //   message: `Verify Token API, ip: ${IP.address()} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
     // });
     return res.redirect(`${process.env.SERVER_URL}`);
-  } catch (error: any) {
+  } catch (_error: any) {
     // logger.log({
     //   level: "error",
     //   message: `Verify Token API, ip: ${IP.address()} error: ${error.message} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
     // });
-    return res.send("Url is invalid, PLease Try Again");
+    return res.send('Url is invalid, PLease Try Again');
   }
 });
 

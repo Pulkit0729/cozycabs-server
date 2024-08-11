@@ -1,9 +1,16 @@
 import mongoose from 'mongoose';
 
-const TermsAndConditionsSchema = new mongoose.Schema({
+const TermsAndConditionsSchema = new mongoose.Schema(
+  {
     name: String,
     value: Object,
-}, { timestamps: true });
+  },
+  { timestamps: true }
+);
 
-const TermsAndCondition = mongoose.model('TermsAndConditions', TermsAndConditionsSchema, 'termsAndConditions');
+const TermsAndCondition = mongoose.model(
+  'TermsAndConditions',
+  TermsAndConditionsSchema,
+  'termsAndConditions'
+);
 export default TermsAndCondition;

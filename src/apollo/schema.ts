@@ -1,62 +1,62 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 export const typeDefs = gql`
-scalar Date
-scalar JSON
+  scalar Date
+  scalar JSON
 
-type Query {
+  type Query {
     users(
       filterBy: UserFilter
-      sortBy: String
+      sortBy: string
       sortOrder: SortOrder
       page: Int
       perPage: Int
     ): [User]
     drivers(
       filterBy: DriverFilter
-      sortBy: String
+      sortBy: string
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[Driver]
+    ): [Driver]
     templatedRides(
       filterBy: TemplatedRideFilter
-      sortBy: String
+      sortBy: string
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[TemplatedRide]
+    ): [TemplatedRide]
     rides(
       filterBy: RideFilter
-      sortBy: String
+      sortBy: string
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[Ride]
+    ): [Ride]
     bookings(
       filterBy: BookingFilter
-      sortBy: String
+      sortBy: string
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[Booking]
+    ): [Booking]
     promos(
       filterBy: PromoFilter
-      sortBy: String
+      sortBy: string
       sortOrder: SortOrder
       page: Int
       perPage: Int
     ): [Promo]
     userPromos(
       filterBy: UserPromoFilter
-      sortBy: String
+      sortBy: string
       sortOrder: SortOrder
       page: Int
       perPage: Int
     ): [UserPromos]
     termsAndConditions(
       filterBy: TermsAndConditionFilter
-      sortBy: String
+      sortBy: string
       sortOrder: SortOrder
       page: Int
       perPage: Int
@@ -76,10 +76,16 @@ type Query {
     addUserPromo(input: UserPromoInput): UserPromos
     addTermsAndCondition(input: TermsAndConditionInput): TermsAndCondition
 
-    updateTemplatedRide(id: String!, input: TemplatedRideUpdateInput!): TemplatedRide
-    updateRide(id: String!, input: RideUpdateInput!): Ride
-    updateBooking(bookingId: String!, input: BookingUpdateInput!): Booking
-    updatePromo(promoId: String!, input: PromoUpdateInput!): Promo 
-    updateTermsAndCondition(id: String!, input: TermsAndConditionUpdateInput!): TermsAndCondition 
+    updateTemplatedRide(
+      id: string!
+      input: TemplatedRideUpdateInput!
+    ): TemplatedRide
+    updateRide(id: string!, input: RideUpdateInput!): Ride
+    updateBooking(bookingId: string!, input: BookingUpdateInput!): Booking
+    updatePromo(promoId: string!, input: PromoUpdateInput!): Promo
+    updateTermsAndCondition(
+      id: string!
+      input: TermsAndConditionUpdateInput!
+    ): TermsAndCondition
   }
 `;

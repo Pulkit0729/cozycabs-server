@@ -1,16 +1,14 @@
-import dotenv from "dotenv";
-const cors = require("cors");
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-import connectMongoose from "./config/mongo.config";
+import connectMongoose from './config/mongo.config';
 
-import App from "./app";
-import { startCron } from "./rideCron";
-import connect from "./services/imap";
+import App from './app';
+import { startCron } from './rideCron';
 
 connectMongoose(() => {
-  let app = App();
+  const app = App();
   startCron();
   // connect();
   return app;

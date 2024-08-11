@@ -1,49 +1,50 @@
 import mongoose from 'mongoose';
 
 export interface IUser {
-    id: String,
-    name: String,
-    phone: String,
-    email: String,
-    emailConfirmed: Boolean,
-    phoneConfirmed: Boolean,
-    phoneVerificationId: number,
-    salt: String,
-    hash: String,
-    referralCode: String,
-    fcm: {
-        value: String,
-        timestamp: Date
-    }
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  emailConfirmed: Boolean;
+  phoneConfirmed: Boolean;
+  phoneVerificationId: number;
+  salt: string;
+  hash: string;
+  referralCode: string;
+  fcm: {
+    value: string;
+    timestamp: Date;
+  };
 }
 
 export interface IUserFilter {
-    id?: String,
-    name?: String,
-    phone?: String,
-    email?: String,
-    emailConfirmed?: Boolean,
-    phoneConfirmed?: Boolean,
-    phoneVerificationId?: number,
-    salt?: String,
-    hash?: String,
-    referralCode?: String,
-    fcm?: {
-        value: String,
-        timestamp: Date
-    }
+  id?: string;
+  name?: string;
+  phone?: string;
+  email?: string;
+  emailConfirmed?: Boolean;
+  phoneConfirmed?: Boolean;
+  phoneVerificationId?: number;
+  salt?: string;
+  hash?: string;
+  referralCode?: string;
+  fcm?: {
+    value: string;
+    timestamp: Date;
+  };
 }
 
-const UserSchema = new mongoose.Schema<IUser>({
+const UserSchema = new mongoose.Schema<IUser>(
+  {
     name: String,
     phone: {
-        type: String,
-        default: null,
+      type: String,
+      default: null,
     },
     email: {
-        type: String,
-        trim: true,
-        lowercase: true,
+      type: String,
+      trim: true,
+      lowercase: true,
     },
     emailConfirmed: Boolean,
     phoneConfirmed: Boolean,
@@ -52,11 +53,12 @@ const UserSchema = new mongoose.Schema<IUser>({
     referralCode: String,
     phoneVerificationId: Number,
     fcm: {
-        value: String,
-        timestamp: Date
-    }
-}, { timestamps: true });
-
+      value: String,
+      timestamp: Date,
+    },
+  },
+  { timestamps: true }
+);
 
 const User = mongoose.model('Users', UserSchema, 'users');
 export default User;

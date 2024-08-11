@@ -7,5 +7,4 @@ router.use('/login', require('./login'));
 router.use('/verify', require('./verify'));
 router.use('/islogin', require('./islogin'));
 
-
 module.exports = router;

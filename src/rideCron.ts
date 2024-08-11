@@ -2,57 +2,61 @@ import cron from 'node-cron';
 import TemplatedRide from './models/templatedRides';
 import Ride from './models/rides';
 import logger from './logger/logger';
-import Driver, { IDriver } from './models/drivers';
 
-const Cron_String = process.env.CRON_STRING || "0 0 * * *";
+const Cron_String = process.env.CRON_STRING || '0 0 * * *';
 
 export function startCron() {
-    cron.schedule(Cron_String, function () {
-        logger.info("Cron Called");
-        addRides();
-    });
+  cron.schedule(Cron_String, function () {
+    logger.info('Cron Called');
+    addRides();
+  });
 }
 
-
 export async function addRides() {
-    logger.info("Adding Rides");
-    let noOfRides = 1;
-    try {
-        noOfRides = (await Ride.find().sort({ rideNo: -1 }).limit(1).exec())[0].rideNo!;
-    } catch (error) {
-    }
+  logger.info('Adding Rides');
+  let noOfRides = 1;
+  try {
+    noOfRides = (await Ride.find().sort({ rideNo: -1 }).limit(1).exec())[0]
+      .rideNo!;
+  } catch (_error) {}
 
-    let templated_rides = await TemplatedRide.find().sort({ time: 1 }).exec();
-    templated_rides.forEach(async (templateRide) => {
-        for (let index = 0; index < 3; index++) {
-            let dateString = getFormattedDate(index);
-            let existRide = await Ride.findOne({ date: dateString, from: templateRide.from, to: templateRide.to, departureTime: templateRide.departureTime, driver: templateRide.driver! });
-            if (!existRide) {
-                noOfRides++;
-                let ride = new Ride({
-                    from: templateRide.from,
-                    to: templateRide.to,
-                    fromAddress: templateRide.fromAddress,
-                    toAddress: templateRide.toAddress,
-                    fromLocation: templateRide.fromLocation,
-                    toLocation: templateRide.toLocation,
-                    date: dateString,
-                    departureTime: templateRide.departureTime,
-                    arrivalTime: templateRide.arrivalTime,
-                    rideNo: noOfRides,
-                    driver: templateRide.driver,
-                    seats: templateRide.seats,
-                    price: templateRide.price,
-                    discountedPrice: templateRide.discountedPrice,
-                    status: "pending",
-                });
-                await ride.save();
-            }
-        }
-    });
+  const templated_rides = await TemplatedRide.find().sort({ time: 1 }).exec();
+  templated_rides.forEach(async (templateRide) => {
+    for (let index = 0; index < 3; index++) {
+      const dateString = getFormattedDate(index);
+      const existRide = await Ride.findOne({
+        date: dateString,
+        from: templateRide.from!,
+        to: templateRide.to!,
+        departureTime: templateRide.departureTime!,
+        driver: templateRide.driver!,
+      });
+      if (!existRide) {
+        noOfRides++;
+        const ride = new Ride({
+          from: templateRide.from,
+          to: templateRide.to,
+          fromAddress: templateRide.fromAddress,
+          toAddress: templateRide.toAddress,
+          fromLocation: templateRide.fromLocation,
+          toLocation: templateRide.toLocation,
+          date: dateString,
+          departureTime: templateRide.departureTime,
+          arrivalTime: templateRide.arrivalTime,
+          rideNo: noOfRides,
+          driver: templateRide.driver,
+          seats: templateRide.seats,
+          price: templateRide.price,
+          discountedPrice: templateRide.discountedPrice,
+          status: 'pending',
+        });
+        await ride.save();
+      }
+    }
+  });
 }
 
 function getFormattedDate(i: number) {
-    let date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000);
-    return new Date(date.toISOString().split("T")[0]);
+  const date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000);
+  return new Date(date.toISOString().split('T')[0]);
 }

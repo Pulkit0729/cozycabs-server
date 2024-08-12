@@ -1,4 +1,4 @@
-import Driver from "../models/drivers";
+import Driver from '../models/drivers';
 
 export async function getDriver(id: string) {
   return await Driver.findOne({ _id: id }).then((driver) => {
@@ -10,7 +10,6 @@ export async function getDriverFromApiKey(apiKey: string) {
     return driver;
   });
 }
-
 
 export async function getDriverFromEmail(email: string) {
   return await Driver.findOne({ email: email }).then((driver) => {

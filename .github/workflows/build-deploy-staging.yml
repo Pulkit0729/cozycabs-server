@@ -1,9 +1,9 @@
-name: Deploy to Ec2 Server
+name: Deploy to Staging Server
 
 on:
   push:
     branches:
-      - main
+      - staging
 
 env:
   AWS_REGION: ap-south-1
@@ -22,11 +22,13 @@ jobs:
         sudo apt install -y nodejs
         npm i
         npm run build 
+        mv src/keys dist/keys
+        mv src/views dist/views
 
     - name: Copy code to EC2 instance
       uses: appleboy/scp-action@master
       with:
-        host: 65.1.153.75
+        host: 13.235.131.193
         username: "ubuntu"
         key_path: ./.github/staging.pem
         source: .
@@ -35,7 +37,7 @@ jobs:
     - name: Restart Service
       uses: appleboy/ssh-action@v0.1.7
       with:
-        host: "65.1.153.75"
+        host: "13.235.131.193"
         username: "ubuntu"
         key_path: ./.github/staging.pem
         port: 22

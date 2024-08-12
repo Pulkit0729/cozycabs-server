@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
-import { verifyJWT } from "../utils/jwtUtils";
-import { getBearerToken } from "../utils/decodeUtils";
-import logger from "../logger/logger";
-import { getDriver } from "../dal/driver.dal";
+import { verifyJWT } from '../utils/jwt.util';
+import { getBearerToken } from '../utils/decode.util';
+import logger from '../logger/logger';
+import { getDriver } from '../dal/driver.dal';
 
 export default async function driverAuthMiddle(
   req: Request,
@@ -13,14 +13,14 @@ export default async function driverAuthMiddle(
   const jwt = getBearerToken(req.headers);
   if (jwt === undefined || jwt === null) {
     return res.status(401).json({
-      message: "Unauthorized",
+      message: 'Unauthorized',
     });
   }
   try {
     const token: any = verifyJWT(jwt);
     const driver = await getDriver(token.sub);
     if (!driver || !driver.phoneConfirmed) {
-      throw new Error("Unauthorized");
+      throw new Error('Unauthorized');
     }
     req.body = { ...req.body, auth: true, user: driver };
     next();
@@ -29,7 +29,7 @@ export default async function driverAuthMiddle(
     res.status(401).json({
       success: false,
       auth: false,
-      msg: "Token expired or invalid",
+      msg: 'Token expired or invalid',
     });
   }
 }

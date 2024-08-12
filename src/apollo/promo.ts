@@ -1,8 +1,8 @@
-import gql from "graphql-tag";
-import Promo from "../models/promos";
-import { constructQuery } from "../utils/apollo.util";
-import { isAdmin, isUserAuthenticated } from "../utils/permission.util";
-import { or, shield } from "graphql-shield";
+import gql from 'graphql-tag';
+import Promo from '../models/promos';
+import { constructQuery } from '../utils/apollo.util';
+import { isAdmin } from '../utils/permission.util';
+import { shield } from 'graphql-shield';
 
 export const promoTypeDefs = gql`
   type Promo {
@@ -10,32 +10,35 @@ export const promoTypeDefs = gql`
     name: String!
     description: String!
     type: String
-    terms_and_conditions: [String]
-    off_amount: Float
+    source: String
+    termsAndConditions: [String]
+    offAmount: Float
     percentage: Float
-    maximum_discount: Float
-    minimum_amount: Float
+    maximumDiscount: Float
+    minimumAmount: Float
   }
-  
+
   input PromoInput {
     name: String!
     description: String!
     type: String!
-    terms_and_conditions: [String]
-    off_amount: Float!
+    source: String!
+    termsAndConditions: [String]
+    offAmount: Float!
     percentage: Float!
-    maximum_discount: Float!
-    minimum_amount: Float!
+    maximumDiscount: Float!
+    minimumAmount: Float!
   }
   input PromoUpdateInput {
     name: String
     description: String
     type: String
-    terms_and_conditions: [String]
-    off_amount: Float
+    source: String
+    termsAndConditions: [String]
+    offAmount: Float
     percentage: Float
-    maximum_discount: Float
-    minimum_amount: Float
+    maximumDiscount: Float
+    minimumAmount: Float
   }
   input PromoFilter {
     AND: [PromoFilter]
@@ -44,17 +47,26 @@ export const promoTypeDefs = gql`
     name: String
     description: String
     type: String
-    terms_and_conditions: [String]
-    off_amount: Float
+    source: String
+    termsAndConditions: [String]
+    offAmount: Float
     percentage: Float
-    maximum_discount: Float
-    minimum_amount: Float
-  }`
+    maximumDiscount: Float
+    minimumAmount: Float
+  }
+`;
 
 export const promoResolvers = {
   Query: {
-    promos: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
-      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
+    promos: async (
+      _: any,
+      { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any
+    ) => {
+      const { query, sortOptions } = constructQuery(
+        filterBy,
+        sortBy,
+        sortOrder
+      );
       const promos = await Promo.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
@@ -76,20 +88,20 @@ export const promoResolvers = {
         // Update promo properties if provided in the input
         await promo.updateOne({ ...input });
 
-        return await Promo.findById(promoId);;
+        return await Promo.findById(promoId);
       } catch (error: any) {
         throw new Error(`Failed to update promo: ${error.message}`);
       }
-    }
+    },
   },
 };
 
 export const prmoPermissions = shield({
   Query: {
-    promos: or(isUserAuthenticated, isAdmin),
+    promos: isAdmin,
   },
   Mutation: {
-    addPromo: or(isUserAuthenticated, isAdmin),
-    updatePromo: or(isUserAuthenticated, isAdmin),
+    addPromo: isAdmin,
+    updatePromo: isAdmin,
   },
 });

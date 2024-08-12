@@ -1,14 +1,12 @@
-import Router from "express";
-import { issueJWT, verifyJWT } from "../../../utils/jwtUtils";
-import { updateUserConfirm } from "../../../utils/userUtils";
-import { getUserFromPhone } from "../../../dal/user.dal";
-import logger from "../../../logger/logger";
-import { flowTypes } from "../../../utils/constants";
-import { verifyOTP } from "../../../services/mcentral";
-
+import Router from 'express';
+import { issueJWT, verifyJWT } from '../../../utils/jwt.util';
+import { genreferralCode, updateUserConfirm } from '../../../utils/user.util';
+import { getUserFromPhone } from '../../../dal/user.dal';
+import logger from '../../../logger/logger';
+import { flowTypes } from '../../../utils/constants';
+import { verifyOTP } from '../../../services/external/mcentral';
 
 const router = Router();
-
 
 router.post('/otp', async (req, res) => {
   const { otp, phone } = req.body;
@@ -17,17 +15,20 @@ router.post('/otp', async (req, res) => {
     const formattedPhone = '91' + phone.trim();
     const user = await getUserFromPhone(formattedPhone);
     let flowType = flowTypes.login;
-    if (!user || !user?.phoneVerificationId) throw new Error("Invalid phone or Otp");
-    let isVerified = await verifyOTP(user.phoneVerificationId, parseInt(otp));
-    if (!isVerified) throw new Error("Invalid phone or Otp");
+    if (!user || !user?.phoneVerificationId)
+      throw new Error('Invalid phone or Otp');
+    const isVerified = await verifyOTP(user.phoneVerificationId, parseInt(otp));
+    if (!isVerified) throw new Error('Invalid phone or Otp');
     const token = issueJWT(user.id);
     let payload: any = {
       token,
-      phone
-    }
+      phone,
+    };
     if (!user.phoneConfirmed || !user.name) {
       user.phoneConfirmed = true;
+      user.referralCode = genreferralCode();
       user.markModified('phoneConfirmed');
+      user.markModified('referralCode');
       await user.save();
       flowType = flowTypes.createUser;
     } else {
@@ -37,15 +38,14 @@ router.post('/otp', async (req, res) => {
     payload.flowType = flowType;
     return res.status(200).json({ success: true, data: payload });
   } catch (error: any) {
-    logger.error(`OTP API, error: ${error.message}, phone: ${phone} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
+    logger.error(
+      `OTP API, error: ${error.message}, phone: ${phone} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
     );
     return res.json({ success: false, message: error.message });
   }
+});
 
-})
-
-
-router.get("/jwt/:token", async (req, res) => {
+router.get('/jwt/:token', async (req, res) => {
   const token = req.params.token;
 
   try {
@@ -58,12 +58,12 @@ router.get("/jwt/:token", async (req, res) => {
     //   message: `Verify Token API, ip: ${IP.address()} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
     // });
     return res.redirect(`${process.env.SERVER_URL}`);
-  } catch (error: any) {
+  } catch (_error: any) {
     // logger.log({
     //   level: "error",
     //   message: `Verify Token API, ip: ${IP.address()} error: ${error.message} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
     // });
-    return res.send("Url is invalid, PLease Try Again");
+    return res.send('Url is invalid, PLease Try Again');
   }
 });
 

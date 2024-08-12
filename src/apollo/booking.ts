@@ -1,12 +1,16 @@
 import { GraphQLScalarType, Kind } from 'graphql';
-import Booking from "../models/bookings";
-import { IRide } from "../models/rides";
-import { IUser } from "../models/users";
+import Booking from '../models/bookings';
+import { IRide } from '../models/rides';
+import { IUser } from '../models/users';
 
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 import { constructQuery } from '../utils/apollo.util';
 import { or, shield } from 'graphql-shield';
-import { isAdmin, isUserAuthenticated } from '../utils/permission.util';
+import {
+  isAdmin,
+  isDriverAuthenticated,
+  isUserAuthenticated,
+} from '../utils/permission.util';
 
 const dateScalar = new GraphQLScalarType({
   name: 'Date',
@@ -31,20 +35,20 @@ const dateScalar = new GraphQLScalarType({
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.INT) {
-      // Convert hard-coded AST string to integer and then to Date
-      let date = new Date(parseInt(ast.value, 10));
+      // Convert hard-coded AST String to integer and then to Date
+      const date = new Date(parseInt(ast.value, 10));
       date.setHours(5, 30);
       return date;
     }
     if (ast.kind === Kind.STRING) {
-      let date = new Date(parseInt(ast.value, 10));
+      const date = new Date(parseInt(ast.value, 10));
       date.setHours(5, 30);
       return date;
     }
     // Invalid hard-coded value (not an integer)
     return null;
   },
-})
+});
 export const bookingTypeDefs = gql(`
 
   type Booking {
@@ -53,9 +57,9 @@ export const bookingTypeDefs = gql(`
     user: User
     seats: Int!
     total: Float!
-    discounted_total: Float!
-    is_paid: Boolean!
-    is_cancelled: Boolean!
+    discountedTotal: Float!
+    isPaid: Boolean!
+    isCancelled: Boolean!
     status: String!
     channel: String!
   }
@@ -64,10 +68,10 @@ export const bookingTypeDefs = gql(`
     user: String!
     seats: Int!
     total: Float!
-    discounted_total: Float!
+    discountedTotal: Float!
     channel: String!
-    is_paid: Boolean!
-    is_cancelled: Boolean!
+    isPaid: Boolean!
+    isCancelled: Boolean!
     status: String!
   }
   input BookingUpdateInput {
@@ -75,10 +79,10 @@ export const bookingTypeDefs = gql(`
     user: String
     seats: Int
     total: Float
-    discounted_total: Float
+    discountedTotal: Float
     channel: String
-    is_paid: Boolean
-    is_cancelled: Boolean
+    isPaid: Boolean
+    isCancelled: Boolean
     status: String
   }
 
@@ -91,22 +95,33 @@ export const bookingTypeDefs = gql(`
     seats: Int
     total: Float
     channel: String
-    discounted_total: Float
-    is_paid: Boolean
-    is_cancelled: Boolean
+    discountedTotal: Float
+    isPaid: Boolean
+    isCancelled: Boolean
     status: String
   }`);
 
 export const bookingResolvers = {
   Date: dateScalar,
   Query: {
-
-    bookings: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
-      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder);
+    bookings: async (
+      _: any,
+      { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any
+    ) => {
+      const { query, sortOptions } = constructQuery(
+        filterBy,
+        sortBy,
+        sortOrder
+      );
       const bookings = await Booking.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
-        .limit(perPage).populate<{ ride: IRide }>({ path: 'ride', populate: { path: 'driver' } }).populate<{ user: IUser }>('user');
+        .limit(perPage)
+        .populate<{ ride: IRide }>({
+          path: 'ride',
+          populate: { path: 'driver' },
+        })
+        .populate<{ user: IUser }>('user');
       return bookings;
     },
   },
@@ -123,11 +138,11 @@ export const bookingResolvers = {
         }
 
         // Update booking properties if provided in the input
-        if (input.is_paid) {
-          booking.is_paid = input.is_paid;
+        if (input.isPaid) {
+          booking.isPaid = input.isPaid;
         }
-        if (input.is_cancelled) {
-          booking.is_cancelled = input.is_cancelled;
+        if (input.isCancelled) {
+          booking.isCancelled = input.isCancelled;
         }
         // Save the updated booking
         await booking.save();
@@ -136,18 +151,16 @@ export const bookingResolvers = {
       } catch (error: any) {
         throw new Error(`Failed to update ride: ${error.message}`);
       }
-    }
+    },
   },
 };
 
 export const bookingPermissions = shield({
   Query: {
-    bookings: or(isUserAuthenticated, isAdmin),
+    bookings: or(isUserAuthenticated, isDriverAuthenticated, isAdmin),
   },
   Mutation: {
     addBooking: or(isUserAuthenticated, isAdmin),
     updateBooking: or(isUserAuthenticated, isAdmin),
   },
 });
-
-

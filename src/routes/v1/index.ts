@@ -1,21 +1,17 @@
 import { Router } from 'express';
 import logger from '../../logger/logger';
-import { addRides } from '../../ride_cron';
-import { createRideStatusNotification } from '../../utils/notifications';
-import { sendNotification } from '../../services/firebase';
-import { Message } from 'firebase-admin/messaging';
+import { addRides } from '../../rideCron';
 
 const router = Router();
 
 router.post('/publishrides', async (_req, res) => {
-    try {
-        await addRides();
-        res.json({ success: true, message: "Rides Published" });
-    } catch (error) {
-        logger.log({ level: "info", message: "Rides Published" + error })
-        res.json({ success: false, error: error });
-    }
-
+  try {
+    await addRides();
+    res.json({ success: true, message: 'Rides Published' });
+  } catch (error) {
+    logger.log({ level: 'info', message: 'Rides Published' + error });
+    res.json({ success: false, error: error });
+  }
 });
 
 // router.get('/notif', async (_req, res) => {
@@ -43,16 +39,16 @@ router.post('/publishrides', async (_req, res) => {
 //     res.send(response);
 // })
 
-
 router.use('/auth', require('./auth'));
 router.use('/authDriver', require('./authDriver'));
 router.use('/user', require('./user'));
 router.use('/driver', require('./driver'));
 router.use('/bot', require('./bot'));
-router.use('/book', require('./book'));
-router.use('/cancel', require('./cancel'));
+router.use('/booking', require('./booking'));
 router.use('/metadata', require('./metadata'));
 router.use('/search', require('./search'));
 router.use('/ride', require('./ride'));
+router.use('/userpromo', require('./userpromo'));
+router.use('/referral', require('./referral'));
 
 module.exports = router;

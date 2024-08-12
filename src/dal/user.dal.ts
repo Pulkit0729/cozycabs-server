@@ -1,4 +1,4 @@
-import User from "../models/users";
+import User, { IUserFilter } from '../models/users';
 
 export async function getUser(id: string) {
   return await User.findOne({ _id: id }).then((user) => {
@@ -11,7 +11,6 @@ export async function getUserFromApiKey(apiKey: string) {
   });
 }
 
-
 export async function getUserFromEmail(email: string) {
   return await User.findOne({ email: email }).then((user) => {
     return user;
@@ -20,6 +19,12 @@ export async function getUserFromEmail(email: string) {
 
 export async function getUserFromPhone(phone: string) {
   return await User.findOne({ phone: phone }).then((user) => {
+    return user;
+  });
+}
+
+export async function searchUser(filters: IUserFilter) {
+  return await User.findOne(filters).then((user) => {
     return user;
   });
 }

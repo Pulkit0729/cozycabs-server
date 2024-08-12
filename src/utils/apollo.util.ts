@@ -1,6 +1,10 @@
-import { isValidObjectId } from "mongoose";
+import { isValidObjectId } from 'mongoose';
 
-export function constructQuery(filterBy: any, sortBy: string | number, sortOrder: string) {
+export function constructQuery(
+  filterBy: any,
+  sortBy: string | number,
+  sortOrder: string
+) {
   let query: any = {};
   if (filterBy) {
     if (filterBy.AND) {
@@ -18,27 +22,32 @@ export function constructQuery(filterBy: any, sortBy: string | number, sortOrder
     }
 
     // Handle individual column filters
-    query = { ...query, ...constructSubQuery(filterBy) }
+    query = { ...query, ...constructSubQuery(filterBy) };
   }
   const sortOptions: any = {};
   if (sortBy) {
     sortOptions[sortBy] = sortOrder === 'ASC' ? 1 : -1;
   }
-  return { query, sortOptions }
+  return { query, sortOptions };
 }
 
-
 export function constructSubQuery(condition: any) {
-  let query: any = {};
+  const query: any = {};
 
   Object.entries(condition).forEach(([key, value]) => {
     if (key !== 'AND' && key !== 'OR' && isValueDefined(value)) {
-      if (isNaN(value as any) && typeof value != "boolean" && key != "id" && key != "status" && typeof value != "object" && !isValidObjectId(value)) {
+      if (
+        isNaN(value as any) &&
+        typeof value != 'boolean' &&
+        key != 'id' &&
+        key != 'status' &&
+        typeof value != 'object' &&
+        !isValidObjectId(value)
+      ) {
         query[key] = { $regex: value, $options: 'i' };
-      } else if (key == "id") {
-        query["_id"] = value;
-      }
-      else {
+      } else if (key == 'id') {
+        query['_id'] = value;
+      } else {
         query[key] = value;
       }
     }
@@ -48,9 +57,9 @@ export function constructSubQuery(condition: any) {
 }
 
 export function isValueDefined(value: any) {
-  let res1 = value != null;
-  let res2 = value != undefined
-  let res3 = (typeof value == "boolean" || value != "");
-  let res4 = value != "null";
+  const res1 = value != null;
+  const res2 = value != undefined;
+  const res3 = typeof value == 'boolean' || value != '';
+  const res4 = value != 'null';
   return res1 && res2 && res3 && res4;
 }

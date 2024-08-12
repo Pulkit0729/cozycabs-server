@@ -1,8 +1,8 @@
-import gql from "graphql-tag";
-import Driver from "../models/drivers";
-import { constructQuery } from "../utils/apollo.util";
-import { or, rule, shield } from "graphql-shield";
-import { isAdmin, isDriverAuthenticated } from "../utils/permission.util";
+import gql from 'graphql-tag';
+import Driver from '../models/drivers';
+import { constructQuery } from '../utils/apollo.util';
+import { or, shield } from 'graphql-shield';
+import { isAdmin, isDriverAuthenticated } from '../utils/permission.util';
 
 export const driverTypeDefs = gql`
   type Driver {
@@ -10,18 +10,18 @@ export const driverTypeDefs = gql`
     name: String!
     phone: String!
     email: String
-    car_name: String
-    car_no: String
+    carName: String
+    carNo: String
     emailConfirmed: Boolean
     phoneConfirmed: Boolean
   }
-  
+
   input DriverInput {
     name: String!
     phone: String!
     email: String
-    car_name: String
-    car_no: String
+    carName: String
+    carNo: String
   }
   input DriverFilter {
     AND: [DriverFilter]
@@ -30,14 +30,22 @@ export const driverTypeDefs = gql`
     name: String
     phone: String
     email: String
-    car_name: String
-    car_no: String
-  }`
+    carName: String
+    carNo: String
+  }
+`;
 
 export const driverResolvers = {
   Query: {
-    drivers: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
-      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
+    drivers: async (
+      _: any,
+      { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any
+    ) => {
+      const { query, sortOptions } = constructQuery(
+        filterBy,
+        sortBy,
+        sortOrder
+      );
       const drivers = await Driver.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
@@ -49,10 +57,9 @@ export const driverResolvers = {
     addDriver: (_: any, { input }: any) => {
       const newUser = new Driver(input);
       return newUser.save();
-    }
+    },
   },
 };
-
 
 export const driverPermissions = shield({
   Query: {
@@ -61,5 +68,4 @@ export const driverPermissions = shield({
   Mutation: {
     addDriver: or(isDriverAuthenticated, isAdmin),
   },
-})
-
+});

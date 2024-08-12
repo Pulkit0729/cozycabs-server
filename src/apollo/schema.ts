@@ -1,9 +1,10 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 export const typeDefs = gql`
-scalar Date
+  scalar Date
+  scalar JSON
 
-type Query {
+  type Query {
     users(
       filterBy: UserFilter
       sortBy: String
@@ -17,28 +18,28 @@ type Query {
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[Driver]
+    ): [Driver]
     templatedRides(
       filterBy: TemplatedRideFilter
       sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[TemplatedRide]
+    ): [TemplatedRide]
     rides(
       filterBy: RideFilter
       sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[Ride]
+    ): [Ride]
     bookings(
       filterBy: BookingFilter
       sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[Booking]
+    ): [Booking]
     promos(
       filterBy: PromoFilter
       sortBy: String
@@ -46,6 +47,20 @@ type Query {
       page: Int
       perPage: Int
     ): [Promo]
+    userPromos(
+      filterBy: UserPromoFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [UserPromo]
+    termsAndConditions(
+      filterBy: TermsAndConditionFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [TermsAndCondition]
   }
   enum SortOrder {
     ASC
@@ -58,10 +73,19 @@ type Query {
     addRide(input: RideInput): Ride
     addBooking(input: BookingInput): Booking
     addPromo(input: PromoInput): Promo
+    addUserPromo(input: UserPromoInput): UserPromo
+    addTermsAndCondition(input: TermsAndConditionInput): TermsAndCondition
 
-    updateTemplatedRide(id: String!, input: TemplatedRideUpdateInput!): TemplatedRide
+    updateTemplatedRide(
+      id: String!
+      input: TemplatedRideUpdateInput!
+    ): TemplatedRide
     updateRide(id: String!, input: RideUpdateInput!): Ride
     updateBooking(bookingId: String!, input: BookingUpdateInput!): Booking
-    updatePromo(promoId: String!, input: PromoUpdateInput!): Promo 
+    updatePromo(promoId: String!, input: PromoUpdateInput!): Promo
+    updateTermsAndCondition(
+      id: String!
+      input: TermsAndConditionUpdateInput!
+    ): TermsAndCondition
   }
 `;

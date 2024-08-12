@@ -1,32 +1,68 @@
-import mongoose, { Types } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+import { BookingStatus } from '../utils/constants';
 
-export interface IBooking {
-    id: String,
-    ride: Types.ObjectId,
-    user: Types.ObjectId,
-    channel: String,
-    seats: number,
-    total: number,
-    discounted_total: number,
-    is_paid: Boolean,
-    is_cancelled: Boolean,
-    status: String,
+export interface IBillDetails {
+  itemTotal: number;
+  discountItemTotal: number;
+  promoDiscount: number;
+  tax: number;
+  grandTotal: number;
 }
-const BookingSchema = new mongoose.Schema<IBooking>({
+export interface IBooking {
+  id: string;
+  ride: Schema.Types.ObjectId;
+  user: Schema.Types.ObjectId;
+  channel: string;
+  seats: number;
+  billDetails: IBillDetails;
+  promoId: Schema.Types.ObjectId;
+  isPaid: Boolean;
+  isCancelled: Boolean;
+  status: BookingStatus;
+}
+
+export interface IBookingFilter {
+  id?: string;
+  ride?: Schema.Types.ObjectId;
+  user?: Schema.Types.ObjectId;
+  promoId?: Schema.Types.ObjectId;
+  channel?: string;
+  seats?: number;
+  isPaid?: Boolean;
+  isCancelled?: Boolean;
+  status?: BookingStatus;
+}
+export const BillDetailsSchema = new mongoose.Schema<IBillDetails>(
+  {
+    itemTotal: Number,
+    discountItemTotal: Number,
+    promoDiscount: Number,
+    tax: Number,
+    grandTotal: Number,
+  },
+  { timestamps: true }
+);
+
+const BookingSchema = new mongoose.Schema<IBooking>(
+  {
     ride: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Rides'
+      type: Schema.Types.ObjectId,
+      ref: 'Rides',
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Users'
+      type: Schema.Types.ObjectId,
+      ref: 'Users',
     },
-    channel: String ,
+    channel: String,
     seats: Number,
-    total: Number,
-    discounted_total: Number,
-    is_paid: Boolean,
-    is_cancelled: Boolean,
-    status: String,
-}, { timestamps: true });
+    promoId: Schema.Types.ObjectId,
+    billDetails: BillDetailsSchema,
+    isPaid: Boolean,
+    isCancelled: Boolean,
+    status: { type: String, enum: BookingStatus },
+  },
+  { timestamps: true }
+);
 
-const Booking = mongoose.model('Bookings', BookingSchema, 'bookings');
+const Booking = mongoose.model<IBooking>('Bookings', BookingSchema, 'bookings');
 export default Booking;

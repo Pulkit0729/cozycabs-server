@@ -1,33 +1,33 @@
 import { CookieOptions } from 'express';
-import jwt, { VerifyOptions } from "jsonwebtoken";
-import fs from "fs";
-import path from "path";
+import jwt, { VerifyOptions } from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path';
 
-const pathToPrivateKey = path.join(__dirname, "..", "keys", "id_rsa_priv.pem");
-const PRIV_KEY = fs.readFileSync(pathToPrivateKey, "utf8");
+const pathToPrivateKey = path.join(__dirname, '..', 'keys', 'id_rsa_priv.pem');
+const PRIV_KEY = fs.readFileSync(pathToPrivateKey, 'utf8');
 
-const pathToPublicKey = path.join(__dirname, "..", "keys", "id_rsa_pub.pem");
-const PUB_KEY = fs.readFileSync(pathToPublicKey, "utf8");
+const pathToPublicKey = path.join(__dirname, '..', 'keys', 'id_rsa_pub.pem');
+const PUB_KEY = fs.readFileSync(pathToPublicKey, 'utf8');
 
-export function issueJWT(userId: String) {
+export function issueJWT(userId: string) {
   const _id = userId;
   const payload = {
     sub: _id,
     iat: Date.now(),
-    expiresIn: '10h'
+    expiresIn: '10h',
     // exp: Math.floor(Date.now() / 1000) + 10 * 60 * 60,
   };
 
-  return jwt.sign(payload, PRIV_KEY, { algorithm: "RS256" });
+  return jwt.sign(payload, PRIV_KEY, { algorithm: 'RS256' });
 }
 
 export function verifyJWT(token: string) {
   return jwt.verify(token, PUB_KEY, {
-    algorithm: "RS256",
+    algorithm: 'RS256',
   } as VerifyOptions);
 }
 export const jwtOptions: CookieOptions = {
-  sameSite: "none",
+  sameSite: 'none',
   domain: process.env.DOMAIN,
   secure: true,
   maxAge: 1000000 * 60 * 15, // would expire after 15 minutes

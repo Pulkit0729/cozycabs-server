@@ -1,0 +1,47 @@
+name: Deploy to Ec2 Server
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ap-south-1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Configure Service
+      run: |
+        curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+        sudo apt install -y nodejs
+        npm i
+        npm run build 
+
+    - name: Copy code to EC2 instance
+      uses: appleboy/scp-action@master
+      with:
+        host: 65.1.153.75
+        username: "ubuntu"
+        key_path: ./.github/prod.pem
+        source: .
+        target: /DATA01/builds/cozycabs-server-new/
+
+    - name: Restart Service
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: "65.1.153.75"
+        username: "ubuntu"
+        key_path: ./.github/prod.pem
+        port: 22
+        script: |
+          rm -rf /DATA01/builds/cozycabs-server-old
+          mv /DATA01/builds/cozycabs-server /DATA01/builds/cozycabs-server-old
+          mv /DATA01/builds/cozycabs-server-new /DATA01/builds/cozycabs-server
+          cd /DATA01/builds/cozycabs-server 
+          pm2 reload cozycabs_server

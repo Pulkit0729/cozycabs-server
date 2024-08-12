@@ -1,34 +1,63 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-export interface IPromo {
-    id: String,
-    name: String,
-    type: String,
-    description: String,
-    terms_and_conditions: [String],
-    off_amount: Number,
-    percentage: Number,
-    maximum_discount: Number,
-    minimum_amount: Number,
-
-
-
+export enum PromoTypes {
+  PERCENTAGE = 'percentage',
+  FLAT = 'flat',
 }
-const PromoSchema = new mongoose.Schema({
+
+export enum PromoSources {
+  ADMIN = 'admin',
+  REFERRAL = 'referral',
+  AUTOMATIC = 'automatic',
+}
+
+export interface IPromoFilter {
+  id?: string;
+  name?: string;
+  type?: string;
+  source?: string;
+  description?: string;
+  offAmount?: number;
+  percentage?: number;
+  maximumDiscount?: number;
+  minimumAmount?: number;
+}
+export interface IPromo {
+  id: Schema.Types.ObjectId;
+  name: string;
+  type: string;
+  source: string;
+  description: string;
+  termsAndConditions: string[];
+  offAmount: number;
+  percentage: number;
+  maximumDiscount: number;
+  minimumAmount: number;
+}
+export const PromoSchema = new mongoose.Schema<IPromo>(
+  {
     name: String,
     description: String,
-    type: String,
-    terms_and_conditions: [
-        {
-            type: String
-        }
+    type: {
+      type: String,
+      enum: PromoTypes,
+    },
+    source: {
+      type: String,
+      enum: PromoSources,
+    },
+    termsAndConditions: [
+      {
+        type: String,
+      },
     ],
-    off_amount: Number,
+    offAmount: Number,
     percentage: Number,
-    maximum_discount: Number,
-    minimum_amount: Number,
-
-}, { timestamps: true });
+    maximumDiscount: Number,
+    minimumAmount: Number,
+  },
+  { timestamps: true }
+);
 
 const Promo = mongoose.model('Promos', PromoSchema, 'promos');
 export default Promo;

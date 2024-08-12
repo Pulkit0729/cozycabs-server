@@ -7,15 +7,15 @@ import { shield } from 'graphql-shield';
 
 export const templateTypeDefs = gql`
   type TemplatedRide {
-    id: string!
-    from: string!
-    to: string!
-    fromAddress: string!
-    toAddress: string!
+    id: String!
+    from: String!
+    to: String!
+    fromAddress: String!
+    toAddress: String!
     fromLocation: Location
     toLocation: Location
-    arrivalTime: string
-    departureTime: string
+    arrivalTime: String
+    departureTime: String
     driver: Driver
     seats: Int!
     price: Int!
@@ -23,29 +23,29 @@ export const templateTypeDefs = gql`
   }
 
   input TemplatedRideInput {
-    from: string!
-    to: string!
-    fromAddress: string!
-    toAddress: string!
+    from: String!
+    to: String!
+    fromAddress: String!
+    toAddress: String!
     fromLocation: LocationInput!
     toLocation: LocationInput!
-    arrivalTime: string!
-    departureTime: string!
-    driver: string!
+    arrivalTime: String!
+    departureTime: String!
+    driver: String!
     seats: Int!
     price: Int!
     discountedPrice: Int!
   }
   input TemplatedRideUpdateInput {
-    from: string
-    to: string
-    fromAddress: string
-    toAddress: string
+    from: String
+    to: String
+    fromAddress: String
+    toAddress: String
     fromLocation: LocationInput
     toLocation: LocationInput
-    arrivalTime: string
-    departureTime: string
-    driver: string
+    arrivalTime: String
+    departureTime: String
+    driver: String
     seats: Int
     price: Int
     discountedPrice: Int
@@ -54,16 +54,16 @@ export const templateTypeDefs = gql`
   input TemplatedRideFilter {
     AND: [TemplatedRideFilter]
     OR: [TemplatedRideFilter]
-    id: string
-    from: string
-    to: string
-    fromAddress: string
-    toAddress: string
+    id: String
+    from: String
+    to: String
+    fromAddress: String
+    toAddress: String
     fromLocation: LocationInput
     toLocation: LocationInput
-    arrivalTime: string
-    departureTime: string
-    driver: string
+    arrivalTime: String
+    departureTime: String
+    driver: String
     seats: Int
     price: Int
     discountedPrice: Int

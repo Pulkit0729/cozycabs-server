@@ -5,41 +5,33 @@ import { isAdmin, isUserAuthenticated } from '../utils/permission.util';
 import { or, shield } from 'graphql-shield';
 import { getPromo } from '../dal/promo.dal';
 import { getUser } from '../dal/user.dal';
-import { getUserPromoByUser } from '../dal/userPromo.dal';
 import logger from '../logger/logger';
-import UserPromos from '../models/userPromos';
+import { UserPromoService } from '../services/userpromo.service';
 
 export const userpromosTypeDefs = gql`
   type UserPromo {
-    id: string!
-    name: string!
-    description: string!
-    type: string
-    source: string
-    termsAndConditions: [string]
-    offAmount: Float
-    percentage: Float
-    maximumDiscount: Float
-    minimumAmount: Float
+    id: String!
+    userId: String!
+    referredFrom: String
+    promo: String!
+    isUsed: Boolean
     validUpto: Date
   }
 
-  type UserPromos {
-    id: string!
-    userId: string!
-    referredFrom: string
-    promos: [UserPromo]
-  }
-
   input UserPromoInput {
-    promoId: string
-    userId: string
-    valid_for: Int
+    userId: String
+    referredFrom: String
+    promo: String
+    isUsed: Boolean
+    validUpto: Date
   }
   input UserPromoFilter {
-    userId: string
-    promoId: string
-    name: string
+    id: String
+    userId: String
+    referredFrom: String
+    promo: String
+    isUsed: Boolean
+    validUpto: Date
   }
 `;
 
@@ -71,35 +63,15 @@ export const userPromosResolvers = {
         const user = await getUser(userId);
         if (!user) throw new Error('Promo not found');
 
-        let userPromo = await getUserPromoByUser(userId);
-        if (!userPromo) {
-          const newUserPromos = new UserPromos({
-            userId: userId,
-            promos: [
-              {
-                ...promo,
-                validUpto: validDays,
-                createdDate: new Date(),
-              },
-            ],
-          });
-          await newUserPromos.save();
-          userPromo = newUserPromos;
-        } else {
-          const userPromos = userPromo.promos;
-          userPromos.push({
-            ...promo,
-            isReferral: false,
-            validUpto: validDays,
-            createdDate: new Date(),
-          });
-          userPromo.promos = userPromos;
-          userPromo.markModified('promos');
-          await userPromo.save();
-        }
+        const userPromo = await UserPromoService.addPromoToUser(
+          user,
+          promo,
+          validDays
+        );
+
         return userPromo;
       } catch (error: any) {
-        logger.error(`Promo Update API, error: ${error}`);
+        logger.error(`Promo Add API, error: ${error}`);
         return;
       }
     },

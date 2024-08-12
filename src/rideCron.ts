@@ -14,46 +14,52 @@ export function startCron() {
 
 export async function addRides() {
   logger.info('Adding Rides');
-  let noOfRides = 1;
+  let noOfRides = 0;
   try {
     noOfRides = (await Ride.find().sort({ rideNo: -1 }).limit(1).exec())[0]
       .rideNo!;
+    if (noOfRides == null) noOfRides = 0;
   } catch (_error) {}
 
-  const templated_rides = await TemplatedRide.find().sort({ time: 1 }).exec();
-  templated_rides.forEach(async (templateRide) => {
-    for (let index = 0; index < 3; index++) {
-      const dateString = getFormattedDate(index);
-      const existRide = await Ride.findOne({
-        date: dateString,
-        from: templateRide.from!,
-        to: templateRide.to!,
-        departureTime: templateRide.departureTime!,
-        driver: templateRide.driver!,
-      });
-      if (!existRide) {
-        noOfRides++;
-        const ride = new Ride({
-          from: templateRide.from,
-          to: templateRide.to,
-          fromAddress: templateRide.fromAddress,
-          toAddress: templateRide.toAddress,
-          fromLocation: templateRide.fromLocation,
-          toLocation: templateRide.toLocation,
+  try {
+    const templated_rides = await TemplatedRide.find().sort({ time: 1 }).exec();
+    for (let i = 0; i < templated_rides.length; i++) {
+      const templateRide = templated_rides[i];
+      for (let index = 0; index < 3; index++) {
+        const dateString = getFormattedDate(index);
+        const existRide = await Ride.findOne({
           date: dateString,
-          departureTime: templateRide.departureTime,
-          arrivalTime: templateRide.arrivalTime,
-          rideNo: noOfRides,
-          driver: templateRide.driver,
-          seats: templateRide.seats,
-          price: templateRide.price,
-          discountedPrice: templateRide.discountedPrice,
-          status: 'pending',
+          from: templateRide.from!,
+          to: templateRide.to!,
+          departureTime: templateRide.departureTime!,
+          driver: templateRide.driver!,
         });
-        await ride.save();
+        if (!existRide) {
+          noOfRides++;
+          const ride = new Ride({
+            from: templateRide.from,
+            to: templateRide.to,
+            fromAddress: templateRide.fromAddress,
+            toAddress: templateRide.toAddress,
+            fromLocation: templateRide.fromLocation,
+            toLocation: templateRide.toLocation,
+            date: dateString,
+            departureTime: templateRide.departureTime,
+            arrivalTime: templateRide.arrivalTime,
+            rideNo: noOfRides,
+            driver: templateRide.driver,
+            seats: templateRide.seats,
+            price: templateRide.price,
+            discountedPrice: templateRide.discountedPrice,
+            status: 'pending',
+          });
+          await ride.save();
+        }
       }
     }
-  });
+  } catch (error) {
+    logger.error(error);
+  }
 }
 
 function getFormattedDate(i: number) {

@@ -6,32 +6,32 @@ import { isAdmin, isDriverAuthenticated } from '../utils/permission.util';
 
 export const driverTypeDefs = gql`
   type Driver {
-    id: string!
-    name: string!
-    phone: string!
-    email: string
-    carName: string
-    carNo: string
+    id: String!
+    name: String!
+    phone: String!
+    email: String
+    carName: String
+    carNo: String
     emailConfirmed: Boolean
     phoneConfirmed: Boolean
   }
 
   input DriverInput {
-    name: string!
-    phone: string!
-    email: string
-    carName: string
-    carNo: string
+    name: String!
+    phone: String!
+    email: String
+    carName: String
+    carNo: String
   }
   input DriverFilter {
     AND: [DriverFilter]
     OR: [DriverFilter]
-    id: string
-    name: string
-    phone: string
-    email: string
-    carName: string
-    carNo: string
+    id: String
+    name: String
+    phone: String
+    email: String
+    carName: String
+    carNo: String
   }
 `;
 

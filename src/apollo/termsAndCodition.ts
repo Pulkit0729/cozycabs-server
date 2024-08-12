@@ -7,26 +7,26 @@ import GraphQLJSON from 'graphql-type-json';
 
 export const termsandconditionTypeDefs = gql`
   type TermsAndCondition {
-    id: string!
-    name: string!
+    id: String!
+    name: String!
     value: JSON
   }
 
   input TermsAndConditionInput {
-    name: string!
+    name: String!
     value: JSON
   }
 
   input TermsAndConditionUpdateInput {
-    name: string
+    name: String
     value: JSON
   }
 
   input TermsAndConditionFilter {
     AND: [TermsAndConditionFilter]
     OR: [TermsAndConditionFilter]
-    id: string
-    name: string
+    id: String
+    name: String
   }
 `;
 

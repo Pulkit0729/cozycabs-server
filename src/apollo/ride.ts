@@ -5,85 +5,85 @@ import { constructQuery } from '../utils/apollo.util';
 
 export const rideTypeDefs = gql`
   type Ride {
-    id: string!
-    blabla_ride_id: string
-    from: string!
-    to: string!
-    fromAddress: string!
-    toAddress: string!
+    id: String!
+    blabla_ride_id: String
+    from: String!
+    to: String!
+    fromAddress: String!
+    toAddress: String!
     fromLocation: Location!
     toLocation: Location!
     date: Date!
-    arrivalTime: string
-    departureTime: string
+    arrivalTime: String
+    departureTime: String
     driver: Driver
     seats: Int!
     price: Int!
     discountedPrice: Int!
     rideNo: Int!
-    status: string!
-    locationUrl: string
+    status: String!
+    locationUrl: String
   }
   input RideInput {
-    blabla_ride_id: string
-    from: string!
-    to: string!
-    fromAddress: string!
-    toAddress: string!
+    blabla_ride_id: String
+    from: String!
+    to: String!
+    fromAddress: String!
+    toAddress: String!
     fromLocation: LocationInput!
     toLocation: LocationInput!
     date: Date!
-    arrivalTime: string!
-    departureTime: string!
-    driver: string!
+    arrivalTime: String!
+    departureTime: String!
+    driver: String!
     seats: Int!
     price: Int!
     discountedPrice: Int!
     rideNo: Int!
-    status: string!
-    locationUrl: string
+    status: String!
+    locationUrl: String
   }
   input RideUpdateInput {
-    blabla_ride_id: string
-    from: string
-    to: string
-    fromAddress: string
-    toAddress: string
+    blabla_ride_id: String
+    from: String
+    to: String
+    fromAddress: String
+    toAddress: String
     fromLocation: LocationInput
     toLocation: LocationInput
     date: Date
-    arrivalTime: string
-    departureTime: string
-    driver: string
+    arrivalTime: String
+    departureTime: String
+    driver: String
     seats: Int
     price: Int
     discountedPrice: Int
     rideNo: Int
-    status: string
-    locationUrl: string
+    status: String
+    locationUrl: String
   }
 
   input RideFilter {
     AND: [RideFilter]
     OR: [RideFilter]
-    id: string
-    blabla_ride_id: string
-    from: string
-    to: string
-    fromAddress: string
-    toAddress: string
+    id: String
+    blabla_ride_id: String
+    from: String
+    to: String
+    fromAddress: String
+    toAddress: String
     fromLocation: LocationInput
     toLocation: LocationInput
     date: Date
-    arrivalTime: string
-    departureTime: string
-    driver: string
+    arrivalTime: String
+    departureTime: String
+    driver: String
     seats: Int
     price: Int
     discountedPrice: Int
     rideNo: Int
-    status: string
-    locationUrl: string
+    status: String
+    locationUrl: String
   }
 `;
 

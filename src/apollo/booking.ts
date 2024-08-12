@@ -35,7 +35,7 @@ const dateScalar = new GraphQLScalarType({
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.INT) {
-      // Convert hard-coded AST string to integer and then to Date
+      // Convert hard-coded AST String to integer and then to Date
       const date = new Date(parseInt(ast.value, 10));
       date.setHours(5, 30);
       return date;
@@ -52,7 +52,7 @@ const dateScalar = new GraphQLScalarType({
 export const bookingTypeDefs = gql(`
 
   type Booking {
-    id: string!
+    id: String!
     ride: Ride
     user: User
     seats: Int!
@@ -60,45 +60,45 @@ export const bookingTypeDefs = gql(`
     discountedTotal: Float!
     isPaid: Boolean!
     isCancelled: Boolean!
-    status: string!
-    channel: string!
+    status: String!
+    channel: String!
   }
   input BookingInput {
-    ride: string!
-    user: string!
+    ride: String!
+    user: String!
     seats: Int!
     total: Float!
     discountedTotal: Float!
-    channel: string!
+    channel: String!
     isPaid: Boolean!
     isCancelled: Boolean!
-    status: string!
+    status: String!
   }
   input BookingUpdateInput {
-    ride: string
-    user: string
+    ride: String
+    user: String
     seats: Int
     total: Float
     discountedTotal: Float
-    channel: string
+    channel: String
     isPaid: Boolean
     isCancelled: Boolean
-    status: string
+    status: String
   }
 
   input BookingFilter {
     AND: [BookingFilter]
     OR: [BookingFilter]
-    id: string
-    ride: string
-    user: string
+    id: String
+    ride: String
+    user: String
     seats: Int
     total: Float
-    channel: string
+    channel: String
     discountedTotal: Float
     isPaid: Boolean
     isCancelled: Boolean
-    status: string
+    status: String
   }`);
 
 export const bookingResolvers = {

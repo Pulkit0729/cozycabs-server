@@ -7,56 +7,56 @@ export const typeDefs = gql`
   type Query {
     users(
       filterBy: UserFilter
-      sortBy: string
+      sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
     ): [User]
     drivers(
       filterBy: DriverFilter
-      sortBy: string
+      sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
     ): [Driver]
     templatedRides(
       filterBy: TemplatedRideFilter
-      sortBy: string
+      sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
     ): [TemplatedRide]
     rides(
       filterBy: RideFilter
-      sortBy: string
+      sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
     ): [Ride]
     bookings(
       filterBy: BookingFilter
-      sortBy: string
+      sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
     ): [Booking]
     promos(
       filterBy: PromoFilter
-      sortBy: string
+      sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
     ): [Promo]
     userPromos(
       filterBy: UserPromoFilter
-      sortBy: string
+      sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ): [UserPromos]
+    ): [UserPromo]
     termsAndConditions(
       filterBy: TermsAndConditionFilter
-      sortBy: string
+      sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
@@ -73,18 +73,18 @@ export const typeDefs = gql`
     addRide(input: RideInput): Ride
     addBooking(input: BookingInput): Booking
     addPromo(input: PromoInput): Promo
-    addUserPromo(input: UserPromoInput): UserPromos
+    addUserPromo(input: UserPromoInput): UserPromo
     addTermsAndCondition(input: TermsAndConditionInput): TermsAndCondition
 
     updateTemplatedRide(
-      id: string!
+      id: String!
       input: TemplatedRideUpdateInput!
     ): TemplatedRide
-    updateRide(id: string!, input: RideUpdateInput!): Ride
-    updateBooking(bookingId: string!, input: BookingUpdateInput!): Booking
-    updatePromo(promoId: string!, input: PromoUpdateInput!): Promo
+    updateRide(id: String!, input: RideUpdateInput!): Ride
+    updateBooking(bookingId: String!, input: BookingUpdateInput!): Booking
+    updatePromo(promoId: String!, input: PromoUpdateInput!): Promo
     updateTermsAndCondition(
-      id: string!
+      id: String!
       input: TermsAndConditionUpdateInput!
     ): TermsAndCondition
   }

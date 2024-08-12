@@ -6,12 +6,12 @@ import { shield } from 'graphql-shield';
 
 export const promoTypeDefs = gql`
   type Promo {
-    id: string!
-    name: string!
-    description: string!
-    type: string
-    source: string
-    termsAndConditions: [string]
+    id: String!
+    name: String!
+    description: String!
+    type: String
+    source: String
+    termsAndConditions: [String]
     offAmount: Float
     percentage: Float
     maximumDiscount: Float
@@ -19,22 +19,22 @@ export const promoTypeDefs = gql`
   }
 
   input PromoInput {
-    name: string!
-    description: string!
-    type: string!
-    source: string!
-    termsAndConditions: [string]
+    name: String!
+    description: String!
+    type: String!
+    source: String!
+    termsAndConditions: [String]
     offAmount: Float!
     percentage: Float!
     maximumDiscount: Float!
     minimumAmount: Float!
   }
   input PromoUpdateInput {
-    name: string
-    description: string
-    type: string
-    source: string
-    termsAndConditions: [string]
+    name: String
+    description: String
+    type: String
+    source: String
+    termsAndConditions: [String]
     offAmount: Float
     percentage: Float
     maximumDiscount: Float
@@ -43,12 +43,12 @@ export const promoTypeDefs = gql`
   input PromoFilter {
     AND: [PromoFilter]
     OR: [PromoFilter]
-    id: string
-    name: string
-    description: string
-    type: string
-    source: string
-    termsAndConditions: [string]
+    id: String
+    name: String
+    description: String
+    type: String
+    source: String
+    termsAndConditions: [String]
     offAmount: Float
     percentage: Float
     maximumDiscount: Float

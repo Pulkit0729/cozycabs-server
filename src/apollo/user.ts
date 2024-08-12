@@ -6,27 +6,27 @@ import { isAdmin, isUserAuthenticated } from '../utils/permission.util';
 
 export const userTypeDef = gql`
   type User {
-    id: string!
-    name: string!
-    phone: string!
-    email: string
-    referralCode: string
+    id: String!
+    name: String!
+    phone: String!
+    email: String
+    referralCode: String
     emailConfirmed: Boolean
     phoneConfirmed: Boolean
   }
 
   input UserInput {
-    name: string!
-    phone: string!
-    email: string
+    name: String!
+    phone: String!
+    email: String
   }
 
   input UserFilter {
     AND: [UserFilter]
     OR: [UserFilter]
-    id: string
-    name: string
-    phone: string
+    id: String
+    name: String
+    phone: String
   }
 `;
 

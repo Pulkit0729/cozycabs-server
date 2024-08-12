@@ -30,7 +30,7 @@ export const sendToUser = async (
   driver: IDriver,
   locationUrl?: any
 ) => {
-  const date = ride.date.split('T')[0];
+  const date = ride.date.toISOString().split('T')[0];
   await makeRequest(
     sendpulseUrl,
     'post',
@@ -45,7 +45,7 @@ export const sendToUser = async (
       seats: booking.seats,
       departureTime: ride.departureTime,
       arrivalTime: ride.arrivalTime,
-      price: booking.discountedTotal,
+      price: booking.billDetails.grandTotal,
       driver_no: driver.phone,
       carName: driver?.carName,
       carNo: driver?.carNo,
@@ -63,7 +63,7 @@ export const sendToDriver = async (
   driver: IDriver,
   driver_name?: any
 ) => {
-  const date = ride.date.split('T')[0];
+  const date = ride.date.toISOString().split('T')[0];
   await makeRequest(
     sendpulseUrl,
     'post',
@@ -75,7 +75,7 @@ export const sendToDriver = async (
       from: ride.from,
       to: ride.to,
       date: date,
-      price: booking.discountedTotal,
+      price: booking.billDetails.grandTotal,
       seats: booking.seats,
       departureTime: ride.departureTime,
       arrivalTime: ride.arrivalTime,
@@ -108,7 +108,7 @@ export const sendToAdmin = async (
   user: IUser,
   no: any
 ) => {
-  const date = ride.date.split('T')[0];
+  const date = ride.date.toISOString().split('T')[0];
 
   await makeRequest(
     sendpulseUrl,
@@ -121,7 +121,7 @@ export const sendToAdmin = async (
       to: ride.to,
       date: date,
       seats: booking.seats,
-      price: booking.discountedTotal,
+      price: booking.billDetails.grandTotal,
       departureTime: ride.departureTime,
       arrivalTime: ride.arrivalTime,
       user_phone: user.phone,

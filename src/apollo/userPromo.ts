@@ -21,9 +21,9 @@ export const userpromosTypeDefs = gql`
   input UserPromoInput {
     userId: String
     referredFrom: String
-    promo: String
+    promoId: String
     isUsed: Boolean
-    validUpto: Date
+    validDays: Int
   }
   input UserPromoFilter {
     id: String
@@ -31,7 +31,7 @@ export const userpromosTypeDefs = gql`
     referredFrom: String
     promo: String
     isUsed: Boolean
-    validUpto: Date
+    validDays: Date
   }
 `;
 

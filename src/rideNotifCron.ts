@@ -16,7 +16,7 @@ export function startRideNotifCron() {
 
 export async function rideNotifHandler() {
   logger.info("Ride Notif");
-  let today = getFormattedDate(1);
+  let today = getFormattedDate(0);
   let now = new Date();
   let todayRides = await Ride.find({ date: today, notification_sent: false });
   for (let i = 0; i < todayRides.length; i++) {

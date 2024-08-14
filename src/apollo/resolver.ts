@@ -4,25 +4,25 @@ import Ride from "../models/rides";
 import TemplatedRide from "../models/templated_rides";
 import User from "../models/users";
 
-import { GraphQLScalarType, Kind } from 'graphql';
+import { GraphQLScalarType, Kind } from "graphql";
 
 const dateScalar = new GraphQLScalarType({
-  name: 'Date',
-  description: 'Date custom scalar type',
+  name: "Date",
+  description: "Date custom scalar type",
   serialize(value) {
     if (value instanceof Date) {
-      return value.toLocaleString().split(',')[0]; // Convert outgoing Date to integer for JSON
+      return value.toLocaleString().split(",")[0]; // Convert outgoing Date to integer for JSON
     }
-    throw Error('GraphQL Date Scalar serializer expected a `Date` object');
+    throw Error("GraphQL Date Scalar serializer expected a `Date` object");
   },
   parseValue(value) {
-    if (typeof value === 'number') {
+    if (typeof value === "number") {
       return new Date(value); // Convert incoming integer to Date
     }
-    if (typeof value === 'string' && !isNaN(parseFloat(value))) {
+    if (typeof value === "string" && !isNaN(parseFloat(value))) {
       return new Date(parseFloat(value));
     }
-    throw new Error('GraphQL Date Scalar parser expected a `number`');
+    throw new Error("GraphQL Date Scalar parser expected a `number`");
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.INT) {
@@ -39,44 +39,59 @@ const dateScalar = new GraphQLScalarType({
     // Invalid hard-coded value (not an integer)
     return null;
   },
-})
+});
 
 export const resolvers = {
   Date: dateScalar,
   Query: {
-    users: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
-      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
+    users: async (
+      _: any,
+      { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any
+    ) => {
+      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder);
       const users = await User.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
         .limit(perPage);
       return users;
     },
-    drivers: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
-      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
+    drivers: async (
+      _: any,
+      { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any
+    ) => {
+      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder);
       const drivers = await Driver.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
         .limit(perPage);
       return drivers;
     },
-    templatedRides: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
-      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
+    templatedRides: async (
+      _: any,
+      { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any
+    ) => {
+      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder);
       const rides = await TemplatedRide.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
         .limit(perPage);
       return rides;
     },
-    rides: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
-      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder)
+    rides: async (
+      _: any,
+      { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any
+    ) => {
+      let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder);
       const rides = await Ride.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
         .limit(perPage);
       return rides;
     },
-    bookings: async (_: any, { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any) => {
+    bookings: async (
+      _: any,
+      { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any
+    ) => {
       let { query, sortOptions } = constructQuery(filterBy, sortBy, sortOrder);
       const bookings = await Booking.find(query)
         .sort(sortOptions)
@@ -110,7 +125,7 @@ export const resolvers = {
       try {
         const templatedRide = await TemplatedRide.findById(id);
         if (!templatedRide) {
-          throw new Error('Ride not found');
+          throw new Error("Ride not found");
         }
 
         // Update templatedRide properties if provided in the input
@@ -141,7 +156,7 @@ export const resolvers = {
       try {
         const ride = await Ride.findById(id);
         if (!ride) {
-          throw new Error('Ride not found');
+          throw new Error("Ride not found");
         }
 
         // Update ride properties if provided in the input
@@ -151,7 +166,7 @@ export const resolvers = {
         if (input.blabla_ride_id) {
           ride.blabla_ride_id = input.blabla_ride_id;
         }
-        if (input.seats != false) {
+        if (input.seats != false || input.seats == 0) {
           ride.seats = input.seats;
         }
         if (input.price) {
@@ -172,7 +187,7 @@ export const resolvers = {
       try {
         const booking = await Booking.findById(bookingId);
         if (!booking) {
-          throw new Error('Ride not found');
+          throw new Error("Ride not found");
         }
 
         // Update booking properties if provided in the input
@@ -189,12 +204,15 @@ export const resolvers = {
       } catch (error: any) {
         throw new Error(`Failed to update ride: ${error.message}`);
       }
-    }
+    },
   },
 };
 
-
-function constructQuery(filterBy: any, sortBy: string | number, sortOrder: string) {
+function constructQuery(
+  filterBy: any,
+  sortBy: string | number,
+  sortOrder: string
+) {
   let query: any = {};
   if (filterBy) {
     if (filterBy.AND) {
@@ -212,27 +230,30 @@ function constructQuery(filterBy: any, sortBy: string | number, sortOrder: strin
     }
 
     // Handle individual column filters
-    query = { ...query, ...constructSubQuery(filterBy) }
+    query = { ...query, ...constructSubQuery(filterBy) };
   }
   const sortOptions: any = {};
   if (sortBy) {
-    sortOptions[sortBy] = sortOrder === 'ASC' ? 1 : -1;
+    sortOptions[sortBy] = sortOrder === "ASC" ? 1 : -1;
   }
-  return { query, sortOptions }
+  return { query, sortOptions };
 }
-
 
 function constructSubQuery(condition: any) {
   let query: any = {};
 
   Object.entries(condition).forEach(([key, value]) => {
-    if (key !== 'AND' && key !== 'OR' && isValueDefined(value)) {
-      if (isNaN(value as any) && typeof value != "boolean" && key != "id" && typeof value != "object") {
-        query[key] = { $regex: value, $options: 'i' };
+    if (key !== "AND" && key !== "OR" && isValueDefined(value)) {
+      if (
+        isNaN(value as any) &&
+        typeof value != "boolean" &&
+        key != "id" &&
+        typeof value != "object"
+      ) {
+        query[key] = { $regex: value, $options: "i" };
       } else if (key == "id") {
         query["_id"] = value;
-      }
-      else {
+      } else {
         query[key] = value;
       }
     }
@@ -243,8 +264,8 @@ function constructSubQuery(condition: any) {
 
 function isValueDefined(value: any) {
   let res1 = value != null;
-  let res2 = value != undefined
-  let res3 = (typeof value == "boolean" || value !="");
+  let res2 = value != undefined;
+  let res3 = typeof value == "boolean" || value != "";
   let res4 = value != "null";
   return res1 && res2 && res3 && res4;
 }

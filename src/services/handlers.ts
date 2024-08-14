@@ -85,7 +85,7 @@ export async function book(
     seats = Number.parseInt(seats);
     if (!ride.seats || ride.seats == 0 || ride.seats < seats) {
       await sendToUser(eventType.error, {
-        date: ride.date,
+        date: ride.date?.toISOString(),
         departure_time: ride.departure_time,
         user_no: user_phone,
         user_name: user.name,
@@ -97,7 +97,7 @@ export async function book(
         await sendToAdmin(
           eventType.error,
           {
-            date: ride.date,
+            date: ride.date?.toISOString(),
             departure_time: ride.departure_time,
             user_no: user_phone,
             user_name: user.name,
@@ -111,7 +111,7 @@ export async function book(
       await sendToDriver(
         eventType.error,
         {
-          date: ride.date,
+          date: ride.date?.toISOString(),
           departure_time: ride.departure_time,
           user_no: user_phone,
           user_name: user.name,

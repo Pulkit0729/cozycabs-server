@@ -1,12 +1,11 @@
 import cron from "node-cron";
-import TemplatedRide from "./models/templated_rides";
 import Ride from "./models/rides";
 import logger from "./logger/logger";
 import Booking from "./models/bookings";
 import { eventType, sendToUser } from "./services/sendpulse";
 
 const Cron_String = "*/30 * * * *";
-const timeDiff = 120;
+const timeDiff = 180;
 
 export function startRideNotifCron() {
   cron.schedule(Cron_String, function () {
@@ -38,6 +37,8 @@ export async function rideNotifHandler() {
         is_cancelled: false,
       });
       bookings.forEach(async (booking) => {
+        logger.info("Ride Notif " + booking.user_no);
+
         let des = await sendToUser(
           eventType.rideNotif,
           JSON.parse(JSON.stringify(booking))

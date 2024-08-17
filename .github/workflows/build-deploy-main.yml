@@ -1,9 +1,9 @@
-name: Deploy to Cozycabs Prod Server
+name: Deploy to Ec2 Server
 
 on:
   push:
     branches:
-      - prod
+      - main
 
 env:
   AWS_REGION: ap-south-1
@@ -26,7 +26,7 @@ jobs:
     - name: Copy code to EC2 instance
       uses: appleboy/scp-action@master
       with:
-        host: 13.200.162.71
+        host: 65.1.153.75
         username: "ubuntu"
         key_path: ./.github/prod.pem
         source: .
@@ -35,7 +35,7 @@ jobs:
     - name: Restart Service
       uses: appleboy/ssh-action@v0.1.7
       with:
-        host: "13.200.162.71"
+        host: "65.1.153.75"
         username: "ubuntu"
         key_path: ./.github/prod.pem
         port: 22

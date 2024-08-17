@@ -39,6 +39,11 @@ export class ReferralController {
         isCancelled: false,
       });
       if (booking) throw new Error('User is already a customer');
+      const userPromoFromReferredUser = await searchUserPromos({
+        referredFrom: user.userId.toString(),
+      });
+      if (userPromoFromReferredUser.length > 0)
+        throw new Error('You are not eligible for a referral');
       const referalUser = await searchUser({ referralCode: referralCode });
       if (
         referalUser == null ||

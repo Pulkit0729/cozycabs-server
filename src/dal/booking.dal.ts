@@ -3,8 +3,8 @@ import { IRide } from '../models/rides';
 import { IUser } from '../models/users';
 import { RideStatus } from '../utils/constants';
 
-export async function getBooking(id: string) {
-  return await Booking.findOne({ _id: id })
+export async function getBooking(bookingId: string) {
+  return await Booking.findOne({ bookingId: bookingId })
     .populate<{ ride: any }>({ path: 'ride', populate: 'driver' })
     .then((booking) => {
       return booking;
@@ -14,7 +14,7 @@ export async function getBookingsFromRide(
   rideId: string,
   cancelled: boolean = false
 ) {
-  return await Booking.find({ ride: rideId, isCancelled: cancelled })
+  return await Booking.find({ rideId: rideId, isCancelled: cancelled })
     .populate<{ ride: IRide }>('ride')
     .populate<{ user: IUser }>('user')
     .exec();
@@ -39,8 +39,8 @@ export async function getBookings(filters: any) {
 }
 
 export async function cancelBookings(rideId: string) {
-  return await Booking.updateMany({ ride: rideId }, { isCancelled: true });
+  return await Booking.updateMany({ rideId: rideId }, { isCancelled: true });
 }
 export async function updateBookings(rideId: string, status: RideStatus) {
-  return await Booking.updateMany({ ride: rideId }, { status: status });
+  return await Booking.updateMany({ rideId: rideId }, { status: status });
 }

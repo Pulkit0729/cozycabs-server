@@ -30,7 +30,7 @@ router.post('/cancel', async (req, res) => {
     // Update ride with seats booked
     const ride = await cancel(
       booking.user.phone.toString()!,
-      booking.ride.toString()!
+      booking.rideId.toString()!
     );
     logger.log({ level: 'info', message: 'Cancel Done' + ride });
     return res.json({ success: true, ride });
@@ -49,7 +49,7 @@ router.post('/start', async (req, res) => {
     ride.status = 'active';
     await ride.save();
     const bookings = await Booking.find({
-      ride_id: ride.id,
+      ride_id: ride.rideId,
       isCancelled: false,
     }).populate<{ user: IUser }>('Users');
     bookings.forEach(async (booking) => {
@@ -81,7 +81,7 @@ router.post('/end', async (req, res) => {
     ride.status = 'end';
     await ride.save();
     const bookings = await Booking.find({
-      ride_id: ride.id,
+      ride_id: ride.rideId,
       isCancelled: false,
     }).populate<{ user: IUser }>('Users');
     bookings.forEach(async (booking) => {

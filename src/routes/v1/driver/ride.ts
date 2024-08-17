@@ -9,16 +9,22 @@ import {
 } from '../../../utils/notifications';
 import { IRide } from '../../../models/rides';
 import { sendNotification } from '../../../services/external/firebase';
+import { IDriver } from '../../../models/drivers';
 const router = Router();
 
 router.post('/navstatus', driverAuthMiddle, async (req, res) => {
-  const { user, ride_id, navstatus } = req.body;
+  const {
+    driver,
+    rideId,
+    navstatus,
+  }: { driver: IDriver; rideId: string; navstatus: string } = req.body;
   try {
-    const ride = await getRide(ride_id);
+    const ride = await getRide(rideId);
     if (!ride) throw new Error('Ride not found');
-    if (user.id != ride.driver.id) throw new Error('Unauthenticated driver');
+    if (driver.driverId.toJSON() != ride.driver.driverId.toString())
+      throw new Error('Unauthenticated driver');
     ride.navigationStatus = navstatus;
-    const bookings = await getBookingsFromRide(ride.id);
+    const bookings = await getBookingsFromRide(ride.rideId.toString());
     for (const booking of bookings) {
       const userFcm = booking.user.fcm?.value;
       if (userFcm) {

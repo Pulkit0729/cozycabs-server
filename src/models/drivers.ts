@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 import { ILocation } from './templatedRides';
 
-export interface IDriver {
-  id: string;
+export interface IDriver extends Document {
+  driverId: Types.ObjectId;
   name: string;
   email: string;
   phone: string;
@@ -19,6 +19,12 @@ export interface IDriver {
 }
 const DriverSchema = new mongoose.Schema<IDriver>(
   {
+    driverId: {
+      type: Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
+      required: true,
+      unique: true,
+    },
     name: String,
     email: String,
     phone: String,

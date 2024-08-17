@@ -46,7 +46,7 @@ export function constructSubQuery(condition: any) {
       ) {
         query[key] = { $regex: value, $options: 'i' };
       } else if (key == 'id') {
-        query['_id'] = value;
+        query['id'] = value;
       } else {
         query[key] = value;
       }

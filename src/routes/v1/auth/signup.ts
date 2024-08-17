@@ -19,10 +19,10 @@ userRouter.post('/', async (req, res) => {
       LastName,
       phonenumber
     );
-    await sendVerifEmail(user.id, user.email);
+    await sendVerifEmail(user.userId, user.email);
     // logger.log({
     //   level: "info",
-    //   message: `SignUp API called, ip: ${IP.address()} userId: ${user.id} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
+    //   message: `SignUp API called, ip: ${IP.address()} userId: ${user.userId} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
     // });
     return res.json({ success: true, msg: 'Account Created successfully' });
   } catch (error: any) {

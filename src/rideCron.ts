@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import TemplatedRide from './models/templatedRides';
 import Ride from './models/rides';
 import logger from './logger/logger';
+import { getFormattedDate } from './utils/date.util';
 
 const Cron_String = process.env.CRON_STRING || '0 0 * * *';
 
@@ -32,7 +33,7 @@ export async function addRides() {
           from: templateRide.from!,
           to: templateRide.to!,
           departureTime: templateRide.departureTime!,
-          driver: templateRide.driver!,
+          driverId: templateRide.driverId!,
         });
         if (!existRide) {
           noOfRides++;
@@ -47,7 +48,7 @@ export async function addRides() {
             departureTime: templateRide.departureTime,
             arrivalTime: templateRide.arrivalTime,
             rideNo: noOfRides,
-            driver: templateRide.driver,
+            driverId: templateRide.driverId,
             seats: templateRide.seats,
             price: templateRide.price,
             discountedPrice: templateRide.discountedPrice,
@@ -60,9 +61,4 @@ export async function addRides() {
   } catch (error) {
     logger.error(error);
   }
-}
-
-function getFormattedDate(i: number) {
-  const date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000);
-  return new Date(date.toISOString().split('T')[0]);
 }

@@ -35,6 +35,7 @@ import {
   termsandconditionResolvers,
   termsandconditionTypeDefs,
 } from './apollo/termsAndCodition';
+import { billDetailsTypeDef } from './apollo/billDetails';
 
 const cors = require('cors');
 const PORT = process.env.API_PORT || 3000;
@@ -55,6 +56,7 @@ export default async function App() {
           resolvers: termsandconditionResolvers,
         },
         { typeDefs: locationTypeDefs },
+        { typeDefs: billDetailsTypeDef },
         { typeDefs },
       ]),
       userPermissions,

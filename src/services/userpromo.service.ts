@@ -1,4 +1,4 @@
-import { Schema, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { getUserPromo } from '../dal/userPromo.dal';
 import { IBooking } from '../models/bookings';
 import { IPromo, PromoSources, PromoTypes } from '../models/promos';
@@ -9,13 +9,18 @@ import { searchPromo } from '../dal/promo.dal';
 import { IRide } from '../models/rides';
 
 export class UserPromoService {
-  static async addPromoToUser(user: IUser, promo: IPromo, validDays: number) {
+  static async addPromoToUser(
+    user: IUser,
+    promo: IPromo,
+    validDays: number,
+    referalUser?: IUser
+  ) {
     const validUptoDate = new Date();
     validUptoDate.setDate(validUptoDate.getDate() + validDays);
     const userPromo = new UserPromo({
-      userId: user.id,
-      referredFrom: '',
-      promo: promo.id,
+      userId: user.userId,
+      referredFrom: referalUser?.userId ?? '',
+      promoId: promo.promoId,
       isUsed: false,
       validUpto: validUptoDate,
     });
@@ -39,7 +44,7 @@ export class UserPromoService {
       userPromo.promo,
       booking.billDetails.discountItemTotal
     );
-    booking.promoId = new Schema.Types.ObjectId(userPromoId);
+    booking.promoId = new Types.ObjectId(userPromoId);
     booking.billDetails.promoDiscount = discount;
     booking.billDetails.grandTotal =
       booking.billDetails.discountItemTotal - discount;
@@ -52,10 +57,12 @@ export class UserPromoService {
     userPromoId: string,
     discountedTotal: number
   ) {
-    const userPromo = await getUserPromo(
-      new Schema.Types.ObjectId(userPromoId)
-    );
-    if (!userPromo || userPromo.isUsed || userPromo.userId != user.id)
+    const userPromo = await getUserPromo(userPromoId);
+    if (
+      !userPromo ||
+      userPromo.isUsed ||
+      userPromo.userId.valueOf() != user.userId.toString()
+    )
       throw new Error(`User do not have promo: ${userPromoId}`);
     if (userPromo.validUpto < new Date())
       throw new Error(`User Promo ${userPromoId} is expired`);
@@ -93,7 +100,7 @@ export class UserPromoService {
     >
   ) {
     if (booking.promoId) {
-      const userPromo = await getUserPromo(booking.promoId);
+      const userPromo = await getUserPromo(booking.promoId.toString());
       if (!userPromo || !userPromo.referredFrom) return;
       const referralFromUser = await getUser(userPromo.referredFrom);
       if (!referralFromUser) return;

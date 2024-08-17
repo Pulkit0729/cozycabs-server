@@ -1,7 +1,13 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const TermsAndConditionsSchema = new mongoose.Schema(
   {
+    id: {
+      type: Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
+      required: true,
+      unique: true,
+    },
     name: String,
     value: Object,
   },

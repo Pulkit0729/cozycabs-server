@@ -12,10 +12,10 @@
 //       return res.json({ success: false, msg: 'First Name Required' });
 //     }
 //     // const driver = await createDriver(email, password, firstName, LastName, phonenumber);
-//     // await sendVerifEmail(driver.id, driver.email);
+//     // await sendVerifEmail(driver.driverId, driver.email);
 //     // logger.log({
 //     //   level: "info",
-//     //   message: `SignUp API called, ip: ${IP.address()} driverId: ${driver.id} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
+//     //   message: `SignUp API called, ip: ${IP.address()} driverId: ${driver.driverId} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
 //     // });
 //     return res.json({ success: true, msg: 'Account Created successfully' });
 //   } catch (error: any) {

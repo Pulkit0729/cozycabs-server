@@ -10,7 +10,7 @@ import { UserPromoService } from '../services/userpromo.service';
 
 export const userpromosTypeDefs = gql`
   type UserPromo {
-    id: String!
+    userPromoId: String!
     userId: String!
     referredFrom: String
     promo: String!
@@ -26,7 +26,7 @@ export const userpromosTypeDefs = gql`
     validDays: Int
   }
   input UserPromoFilter {
-    id: String
+    userPromoId: String
     userId: String
     referredFrom: String
     promo: String

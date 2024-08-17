@@ -7,7 +7,7 @@ import { shield } from 'graphql-shield';
 
 export const templateTypeDefs = gql`
   type TemplatedRide {
-    id: String!
+    templateRideId: String!
     from: String!
     to: String!
     fromAddress: String!
@@ -31,7 +31,7 @@ export const templateTypeDefs = gql`
     toLocation: LocationInput!
     arrivalTime: String!
     departureTime: String!
-    driver: String!
+    driverId: String!
     seats: Int!
     price: Int!
     discountedPrice: Int!
@@ -45,7 +45,7 @@ export const templateTypeDefs = gql`
     toLocation: LocationInput
     arrivalTime: String
     departureTime: String
-    driver: String
+    driverId: String
     seats: Int
     price: Int
     discountedPrice: Int
@@ -54,7 +54,7 @@ export const templateTypeDefs = gql`
   input TemplatedRideFilter {
     AND: [TemplatedRideFilter]
     OR: [TemplatedRideFilter]
-    id: String
+    templateRideId: String
     from: String
     to: String
     fromAddress: String
@@ -63,7 +63,7 @@ export const templateTypeDefs = gql`
     toLocation: LocationInput
     arrivalTime: String
     departureTime: String
-    driver: String
+    driverId: String
     seats: Int
     price: Int
     discountedPrice: Int

@@ -32,7 +32,9 @@ export class UserPromoControlller {
   static async getUserPromos(req: Request, res: Response) {
     const { user } = req.body;
     try {
-      const userPromos = await getValidUserPromo(user.id);
+      const userPromos = await getValidUserPromo(user.userId);
+      console.log(userPromos);
+
       return res.status(200).json({ success: true, data: userPromos });
     } catch (error: any) {
       logger.error(

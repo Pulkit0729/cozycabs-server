@@ -44,7 +44,7 @@ export async function book(
     }
     if (!ride) throw new Error('No ride found');
     const existingBooking = await Booking.findOne({
-      ride_id: ride.id,
+      ride_id: ride.rideId,
       user_no: user_phone,
       isCancelled: false,
     });
@@ -63,8 +63,8 @@ export async function book(
     ride.seats = ride.seats - seats;
     await ride.save();
     const booking = new Booking({
-      ride: ride.id,
-      user: user.id,
+      ride: ride.rideId,
+      user: user.userId,
       seats: seats,
       total: total,
       discountedTotal: discountedTotal,
@@ -146,7 +146,7 @@ export async function cancel(
     }
     if (!user) throw new Error('No user found');
     const booking = await Booking.findOne({
-      $and: [{ user: user.id }, { isCancelled: false }],
+      $and: [{ user: user.userId }, { isCancelled: false }],
     });
     if (!booking) throw new Error('No Booking found');
     booking.isCancelled = true;

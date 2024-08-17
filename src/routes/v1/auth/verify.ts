@@ -19,7 +19,7 @@ router.post('/otp', async (req, res) => {
       throw new Error('Invalid phone or Otp');
     const isVerified = await verifyOTP(user.phoneVerificationId, parseInt(otp));
     if (!isVerified) throw new Error('Invalid phone or Otp');
-    const token = issueJWT(user.id);
+    const token = issueJWT(user.userId.toString());
     let payload: any = {
       token,
       phone,

@@ -50,37 +50,36 @@ const dateScalar = new GraphQLScalarType({
   },
 });
 export const bookingTypeDefs = gql(`
-
   type Booking {
-    id: String!
+    bookingId: String!
     ride: Ride
     user: User
-    seats: Int!
-    total: Float!
-    discountedTotal: Float!
+    channel: String!
+    seats: Float!
+    billDetails: BillDetails!
+    promoId: String
     isPaid: Boolean!
     isCancelled: Boolean!
     status: String!
-    channel: String!
   }
   input BookingInput {
-    ride: String!
-    user: String!
-    seats: Int!
-    total: Float!
-    discountedTotal: Float!
+    rideId: String!
+    userId: String!
     channel: String!
+    seats: Float!
+    billDetails: BillDetailsInput!
+    promoId: String
     isPaid: Boolean!
     isCancelled: Boolean!
     status: String!
   }
   input BookingUpdateInput {
-    ride: String
-    user: String
-    seats: Int
-    total: Float
-    discountedTotal: Float
+    rideId: String
+    userId: String
     channel: String
+    seats: Float
+    billDetails: BillDetailsInput
+    promoId: String
     isPaid: Boolean
     isCancelled: Boolean
     status: String
@@ -89,13 +88,12 @@ export const bookingTypeDefs = gql(`
   input BookingFilter {
     AND: [BookingFilter]
     OR: [BookingFilter]
-    id: String
-    ride: String
-    user: String
-    seats: Int
-    total: Float
+    bookingId: String
+    rideId: String
+    userId: String
     channel: String
-    discountedTotal: Float
+    seats: Float
+    promoId: String
     isPaid: Boolean
     isCancelled: Boolean
     status: String
@@ -113,6 +111,7 @@ export const bookingResolvers = {
         sortBy,
         sortOrder
       );
+      console.log(query, sortOptions);
       const bookings = await Booking.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)

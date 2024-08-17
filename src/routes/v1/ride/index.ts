@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
   const { id } = req.query;
   try {
     const ride = await getRide(id as string);
-    const bookings = await getBookingsFromRide(ride?.id, false);
+    const bookings = await getBookingsFromRide(ride?.rideId.toString()!, false);
     const passengers = bookings.map((booking) => booking.user);
     const jsonRide = JSON.parse(JSON.stringify(ride));
     jsonRide['passengers'] = passengers;

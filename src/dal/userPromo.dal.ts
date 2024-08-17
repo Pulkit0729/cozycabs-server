@@ -1,14 +1,13 @@
 import {
   FilterQuery,
-  Schema,
   UpdateQuery,
   UpdateWithAggregationPipeline,
 } from 'mongoose';
-import { IPromo, PromoSources } from '../models/promos';
+import { IPromo } from '../models/promos';
 import UserPromo, { IUserPromo } from '../models/userPromos';
 
-export async function getUserPromo(id: Schema.Types.ObjectId) {
-  return await UserPromo.findOne({ _id: id })
+export async function getUserPromo(userPromoId: string) {
+  return await UserPromo.findOne({ userPromoId: userPromoId })
     .populate<{ promo: IPromo }>('promo')
     .then((userPromos) => {
       return userPromos;
@@ -36,18 +35,20 @@ export async function getUserPromoByPromo(
   promoId: string,
   filters: {} = {}
 ) {
-  return await UserPromo.find({ userId: userId, promo: promoId, ...filters })
+  return await UserPromo.find({ userId: userId, promoId: promoId, ...filters })
     .populate<{ promo: IPromo }>('promo')
     .then((promos) => {
       return promos;
     });
 }
 
-export async function getUserPromoBySource(
-  userId: string,
-  source: PromoSources
-) {
-  return await UserPromo.find({ userId: userId, 'promo.source': source })
+export async function getReferralUserPromo(userId: string) {
+  return await UserPromo.find({
+    $and: [
+      { userId: userId },
+      { $or: [{ referredFrom: { $ne: '' } }, { referredFrom: { $ne: null } }] },
+    ],
+  })
     .populate<{ promo: IPromo }>('promo')
     .then((promos) => {
       return promos;
@@ -57,6 +58,7 @@ export async function getUserPromoBySource(
 export async function getValidUserPromo(userId: string) {
   return await UserPromo.find({
     userId: userId,
+    isUsed: false,
     validUpto: { $gte: new Date() },
   })
     .populate<{ promo: IPromo }>('promo')
@@ -66,8 +68,8 @@ export async function getValidUserPromo(userId: string) {
 }
 
 export async function updateUserPromo(
-  id: any,
+  userPromoId: any,
   update: UpdateWithAggregationPipeline | UpdateQuery<IUserPromo> | undefined
 ) {
-  return await UserPromo.updateOne({ _id: id }, update);
+  return await UserPromo.updateOne({ userPromoId: userPromoId }, update);
 }

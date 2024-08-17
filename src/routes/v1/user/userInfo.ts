@@ -12,8 +12,8 @@ router.put('/', authMiddle, async (req, res) => {
   try {
     if (userInfo === undefined || userInfo === null)
       throw new Error('Info missing');
-    await User.updateOne({ _id: user.id }, { $set: { ...userInfo } });
-    const newUser = await getUser(user.id);
+    await User.updateOne({ userId: user.userId }, { $set: { ...userInfo } });
+    const newUser = await getUser(user.userId);
     return res.json({
       success: true,
       user: newUser,

@@ -1,7 +1,7 @@
 import Driver from '../models/drivers';
 
-export async function getDriver(id: string) {
-  return await Driver.findOne({ _id: id }).then((driver) => {
+export async function getDriver(driverId: string) {
+  return await Driver.findOne({ driverId: driverId }).then((driver) => {
     return driver;
   });
 }

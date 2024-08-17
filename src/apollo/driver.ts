@@ -6,7 +6,7 @@ import { isAdmin, isDriverAuthenticated } from '../utils/permission.util';
 
 export const driverTypeDefs = gql`
   type Driver {
-    id: String!
+    driverId: String!
     name: String!
     phone: String!
     email: String
@@ -26,7 +26,7 @@ export const driverTypeDefs = gql`
   input DriverFilter {
     AND: [DriverFilter]
     OR: [DriverFilter]
-    id: String
+    driverId: String
     name: String
     phone: String
     email: String

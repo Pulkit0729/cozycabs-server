@@ -28,7 +28,7 @@ userRouter.post('/', async (req, res) => {
     if (!user.emailConfirmed) throw new Error('Email is not confirmed');
     const isValid = validPassword(password, user.hash, user.salt);
     if (!isValid) throw new Error('Invalid password');
-    const token = issueJWT(user._id);
+    const token = issueJWT(user.userId);
 
     const userData = {
       name: user.name,
@@ -36,10 +36,7 @@ userRouter.post('/', async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
     };
-    // logger.log({
-    //   level: "info",
-    //   message: `Login API, ip: ${IP.address()} userId: ${user._id}, URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
-    // });
+
     return res.cookie('jwt', token, jwtOptions).status(200).json({
       success: true,
       user: userData,

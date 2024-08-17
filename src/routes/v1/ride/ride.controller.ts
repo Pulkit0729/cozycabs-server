@@ -11,13 +11,14 @@ import { updateUserPromo } from '../../../dal/userPromo.dal';
 
 export class RideController {
   static async updateRideStatus(req: Request, res: Response) {
-    const { user, rideId, status } = req.body;
+    const { driver, rideId, status } = req.body;
     try {
       const ride = await getRide(rideId);
       if (!ride) throw new Error('Ride not found');
-      if (user.id != ride.driver.id) throw new Error('Unauthenticated driver');
+      if (driver.driverId.toString() != ride.driver.driverId.toString())
+        throw new Error('Unauthenticated driver');
       ride.status = status;
-      const bookings = await getBookingsFromRide(ride.id);
+      const bookings = await getBookingsFromRide(ride.rideId.toString());
       bookings.forEach(async (booking) => {
         switch (ride.status) {
           case RideStatus.cancelled:

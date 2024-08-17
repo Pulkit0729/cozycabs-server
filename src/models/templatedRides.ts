@@ -1,11 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
+import { IDriver } from './drivers';
 
 export interface ILocation {
   type: string;
   coordinates: any[];
 }
-export interface ITemplateRide {
-  id: string;
+export interface ITemplateRide extends Document {
+  templateRideId: Types.ObjectId;
   from: string;
   fromLocation: ILocation;
   to: string;
@@ -15,7 +16,8 @@ export interface ITemplateRide {
   time: string;
   arrivalTime: string;
   departureTime: string;
-  driver: string;
+  driverId: string;
+  driver: IDriver;
   seats: number;
   price: number;
   discountedPrice: number;
@@ -23,6 +25,12 @@ export interface ITemplateRide {
 
 const TemplatedRideSchema = new mongoose.Schema(
   {
+    templateRideId: {
+      type: Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
+      required: true,
+      unique: true,
+    },
     from: String,
     to: String,
     fromAddress: String,
@@ -30,9 +38,8 @@ const TemplatedRideSchema = new mongoose.Schema(
     time: String,
     arrivalTime: String,
     departureTime: String,
-    driver: {
+    driverId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Drivers',
     },
     fromLocation: Object,
     toLocation: Object,
@@ -42,6 +49,14 @@ const TemplatedRideSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+TemplatedRideSchema.virtual('driver', {
+  ref: 'Drivers',
+  localField: 'driverId',
+  justOne: true,
+
+  foreignField: 'driverId',
+});
 
 const TemplatedRide = mongoose.model(
   'TemplatedRides',

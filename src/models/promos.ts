@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 
 export enum PromoTypes {
   PERCENTAGE = 'percentage',
@@ -12,7 +12,7 @@ export enum PromoSources {
 }
 
 export interface IPromoFilter {
-  id?: string;
+  promoId?: string;
   name?: string;
   type?: string;
   source?: string;
@@ -22,8 +22,8 @@ export interface IPromoFilter {
   maximumDiscount?: number;
   minimumAmount?: number;
 }
-export interface IPromo {
-  id: Schema.Types.ObjectId;
+export interface IPromo extends Document {
+  promoId: Types.ObjectId;
   name: string;
   type: string;
   source: string;
@@ -36,6 +36,12 @@ export interface IPromo {
 }
 export const PromoSchema = new mongoose.Schema<IPromo>(
   {
+    promoId: {
+      type: Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
+      required: true,
+      unique: true,
+    },
     name: String,
     description: String,
     type: {

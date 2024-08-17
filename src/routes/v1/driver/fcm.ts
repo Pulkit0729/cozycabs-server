@@ -6,7 +6,7 @@ import Driver from '../../../models/drivers';
 const router = Router();
 
 router.post('/', driverAuthMiddle, async (req, res) => {
-  const driver = req.body.user;
+  const driver = req.body.driver;
   const { fcm } = req.body;
   try {
     if (fcm === undefined || fcm === null) throw new Error('FCM missing');

@@ -6,7 +6,7 @@ import { isAdmin, isUserAuthenticated } from '../utils/permission.util';
 
 export const userTypeDef = gql`
   type User {
-    id: String!
+    userId: String!
     name: String!
     phone: String!
     email: String
@@ -24,7 +24,7 @@ export const userTypeDef = gql`
   input UserFilter {
     AND: [UserFilter]
     OR: [UserFilter]
-    id: String
+    userId: String
     name: String
     phone: String
   }

@@ -20,7 +20,7 @@ router.post('/otp', async (req, res) => {
       parseInt(otp)
     );
     if (!isVerified) throw new Error('Invalid phone or Otp');
-    const token = issueJWT(driver.id);
+    const token = issueJWT(driver.driverId.toString());
     let payload: any = {
       token,
       phone,

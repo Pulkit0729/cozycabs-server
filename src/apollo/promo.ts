@@ -6,7 +6,7 @@ import { shield } from 'graphql-shield';
 
 export const promoTypeDefs = gql`
   type Promo {
-    id: String!
+    promoId: String!
     name: String!
     description: String!
     type: String
@@ -43,7 +43,7 @@ export const promoTypeDefs = gql`
   input PromoFilter {
     AND: [PromoFilter]
     OR: [PromoFilter]
-    id: String
+    promoId: String
     name: String
     description: String
     type: String

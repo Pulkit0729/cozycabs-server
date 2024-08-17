@@ -1,7 +1,7 @@
 import TermsAndCondition from '../models/termsAndCoditions';
 
 export async function getTermsAndConditions(id: string) {
-  return await TermsAndCondition.findOne({ _id: id }).then((tc) => {
+  return await TermsAndCondition.findOne({ id: id }).then((tc) => {
     return tc;
   });
 }

@@ -1,7 +1,7 @@
 import User, { IUserFilter } from '../models/users';
 
-export async function getUser(id: string) {
-  return await User.findOne({ _id: id }).then((user) => {
+export async function getUser(userId: string) {
+  return await User.findOne({ userId: userId }).then((user) => {
     return user;
   });
 }

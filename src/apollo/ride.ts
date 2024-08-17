@@ -5,8 +5,7 @@ import { constructQuery } from '../utils/apollo.util';
 
 export const rideTypeDefs = gql`
   type Ride {
-    id: String!
-    blabla_ride_id: String
+    rideId: String!
     from: String!
     to: String!
     fromAddress: String!
@@ -25,7 +24,6 @@ export const rideTypeDefs = gql`
     locationUrl: String
   }
   input RideInput {
-    blabla_ride_id: String
     from: String!
     to: String!
     fromAddress: String!
@@ -35,7 +33,7 @@ export const rideTypeDefs = gql`
     date: Date!
     arrivalTime: String!
     departureTime: String!
-    driver: String!
+    driverId: String!
     seats: Int!
     price: Int!
     discountedPrice: Int!
@@ -44,7 +42,6 @@ export const rideTypeDefs = gql`
     locationUrl: String
   }
   input RideUpdateInput {
-    blabla_ride_id: String
     from: String
     to: String
     fromAddress: String
@@ -54,7 +51,7 @@ export const rideTypeDefs = gql`
     date: Date
     arrivalTime: String
     departureTime: String
-    driver: String
+    driverId: String
     seats: Int
     price: Int
     discountedPrice: Int
@@ -66,8 +63,7 @@ export const rideTypeDefs = gql`
   input RideFilter {
     AND: [RideFilter]
     OR: [RideFilter]
-    id: String
-    blabla_ride_id: String
+    rideId: String
     from: String
     to: String
     fromAddress: String
@@ -77,7 +73,7 @@ export const rideTypeDefs = gql`
     date: Date
     arrivalTime: String
     departureTime: String
-    driver: String
+    driverId: String
     seats: Int
     price: Int
     discountedPrice: Int
@@ -98,8 +94,6 @@ export const rideResolvers = {
         sortBy,
         sortOrder
       );
-      console.log(query, sortOptions);
-
       const rides = await Ride.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)
@@ -123,9 +117,6 @@ export const rideResolvers = {
         // Update ride properties if provided in the input
         if (input.seats != false) {
           ride.status = input.status;
-        }
-        if (input.blabla_ride_id) {
-          ride.blabla_ride_id = input.blabla_ride_id;
         }
         if (input.seats) {
           ride.seats = input.seats;

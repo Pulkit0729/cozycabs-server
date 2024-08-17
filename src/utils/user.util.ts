@@ -34,7 +34,7 @@ export async function createUser(
   if (!user) {
     await newUser.save();
   } else if (!!user && !user.emailConfirmed) {
-    await User.deleteOne({ _id: user._id });
+    await User.deleteOne({ id: user.userId });
     await newUser.save();
   } else {
     throw new Error('Account already exists');
@@ -122,7 +122,7 @@ export async function sendResetPasswordEmail(
 
 export async function updateUserConfirm(id: string) {
   const user: any = await User.findOne({
-    _id: new mongoose.Types.ObjectId(id),
+    id: new mongoose.Types.ObjectId(id),
   });
 
   user.emailConfirmed = true;

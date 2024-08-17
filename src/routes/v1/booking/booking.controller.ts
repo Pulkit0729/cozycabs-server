@@ -11,17 +11,18 @@ import {
 } from '../../../utils/notifications';
 import { Request, Response } from 'express';
 import { UserPromoService } from '../../../services/userpromo.service';
+import { getFormattedDate } from '../../../utils/date.util';
 
 export class BookingControlller {
   static async book(req: Request, res: Response) {
     try {
       const { user, rideId, userPromoId } = req.body;
       let { seats } = req.body;
-      const ride = await this.validateRide(rideId, true);
+      const ride = await BookingControlller.validateRide(rideId, true);
 
       const existingBooking = await searchBooking({
-        ride: ride.id,
-        user: user.id,
+        rideId: ride.rideId,
+        userId: user.userId,
         isCancelled: false,
       });
       if (existingBooking) throw new Error(`Booking already exists`);
@@ -36,8 +37,8 @@ export class BookingControlller {
       const discountedTotal = seats * ride.discountedPrice;
 
       const booking = new Booking({
-        ride: ride.id,
-        user: user.id,
+        rideId: ride.rideId,
+        userId: user.userId,
         seats: seats,
         billDetails: {
           itemTotal: total,
@@ -52,7 +53,11 @@ export class BookingControlller {
         status: BookingStatus.pending,
       });
       if (userPromoId != undefined && userPromoId.length != 0) {
-        UserPromoService.handlePromoApplication(user, userPromoId, booking);
+        await UserPromoService.handlePromoApplication(
+          user,
+          userPromoId,
+          booking
+        );
       }
       await booking.save();
       await ride.save();
@@ -79,8 +84,11 @@ export class BookingControlller {
   static async cancel(req: Request, res: Response) {
     try {
       const { user, bookingId } = req.body;
-      const booking = await this.validateBooking(bookingId, user._id);
-      const ride = await this.validateRide(booking.ride.id);
+      const booking = await BookingControlller.validateBooking(
+        bookingId,
+        user.userId
+      );
+      const ride = await BookingControlller.validateRide(booking.ride.rideId);
 
       ride.seats = ride.seats + booking.seats;
       booking.isCancelled = true;
@@ -116,7 +124,7 @@ export class BookingControlller {
     if (!ride) throw new Error(`Ride ${rideId} does not exist`);
     if ([RideStatus.cancelled, RideStatus.ended].includes(ride.status as any))
       throw new Error(`Ride ${rideId} is already ended`);
-    if (ride.date < new Date())
+    if (ride.date < getFormattedDate(0))
       throw new Error(`Ride ${rideId} is already ended`);
     if (validateSeats && ride.seats < 1)
       throw new Error(`No seats in ride ${rideId}`);
@@ -126,7 +134,7 @@ export class BookingControlller {
   static async validateBooking(bookingId: string, userId: string) {
     const booking = await getBooking(bookingId);
     if (!booking) throw new Error(`Booking ${bookingId} not found`);
-    if (booking.user.toString() != userId)
+    if (booking.userId.toString() != userId)
       throw new Error(`Unauthenticated booking cancellation`);
     if (booking.status != BookingStatus.pending || booking.isCancelled)
       throw new Error(`Booking status ${booking.status} not pending`);

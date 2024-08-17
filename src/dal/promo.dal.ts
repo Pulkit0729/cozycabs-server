@@ -1,7 +1,7 @@
 import Promo, { IPromoFilter } from '../models/promos';
 
-export async function getPromo(id: string) {
-  return await Promo.findOne({ _id: id }).then((promo) => {
+export async function getPromo(promoId: string) {
+  return await Promo.findOne({ promoId: promoId }).then((promo) => {
     return promo;
   });
 }

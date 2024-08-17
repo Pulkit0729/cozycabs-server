@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 
-export interface IUser {
-  id: string;
+export interface IUser extends Document {
+  userId: Types.ObjectId;
   name: string;
   phone: string;
   email: string;
@@ -18,7 +18,7 @@ export interface IUser {
 }
 
 export interface IUserFilter {
-  id?: string;
+  userId?: Types.ObjectId;
   name?: string;
   phone?: string;
   email?: string;
@@ -36,6 +36,12 @@ export interface IUserFilter {
 
 const UserSchema = new mongoose.Schema<IUser>(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
+      required: true,
+      unique: true,
+    },
     name: String,
     phone: {
       type: String,

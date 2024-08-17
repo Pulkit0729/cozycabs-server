@@ -1,4 +1,5 @@
 import { createLogger, format, transports } from 'winston';
+import path from 'path';
 const { combine, timestamp, printf } = format;
 require('dotenv').config();
 import 'winston-mongodb';
@@ -12,7 +13,10 @@ function logger() {
     level: 'debug',
     format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), myFormat),
     transports: [
-      new transports.File({ filename: 'logs/api/logs.log', maxsize: 102400 }),
+      new transports.File({
+        filename: path.join(__dirname, '../../', 'logs/api/logs.log'),
+        maxsize: 102400,
+      }),
       new transports.Console(),
       new transports.MongoDB({
         level: 'debug',

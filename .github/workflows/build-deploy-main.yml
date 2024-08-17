@@ -21,7 +21,9 @@ jobs:
         curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
         sudo apt install -y nodejs
         npm i
-        npm run build 
+        npm run build
+        mv src/keys dist/keys
+        mv src/views dist/views
 
     - name: Copy code to EC2 instance
       uses: appleboy/scp-action@master

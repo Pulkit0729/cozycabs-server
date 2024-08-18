@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import TemplatedRide from "./models/templated_rides";
+import TemplatedRide, { TemplateStatus } from "./models/templated_rides";
 import Ride from "./models/rides";
 import logger from "./logger/logger";
 
@@ -20,7 +20,11 @@ export async function addRides() {
       .ride_no!;
   } catch (error) {}
 
-  let templated_rides = await TemplatedRide.find().sort({ time: 1 }).exec();
+  let templated_rides = await TemplatedRide.find({
+    status: TemplateStatus.ACTIVE,
+  })
+    .sort({ time: 1 })
+    .exec();
   templated_rides.forEach(async (templateRide) => {
     for (let index = 0; index < 3; index++) {
       let dateString = getFormattedDate(index);

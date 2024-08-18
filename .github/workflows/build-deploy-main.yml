@@ -28,7 +28,7 @@ jobs:
       with:
         host: 65.1.153.75
         username: "ubuntu"
-        key_path: ./.github/staging.pem
+        key_path: ./.github/main.pem
         source: .
         target: /DATA01/builds/cozycabs-server-new/
 
@@ -37,7 +37,7 @@ jobs:
       with:
         host: "65.1.153.75"
         username: "ubuntu"
-        key_path: ./.github/staging.pem
+        key_path: ./.github/main.pem
         port: 22
         script: |
           rm -rf /DATA01/builds/cozycabs-server-old

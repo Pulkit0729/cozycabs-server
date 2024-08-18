@@ -24,13 +24,14 @@ export const typeDefs = gql`
     to: String!
     from_address: String!
     to_address: String!
-    arrival_time: String,
-    departure_time: String,
+    arrival_time: String
+    departure_time: String
     driver_no: String!
     driver_name: String!
     seats: Int!
     price: Int!
     discounted_price: Int!
+    status: String!
   }
   type Ride {
     id: String!
@@ -40,8 +41,8 @@ export const typeDefs = gql`
     from_address: String!
     to_address: String!
     date: Date!
-    arrival_time: String,
-    departure_time: String,
+    arrival_time: String
+    departure_time: String
     driver_no: String!
     driver_name: String!
     seats: Int!
@@ -57,8 +58,8 @@ export const typeDefs = gql`
     from: String!
     to: String!
     date: Date!
-    arrival_time: String,
-    departure_time: String,
+    arrival_time: String
+    departure_time: String
     driver_no: String!
     user_no: String!
     user_name: String!
@@ -95,6 +96,7 @@ export const typeDefs = gql`
     seats: Int!
     price: Int!
     discounted_price: Int!
+    status: String!
   }
   input TemplatedRideUpdateInput {
     from: String
@@ -108,6 +110,7 @@ export const typeDefs = gql`
     seats: Int
     price: Int
     discounted_price: Int
+    status: String
   }
   input RideInput {
     blabla_ride_id: String
@@ -133,8 +136,8 @@ export const typeDefs = gql`
     from_address: String
     to_address: String
     date: Date
-    arrival_time: String,
-    departure_time: String,
+    arrival_time: String
+    departure_time: String
     driver_no: String
     driver_name: String
     seats: Int
@@ -214,6 +217,7 @@ export const typeDefs = gql`
     seats: Int
     price: Int
     discounted_price: Int
+    status: String
   }
 
   input RideFilter {
@@ -272,28 +276,28 @@ export const typeDefs = gql`
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[Driver]
+    ): [Driver]
     templatedRides(
       filterBy: TemplatedRideFilter
       sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[Ride]
+    ): [Ride]
     rides(
       filterBy: RideFilter
       sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[Ride]
+    ): [Ride]
     bookings(
       filterBy: BookingFilter
       sortBy: String
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ):[Booking]
+    ): [Booking]
   }
   enum SortOrder {
     ASC
@@ -304,7 +308,10 @@ export const typeDefs = gql`
     addDriver(input: DriverInput!): Driver
     addTemplatedRide(input: TemplatedRideInput!): TemplatedRide
     addRide(input: RideInput!): Ride
-    updateTemplatedRide(id: String!, input: TemplatedRideUpdateInput!): TemplatedRide
+    updateTemplatedRide(
+      id: String!
+      input: TemplatedRideUpdateInput!
+    ): TemplatedRide
     updateRide(id: String!, input: RideUpdateInput!): Ride
     addBooking(input: BookingUpdateInput!): Booking
     updateBooking(bookingId: String!, input: BookingInput!): Booking

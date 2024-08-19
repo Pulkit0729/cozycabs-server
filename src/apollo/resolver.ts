@@ -101,25 +101,25 @@ export const resolvers = {
     },
   },
   Mutation: {
-    addUser: (_: any, { input }: any) => {
+    addUser: async (_: any, { input }: any) => {
       const newUser = new User(input);
-      return newUser.save();
+      return await newUser.save();
     },
-    addDriver: (_: any, { input }: any) => {
+    addDriver: async (_: any, { input }: any) => {
       const newDriver = new Driver(input);
-      return newDriver.save();
+      return await newDriver.save();
     },
-    addBooking: (_: any, { input }: any) => {
+    addBooking: async (_: any, { input }: any) => {
       const newBook = new Booking(input);
-      return newBook.save();
+      return await newBook.save();
     },
-    addTemplatedRide: (_: any, { input }: any) => {
+    addTemplatedRide: async (_: any, { input }: any) => {
       const newRide = new TemplatedRide(input);
-      return newRide.save();
+      return await newRide.save();
     },
-    addRide: (_: any, { input }: any) => {
+    addRide: async (_: any, { input }: any) => {
       const newRide = new Ride(input);
-      return newRide.save();
+      return await newRide.save();
     },
     updateTemplatedRide: async (_: any, { id, input }: any) => {
       try {
@@ -135,7 +135,7 @@ export const resolvers = {
         if (input.departure_time) {
           templatedRide.time = input.departure_time;
         }
-        if (input.seats) {
+        if (input.seats != false || input.seats == 0) {
           templatedRide.seats = input.seats;
         }
         if (input.price) {

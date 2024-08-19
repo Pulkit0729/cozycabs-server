@@ -283,7 +283,7 @@ export const typeDefs = gql`
       sortOrder: SortOrder
       page: Int
       perPage: Int
-    ): [TemplateRide]
+    ): [TemplatedRide]
     rides(
       filterBy: RideFilter
       sortBy: String

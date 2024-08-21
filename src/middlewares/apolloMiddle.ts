@@ -32,6 +32,7 @@ export default async function apolloMiddleware({
     if (apiKey == process.env.API_KEY) {
       return { isAdmin: true };
     }
+    return {};
   } catch (error: any) {
     logger.error(`authMiddleware, error: ${error.message}`);
     return {};

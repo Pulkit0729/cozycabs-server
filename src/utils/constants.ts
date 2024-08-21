@@ -17,6 +17,11 @@ export enum BookingStatus {
   cancelled = 'cancelled',
 }
 
+export enum BookingChannel {
+  app = 'app',
+  bot = 'bot',
+}
+
 export enum NavigationStatus {
   goToPickup = 'goToPickup',
   goToDrop = 'goToDrop',

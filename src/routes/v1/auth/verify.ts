@@ -17,8 +17,23 @@ router.post('/otp', async (req, res) => {
     let flowType = flowTypes.login;
     if (!user || !user?.phoneVerificationId)
       throw new Error('Invalid phone or Otp');
-    const isVerified = await verifyOTP(user.phoneVerificationId, parseInt(otp));
-    if (!isVerified) throw new Error('Invalid phone or Otp');
+    if (
+      user.phone === process.env.DUMMY_USER &&
+      String(otp) == process.env.DUMMY_USER_OTP
+    ) {
+      const token = issueJWT(user.userId.toString());
+      return res.status(200).json({
+        success: true,
+        data: { user, flowType: flowTypes.login, token },
+      });
+    } else {
+      const isVerified = await verifyOTP(
+        user.phoneVerificationId,
+        parseInt(otp)
+      );
+      if (!isVerified) throw new Error('Invalid phone or Otp');
+    }
+
     const token = issueJWT(user.userId.toString());
     let payload: any = {
       token,

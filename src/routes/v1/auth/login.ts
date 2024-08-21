@@ -57,6 +57,12 @@ userRouter.post('/phone', async (req, res) => {
     if (!user) {
       user = new User({ phone: formattedPhone, phoneConfirmed: false });
     }
+    if (user.phone === process.env.DUMMY_USER) {
+      return res.status(200).json({
+        success: true,
+        message: 'Otp Send to phone',
+      });
+    }
     const vId = await sendOTP(phone);
     if (!vId) throw new Error(`Error sending otp`);
     user.phoneVerificationId = vId;

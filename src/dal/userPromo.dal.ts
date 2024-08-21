@@ -68,7 +68,7 @@ export async function getValidUserPromo(userId: string) {
 }
 
 export async function updateUserPromo(
-  userPromoId: any,
+  userPromoId: string,
   update: UpdateWithAggregationPipeline | UpdateQuery<IUserPromo> | undefined
 ) {
   return await UserPromo.updateOne({ userPromoId: userPromoId }, update);

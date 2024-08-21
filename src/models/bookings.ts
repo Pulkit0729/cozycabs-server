@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types } from 'mongoose';
-import { BookingStatus } from '../utils/constants';
+import { BookingChannel, BookingStatus } from '../utils/constants';
 import { IUser } from './users';
 
 export interface IBillDetails {
@@ -17,7 +17,7 @@ export interface IBooking extends Document {
   channel: string;
   seats: number;
   billDetails: IBillDetails;
-  promoId: Types.ObjectId;
+  promoId?: Types.ObjectId;
   isPaid: Boolean;
   isCancelled: Boolean;
   status: BookingStatus;
@@ -61,7 +61,7 @@ const BookingSchema = new mongoose.Schema<IBooking>(
       type: Schema.Types.ObjectId,
       // ref: 'Users',
     },
-    channel: String,
+    channel: { type: String, enum: BookingChannel },
     seats: Number,
     promoId: Schema.Types.ObjectId,
     billDetails: BillDetailsSchema,

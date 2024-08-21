@@ -21,9 +21,10 @@ router.post('/otp', async (req, res) => {
       user.phone === process.env.DUMMY_USER &&
       String(otp) == process.env.DUMMY_USER_OTP
     ) {
+      const token = issueJWT(user.userId.toString());
       return res.status(200).json({
         success: true,
-        data: { user, flowType: flowTypes.login },
+        data: { user, flowType: flowTypes.login, token },
       });
     } else {
       const isVerified = await verifyOTP(

@@ -23,7 +23,7 @@ router.post('/otp', async (req, res) => {
     ) {
       return res.status(200).json({
         success: true,
-        data: user,
+        data: { user, flowType: flowTypes.login },
       });
     } else {
       const isVerified = await verifyOTP(

@@ -25,6 +25,11 @@ export async function addRides() {
   })
     .sort({ time: 1 })
     .exec();
+  templated_rides.sort((tr1, tr2) => {
+    const a = new Date("1970/01/01 " + tr1.departure_time).valueOf();
+    const b = new Date("1970/01/01 " + tr2.departure_time).valueOf();
+    return a - b;
+  });
   templated_rides.forEach(async (templateRide) => {
     for (let index = 0; index < 3; index++) {
       let dateString = getFormattedDate(index);

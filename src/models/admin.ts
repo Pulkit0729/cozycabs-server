@@ -1,6 +1,11 @@
-import mongoose, { Schema } from 'mongoose';
-
-const AdminSchema = new mongoose.Schema(
+import mongoose, { Schema, Types } from 'mongoose';
+export interface IAdmin extends Document {
+  adminId: Types.ObjectId;
+  name: string;
+  phone: string;
+  type: string;
+}
+const AdminSchema = new mongoose.Schema<IAdmin>(
   {
     adminId: {
       type: Schema.Types.ObjectId,

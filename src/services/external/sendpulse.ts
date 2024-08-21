@@ -1,3 +1,4 @@
+import { IAdmin } from '../../models/admin';
 import { IBooking } from '../../models/bookings';
 import { IDriver } from '../../models/drivers';
 import { IRide } from '../../models/rides';
@@ -5,129 +6,85 @@ import { IUser } from '../../models/users';
 
 const axios = require('axios').create();
 const sendpulseUrl =
-  'https://events.sendpulse.com/events/id/e7f2456215644ca2ffbc925ab367cdf8/8582829';
+  'https://events.sendpulse.com/events/id/26c3cacd66274c4fdb88714f03327e5f/8582829';
 
 export async function makeRequest(
   url: string,
   method: any,
-  body: any,
+  body: ISendpulsePostBody,
   headers: any
 ) {
   return axios[method]((url = url), body, { headers });
 }
-export const eventType = {
-  ride_start: 'ride_start',
-  ride_end: 'ride_end',
-  book: 'book',
-  error: 'error',
-  cancel: 'cancel',
-};
-export const sendToUser = async (
+export enum SendPulseEventTypes {
+  RIDESTART = 'rideStart',
+  RIDEEND = 'rideEnd',
+  RIDECANCEL = 'rideCancel',
+  BOOK = 'book',
+  ERROR = 'error',
+  CANCEL = 'cancel',
+}
+export interface ISendpulsePostBody {
+  phone: string;
+  username: string;
+  userPhone: string;
+  fromAddress?: string;
+  toAddress?: string;
+  date?: string;
+  seats?: string;
+  driverName?: string;
+  grandTotal?: string;
+  rideId?: string;
+  departureTime?: string;
+  carNo?: string;
+  carName?: string;
+  arrivalTime?: string;
+  eventType: string;
+  errorMessage?: string | undefined;
+  userType: string;
+  timestamp: string;
+  driverPhone?: string;
+}
+export const sendMessage = async (
   event: string,
-  booking: IBooking,
-  ride: IRide,
+  userType: string,
   user: IUser,
-  driver: IDriver,
-  locationUrl?: any
+  driver?: IDriver,
+  admin?: IAdmin,
+  booking?: IBooking,
+  ride?: IRide
 ) => {
-  const date = ride.date.toISOString().split('T')[0];
+  const date = ride?.date.toISOString().split('T')[0];
   await makeRequest(
     sendpulseUrl,
     'post',
     {
-      phone: user.phone,
-      name: user.name,
-      type: 'user',
-      event_type: event,
-      from: ride.from,
-      to: ride.to,
+      phone:
+        userType == 'user'
+          ? user.phone
+          : userType == 'admin'
+            ? admin!.phone
+            : driver!.phone,
+      username: user.name,
+      userPhone: user.phone,
+      fromAddress: ride?.fromAddress,
+      toAddress: ride?.toAddress,
       date: date,
-      seats: booking.seats,
-      departureTime: ride.departureTime,
-      arrivalTime: ride.arrivalTime,
-      price: booking.billDetails.grandTotal,
-      driver_no: driver.phone,
-      carName: driver?.carName,
+      seats: ride?.seats.toString(),
+      rideId: ride?.rideId.toString(),
+      departureTime: ride?.departureTime,
+      arrivalTime: ride?.arrivalTime,
+      grandTotal: booking?.billDetails.grandTotal.toString(),
+      driverName: driver?.name,
+      driverPhone: driver?.phone,
       carNo: driver?.carNo,
-      locationUrl: locationUrl,
-      is_active: Date.now(),
+      carName: driver?.carName,
+      eventType: event,
+      userType: userType,
+      timestamp: Date.now().toString(),
     },
-    { 'Content-Type': 'application/json' }
-  );
-};
-export const sendToDriver = async (
-  event: string,
-  booking: IBooking,
-  ride: IRide,
-  user: IUser,
-  driver: IDriver,
-  driver_name?: any
-) => {
-  const date = ride.date.toISOString().split('T')[0];
-  await makeRequest(
-    sendpulseUrl,
-    'post',
     {
-      phone: driver.phone,
-      driver_name: driver_name,
-      type: 'driver',
-      event_type: event,
-      from: ride.from,
-      to: ride.to,
-      date: date,
-      price: booking.billDetails.grandTotal,
-      seats: booking.seats,
-      departureTime: ride.departureTime,
-      arrivalTime: ride.arrivalTime,
-      user_phone: user.phone,
-      name: user.name,
-      is_active: Date.now(),
-    },
-    { 'Content-Type': 'application/json' }
-  );
-};
-
-export const sendError = async (event: string, phone: string) => {
-  await makeRequest(
-    sendpulseUrl,
-    'post',
-    {
-      phone: phone,
-      type: 'user',
-      event_type: event,
-      is_active: Date.now(),
-    },
-    { 'Content-Type': 'application/json' }
-  );
-};
-
-export const sendToAdmin = async (
-  event: string,
-  booking: IBooking,
-  ride: IRide,
-  user: IUser,
-  no: any
-) => {
-  const date = ride.date.toISOString().split('T')[0];
-
-  await makeRequest(
-    sendpulseUrl,
-    'post',
-    {
-      phone: no,
-      type: 'driver',
-      event_type: event,
-      from: ride.from,
-      to: ride.to,
-      date: date,
-      seats: booking.seats,
-      price: booking.billDetails.grandTotal,
-      departureTime: ride.departureTime,
-      arrivalTime: ride.arrivalTime,
-      user_phone: user.phone,
-      name: user.name,
-      is_active: Date.now(),
-    },
-    { 'Content-Type': 'application/json' }
+      'Content-Type': 'application/json',
+    }
   );
 };

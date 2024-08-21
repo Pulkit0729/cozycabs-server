@@ -8,6 +8,10 @@ import { BookingStatus, RideStatus } from '../../../utils/constants';
 import { createRideStatusNotification } from '../../../utils/notifications';
 import { UserPromoService } from '../../../services/userpromo.service';
 import { updateUserPromo } from '../../../dal/userPromo.dal';
+import {
+  sendMessage,
+  SendPulseEventTypes,
+} from '../../../services/external/sendpulse';
 
 export class RideController {
   static async updateRideStatus(req: Request, res: Response) {
@@ -24,7 +28,10 @@ export class RideController {
           case RideStatus.cancelled:
             booking.isCancelled = true;
             booking.status = BookingStatus.cancelled;
-            await updateUserPromo(booking.promoId, { isUsed: false });
+            if (booking.promoId)
+              await updateUserPromo(booking.promoId.toString(), {
+                isUsed: false,
+              });
             break;
           case RideStatus.ended:
             booking.status = BookingStatus.ended;
@@ -36,6 +43,13 @@ export class RideController {
         }
         await booking.save();
       });
+      const sendPulseEventType =
+        ride.status == RideStatus.active
+          ? SendPulseEventTypes.RIDESTART
+          : ride.status == RideStatus.cancelled
+            ? SendPulseEventTypes.RIDECANCEL
+            : SendPulseEventTypes.RIDEEND;
+
       for (const booking of bookings) {
         const userFcm = booking.user.fcm?.value;
         if (userFcm) {
@@ -45,6 +59,16 @@ export class RideController {
           );
           await sendNotification(message);
         }
+
+        await sendMessage(
+          sendPulseEventType,
+          'user',
+          booking.user,
+          ride.driver,
+          undefined,
+          booking,
+          booking.ride
+        );
       }
 
       const driverFcm = ride.driver.fcm?.value;

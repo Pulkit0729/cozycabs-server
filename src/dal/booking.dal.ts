@@ -5,7 +5,7 @@ import { RideStatus } from '../utils/constants';
 
 export async function getBooking(bookingId: string) {
   return await Booking.findOne({ bookingId: bookingId })
-    .populate<{ ride: any }>({ path: 'ride', populate: 'driver' })
+    .populate<{ ride: IRide }>({ path: 'ride', populate: 'driver' })
     .then((booking) => {
       return booking;
     });

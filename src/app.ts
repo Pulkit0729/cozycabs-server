@@ -4,6 +4,7 @@ import { ApolloServer } from '@apollo/server';
 import { typeDefs } from './apollo/schema';
 import { expressMiddleware } from '@apollo/server/express4';
 import { userPermissions, userResolvers, userTypeDef } from './apollo/user';
+import logMiddleware from './middlewares/logMiddle';
 import {
   driverPermissions,
   driverResolvers,
@@ -74,10 +75,9 @@ export default async function App() {
 
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
-
   //   app.use(cors({ origin: /\*|http:\/\/localhost:3000|http:\/\/localhost:3001|https:\/\/app.alapi.co|https:\/\/link.alapi.co|https:\/\/app.testalapi.co|https:\/\/link.testalapi.co/, credentials: true }));
   app.use(cors({ origin: '*' }));
-
+  app.use(logMiddleware);
   app.get('/', (_req: any, res: any) => {
     res.send('working');
   });

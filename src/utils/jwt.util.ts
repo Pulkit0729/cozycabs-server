@@ -9,6 +9,11 @@ const PRIV_KEY = fs.readFileSync(pathToPrivateKey, 'utf8');
 const pathToPublicKey = path.join(__dirname, '..', 'keys', 'id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(pathToPublicKey, 'utf8');
 
+/**
+ *
+ * @param userId
+ * @returns a base 64 encoded jwt token
+ */
 export function issueJWT(userId: string) {
   const _id = userId;
   const payload = {
@@ -17,12 +22,17 @@ export function issueJWT(userId: string) {
     expiresIn: '10h',
     // exp: Math.floor(Date.now() / 1000) + 10 * 60 * 60,
   };
-
-  return jwt.sign(payload, PRIV_KEY, { algorithm: 'RS256' });
+  const jwtToken = jwt.sign(payload, PRIV_KEY, { algorithm: 'RS256' });
+  return Buffer.from(jwtToken).toString('base64');
 }
 
+/**
+ *
+ * @param token base64 jwt token
+ * @returns
+ */
 export function verifyJWT(token: string) {
-  return jwt.verify(token, PUB_KEY, {
+  return jwt.verify(Buffer.from(token, 'base64').toString('ascii'), PUB_KEY, {
     algorithm: 'RS256',
   } as VerifyOptions);
 }

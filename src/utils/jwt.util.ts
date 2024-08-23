@@ -22,7 +22,10 @@ export function issueJWT(userId: string) {
     expiresIn: '10h',
     // exp: Math.floor(Date.now() / 1000) + 10 * 60 * 60,
   };
-  const jwtToken = jwt.sign(payload, PRIV_KEY, { algorithm: 'RS256' });
+  const jwtToken = jwt.sign(payload, PRIV_KEY, {
+    algorithm: 'RS256',
+    allowInsecureKeySizes: true,
+  });
   return Buffer.from(jwtToken).toString('base64');
 }
 

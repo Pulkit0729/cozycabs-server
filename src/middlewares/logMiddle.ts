@@ -6,7 +6,11 @@ const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const logDetails = {
       additionalInfo: {
         request: {
-          ip: req.ip,
+          ip:
+            req.headers['x-real-ip'] ||
+            req.headers['x-forwared-for'] ||
+            req.socket.remoteAddress ||
+            '',
           method: req.method,
           body: req.body,
           url: req.originalUrl,

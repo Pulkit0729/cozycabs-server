@@ -70,7 +70,7 @@ export const sendMessage = async (
       fromAddress: ride?.fromAddress,
       toAddress: ride?.toAddress,
       date: date,
-      seats: ride?.seats.toString(),
+      seats: booking?.seats.toString(),
       rideId: ride?.rideId.toString(),
       departureTime: ride?.departureTime,
       arrivalTime: ride?.arrivalTime,

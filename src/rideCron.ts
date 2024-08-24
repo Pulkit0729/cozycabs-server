@@ -58,7 +58,7 @@ export async function addRides() {
         }
       }
     }
-  } catch (error) {
-    logger.error(error);
+  } catch (error: any) {
+    logger.error(error.message);
   }
 }

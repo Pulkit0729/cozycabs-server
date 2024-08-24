@@ -14,15 +14,16 @@ const PUB_KEY = fs.readFileSync(pathToPublicKey, 'utf8');
  * @param userId
  * @returns a base 64 encoded jwt token
  */
-export function issueJWT(userId: string) {
+export function issueJWT(
+  userId: string,
+  expiresIn: string | number | undefined = undefined
+) {
   const _id = userId;
   const payload = {
     sub: _id,
-    iat: Date.now(),
-    expiresIn: '10h',
-    // exp: Math.floor(Date.now() / 1000) + 10 * 60 * 60,
   };
   const jwtToken = jwt.sign(payload, PRIV_KEY, {
+    expiresIn: expiresIn || '60d',
     algorithm: 'RS256',
     allowInsecureKeySizes: true,
   });

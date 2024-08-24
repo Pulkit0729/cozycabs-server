@@ -18,7 +18,7 @@ export default class BotController {
       userPhone = userPhone.replace(/ /g, '');
       userPhone = '91' + userPhone.substr(userPhone.length - 10);
       const user = await findOrCreateUser({ phone: userPhone });
-      const token = issueJWT(user.userId.toString());
+      const token = issueJWT(user.userId.toString(), 120);
       const payload: any = {
         token,
       };
@@ -29,6 +29,25 @@ export default class BotController {
         message: 'Bot Generate Access ErrorF' + error,
       });
       return res.json({ success: false, error: error });
+    }
+  }
+
+  static async verify(req: Request, res: Response) {
+    try {
+      const { user } = req.body;
+      return res
+        .status(200)
+        .json({ success: true, data: { auth: true, user } });
+    } catch (error: any) {
+      logger.log({
+        level: 'error',
+        message: 'Bot Verify Erro' + error,
+      });
+      return res.json({
+        success: false,
+        error: error,
+        data: { auth: false },
+      });
     }
   }
   static async bookFromBot(req: Request, res: Response) {

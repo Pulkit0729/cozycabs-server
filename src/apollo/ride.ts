@@ -19,7 +19,6 @@ export const rideTypeDefs = gql`
     seats: Int!
     price: Int!
     discountedPrice: Int!
-    rideNo: Int!
     status: String!
     locationUrl: String
   }
@@ -37,7 +36,6 @@ export const rideTypeDefs = gql`
     seats: Int!
     price: Int!
     discountedPrice: Int!
-    rideNo: Int!
     status: String!
     locationUrl: String
   }
@@ -55,7 +53,6 @@ export const rideTypeDefs = gql`
     seats: Int
     price: Int
     discountedPrice: Int
-    rideNo: Int
     status: String
     locationUrl: String
   }
@@ -77,7 +74,6 @@ export const rideTypeDefs = gql`
     seats: Int
     price: Int
     discountedPrice: Int
-    rideNo: Int
     status: String
     locationUrl: String
   }

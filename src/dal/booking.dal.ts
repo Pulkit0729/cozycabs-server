@@ -62,7 +62,23 @@ export async function searchBookingsFromRideFilters(
     },
     { $unwind: '$ride' },
     {
+      $lookup: {
+        from: 'drivers', // The drivers collection
+        localField: 'ride.driverId', // The driverId field in rides that connects to drivers
+        foreignField: 'driverId', // The field in drivers that is the driver id
+        as: 'ride.driver', // The name for the resulting array of driver details
+      },
+    },
+    {
+      $unwind: '$ride.driver', // Unwind the driver array to get driver details
+    },
+    {
       $match: match,
+    },
+    {
+      $sort: {
+        'ride.date': -1, // Sort by ride date in ascending order (1 for ascending, -1 for descending)
+      },
     },
     {
       $skip: (page - 1) * perPage, // Skip the first 10 results (adjust this for your page number)

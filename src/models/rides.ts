@@ -19,7 +19,6 @@ export interface IRide extends Document {
   seats: number;
   price: number;
   discountedPrice: number;
-  rideNo: number;
   locationUrl: string | undefined;
   status: string;
   navigationStatus: string;
@@ -49,10 +48,6 @@ const RideSchema = new mongoose.Schema<IRide>(
     seats: Number,
     price: Number,
     discountedPrice: Number,
-    rideNo: {
-      type: Number,
-      unique: true,
-    },
     status: String,
     locationUrl: String,
     navigationStatus: String,

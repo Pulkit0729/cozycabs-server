@@ -105,7 +105,7 @@ export class UserPromoService {
       const referralFromUser = await getUser(userPromo.referredFrom);
       if (!referralFromUser) return;
       const promo = await searchPromo({
-        name: 'REFRAL50',
+        name: process.env.REFERRAL_REWARD_COUPON ?? 'REFERAL50',
         source: PromoSources.AUTOMATIC,
       });
       if (!promo) return;

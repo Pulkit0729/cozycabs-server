@@ -15,13 +15,6 @@ export function startCron() {
 
 export async function addRides() {
   logger.info('Adding Rides');
-  let noOfRides = 0;
-  try {
-    noOfRides = (await Ride.find().sort({ rideNo: -1 }).limit(1).exec())[0]
-      .rideNo!;
-    if (noOfRides == null) noOfRides = 0;
-  } catch (_error) {}
-
   try {
     const templated_rides = await TemplatedRide.find().sort({ time: 1 }).exec();
     for (let i = 0; i < templated_rides.length; i++) {
@@ -36,7 +29,6 @@ export async function addRides() {
           driverId: templateRide.driverId!,
         });
         if (!existRide) {
-          noOfRides++;
           const ride = new Ride({
             from: templateRide.from,
             to: templateRide.to,
@@ -47,7 +39,6 @@ export async function addRides() {
             date: dateString,
             departureTime: templateRide.departureTime,
             arrivalTime: templateRide.arrivalTime,
-            rideNo: noOfRides,
             driverId: templateRide.driverId,
             seats: templateRide.seats,
             price: templateRide.price,

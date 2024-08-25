@@ -95,6 +95,7 @@ export class BookingService {
 
       ride.seats = ride.seats + booking.seats;
       booking.isCancelled = true;
+      booking.status = BookingStatus.cancelled;
 
       await ride.save();
       await booking.save();

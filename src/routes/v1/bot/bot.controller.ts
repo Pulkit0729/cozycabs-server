@@ -92,8 +92,7 @@ export default class BotController {
     return res.json(response);
   }
   static async cancelFromBot(req: Request, res: Response) {
-    let { userPhone }: { userPhone: string; perPage: number; page: number } =
-      req.body;
+    let { userPhone }: { userPhone: string } = req.body;
     const { bookingId } = req.body;
 
     try {

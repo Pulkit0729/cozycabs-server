@@ -93,35 +93,46 @@ export default class BotController {
     return res.json(response);
   }
   static async cancelFromBot(req: Request, res: Response) {
-    const { user, bookingId } = req.body;
-    const response = await BookingService.cancel(user, bookingId);
-    if (response.success && response.data) {
-      const booking = await getBooking(response.data?.bookingId.toString());
-      if (booking) {
-        await sendMessage(
-          SendPulseEventTypes.CANCEL,
-          'user',
-          user,
-          booking?.ride.driver,
-          undefined,
-          booking,
-          booking?.ride
-        );
-        const admins = await Admin.find();
-        for (const admin of admins) {
+    let { userPhone }: { userPhone: string; perPage: number; page: number } =
+      req.body;
+    const { bookingId } = req.body;
+
+    try {
+      userPhone = userPhone.replace(/ /g, '');
+      userPhone = '91' + userPhone.substr(userPhone.length - 10);
+      const user = await getUserFromPhone(userPhone);
+      if (!user) throw new Error('User not found');
+      const response = await BookingService.cancel(user, bookingId);
+      if (response.success && response.data) {
+        const booking = await getBooking(response.data?.bookingId.toString());
+        if (booking) {
           await sendMessage(
             SendPulseEventTypes.CANCEL,
-            'admin',
+            'user',
             user,
             booking?.ride.driver,
-            admin,
+            undefined,
             booking,
             booking?.ride
           );
+          const admins = await Admin.find();
+          for (const admin of admins) {
+            await sendMessage(
+              SendPulseEventTypes.CANCEL,
+              'admin',
+              user,
+              booking?.ride.driver,
+              admin,
+              booking,
+              booking?.ride
+            );
+          }
         }
       }
+      return res.json(response);
+    } catch (error: any) {
+      return res.json({ success: false, error: error.message });
     }
-    return res.json(response);
   }
   static async getUserBookings(req: Request, res: Response) {
     let { userPhone }: { userPhone: string; perPage: number; page: number } =

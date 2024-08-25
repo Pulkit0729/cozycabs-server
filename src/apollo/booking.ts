@@ -111,7 +111,6 @@ export const bookingResolvers = {
         sortBy,
         sortOrder
       );
-      console.log(query, sortOptions);
       const bookings = await Booking.find(query)
         .sort(sortOptions)
         .skip((page - 1) * perPage)

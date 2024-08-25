@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { findOrCreateUser } from '../../../dal/user.dal';
+import { findOrCreateUser, getUserFromPhone } from '../../../dal/user.dal';
 import logger from '../../../logger/logger';
 import { issueJWT } from '../../../utils/jwt.util';
 import { BookingService } from '../../../services/booking.service';
@@ -7,9 +7,13 @@ import {
   sendMessage,
   SendPulseEventTypes,
 } from '../../../services/external/sendpulse';
-import { getBooking } from '../../../dal/booking.dal';
+import {
+  getBooking,
+  searchBookingsFromRideFilters,
+} from '../../../dal/booking.dal';
 import Admin from '../../../models/admin';
-import { BookingChannel } from '../../../utils/constants';
+import { BookingChannel, BookingStatus } from '../../../utils/constants';
+import { getFormattedDate } from '../../../utils/date.util';
 
 export default class BotController {
   static async botAccessToken(req: Request, res: Response) {
@@ -18,7 +22,7 @@ export default class BotController {
       userPhone = userPhone.replace(/ /g, '');
       userPhone = '91' + userPhone.substr(userPhone.length - 10);
       const user = await findOrCreateUser({ phone: userPhone });
-      const token = issueJWT(user.userId.toString());
+      const token = issueJWT(user.userId.toString(), 120);
       const payload: any = {
         token,
       };
@@ -29,6 +33,25 @@ export default class BotController {
         message: 'Bot Generate Access ErrorF' + error,
       });
       return res.json({ success: false, error: error });
+    }
+  }
+
+  static async verify(req: Request, res: Response) {
+    try {
+      const { user } = req.body;
+      return res
+        .status(200)
+        .json({ success: true, data: { auth: true, user } });
+    } catch (error: any) {
+      logger.log({
+        level: 'error',
+        message: 'Bot Verify Erro' + error,
+      });
+      return res.json({
+        success: false,
+        error: error,
+        data: { auth: false },
+      });
     }
   }
   static async bookFromBot(req: Request, res: Response) {
@@ -99,5 +122,32 @@ export default class BotController {
       }
     }
     return res.json(response);
+  }
+  static async getUserBookings(req: Request, res: Response) {
+    let { userPhone }: { userPhone: string; perPage: number; page: number } =
+      req.body;
+    const { perPage, page }: { perPage: number; page: number } = req.body;
+    try {
+      userPhone = userPhone.replace(/ /g, '');
+      userPhone = '91' + userPhone.substr(userPhone.length - 10);
+      const user = await getUserFromPhone(userPhone);
+      if (!user) throw new Error('User not found');
+      const bookings = await searchBookingsFromRideFilters(
+        {
+          userId: user.userId,
+
+          $or: [
+            { status: BookingStatus.active },
+            { status: BookingStatus.pending },
+          ],
+          'ride.date': { $gte: getFormattedDate(0) },
+        },
+        perPage ?? 10,
+        page ?? 1
+      );
+      return res.json({ success: true, data: { bookings } });
+    } catch (error: any) {
+      return res.json({ success: false, error: error.message });
+    }
   }
 }

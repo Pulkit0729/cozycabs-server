@@ -5,7 +5,7 @@ require('dotenv').config();
 import 'winston-mongodb';
 
 const myFormat = printf((info) => {
-  return `${info.timestamp} ${info.level}: ${info.message}`;
+  return `${info.timestamp} ${info.level}: ${info.message} ${info.additionInfo ? JSON.stringify(info.additionInfo) : ''}`;
 });
 
 function logger() {

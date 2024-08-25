@@ -1,6 +1,6 @@
 import Router from 'express';
-import { issueJWT, verifyJWT } from '../../../utils/jwt.util';
-import { genreferralCode, updateUserConfirm } from '../../../utils/user.util';
+import { issueJWT } from '../../../utils/jwt.util';
+import { genreferralCode } from '../../../utils/user.util';
 import { getUserFromPhone } from '../../../dal/user.dal';
 import logger from '../../../logger/logger';
 import { flowTypes } from '../../../utils/constants';
@@ -60,26 +60,26 @@ router.post('/otp', async (req, res) => {
   }
 });
 
-router.get('/jwt/:token', async (req, res) => {
-  const token = req.params.token;
+// router.get('/jwt/:token', async (req, res) => {
+//   const token = req.params.token;
 
-  try {
-    const verify: any = verifyJWT(token);
-    const user = await updateUserConfirm(verify.sub);
-    console.log(user);
+//   try {
+//     const verify: any = verifyJWT(token);
+//     const user = await updateUserConfirm(verify.sub);
+//     console.log(user);
 
-    // logger.log({
-    //   level: "info",
-    //   message: `Verify Token API, ip: ${IP.address()} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
-    // });
-    return res.redirect(`${process.env.SERVER_URL}`);
-  } catch (_error: any) {
-    // logger.log({
-    //   level: "error",
-    //   message: `Verify Token API, ip: ${IP.address()} error: ${error.message} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
-    // });
-    return res.send('Url is invalid, PLease Try Again');
-  }
-});
+//     // logger.log({
+//     //   level: "info",
+//     //   message: `Verify Token API, ip: ${IP.address()} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
+//     // });
+//     return res.redirect(`${process.env.SERVER_URL}`);
+//   } catch (_error: any) {
+//     // logger.log({
+//     //   level: "error",
+//     //   message: `Verify Token API, ip: ${IP.address()} error: ${error.message} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
+//     // });
+//     return res.send('Url is invalid, PLease Try Again');
+//   }
+// });
 
 module.exports = router;

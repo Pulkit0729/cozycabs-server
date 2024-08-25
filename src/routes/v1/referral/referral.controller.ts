@@ -60,7 +60,7 @@ export class ReferralController {
       const userPromos = await getReferralUserPromo(user.userId.toString());
       if (userPromos.length > 0) throw new Error('Referral already exists');
       const promo = await searchPromo({
-        name: 'NEW50',
+        name: process.env.NEW_USER_COUPON ?? 'NEW50',
         source: PromoSources.REFERRAL,
       });
       if (!promo) throw new Error('No promotion found');

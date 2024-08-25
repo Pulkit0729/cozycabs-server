@@ -13,7 +13,6 @@ import {
 } from '../../../dal/booking.dal';
 import Admin from '../../../models/admin';
 import { BookingChannel, BookingStatus } from '../../../utils/constants';
-import { getFormattedDate } from '../../../utils/date.util';
 
 export default class BotController {
   static async botAccessToken(req: Request, res: Response) {
@@ -151,7 +150,6 @@ export default class BotController {
             { status: BookingStatus.active },
             { status: BookingStatus.pending },
           ],
-          'ride.date': { $gte: getFormattedDate(0) },
         },
         perPage ?? 10,
         page ?? 1

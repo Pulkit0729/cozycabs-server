@@ -5,6 +5,8 @@ import { getUserFromPhone } from '../../../dal/user.dal';
 import logger from '../../../logger/logger';
 import { flowTypes } from '../../../utils/constants';
 import { verifyOTP } from '../../../services/external/mcentral';
+import { UserPromoService } from '../../../services/userpromo.service';
+import { searchPromo } from '../../../dal/promo.dal';
 
 const router = Router();
 
@@ -45,6 +47,12 @@ router.post('/otp', async (req, res) => {
       user.markModified('phoneConfirmed');
       user.markModified('referralCode');
       await user.save();
+      const promo = await searchPromo({
+        name: process.env.WELCM_COUPON || 'WELCOM50',
+      });
+      if (promo) {
+        await UserPromoService.addPromoToUser(user, promo, 365);
+      }
       flowType = flowTypes.createUser;
     } else {
       payload = { ...payload, user: user };

@@ -3,7 +3,7 @@ import { getDriverFromPhone } from '../../../dal/driver.dal';
 import Driver from '../../../models/drivers';
 import logger from '../../../logger/logger';
 import { sendOTP } from '../../../services/external/mcentral';
-
+import auditLogger from '../../../logger/auditLogger';
 const driverRouter = Router();
 
 // driverRouter.get('/', (_req: any, res) => {
@@ -60,6 +60,17 @@ driverRouter.post('/phone', async (req, res) => {
     driver.phoneVerificationId = vId;
     driver.markModified('phoneVerificationId');
     await driver.save();
+    auditLogger.info('OTP sent to Driver', {
+      eventType: 'Login Attempt',
+      eventCreatedBy: driver.driverId,
+      description: `OTP sent to the Driver with phone number ${formattedPhone}`,
+      timestamp: new Date().toISOString(),
+      ip:
+        req.headers['x-real-ip'] ||
+        req.headers['x-forwarded-for'] ||
+        req.socket.remoteAddress ||
+        '',
+    });
     return res.status(200).json({
       success: true,
       message: 'Otp Send to phone',

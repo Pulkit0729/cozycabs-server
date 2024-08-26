@@ -4,7 +4,7 @@ import { getDriverFromPhone } from '../../../dal/driver.dal';
 import logger from '../../../logger/logger';
 import { flowTypes } from '../../../utils/constants';
 import { verifyOTP } from '../../../services/external/mcentral';
-
+import auditLogger from '../../../logger/auditLogger';
 const router = Router();
 
 router.post('/otp', async (req, res) => {
@@ -35,11 +35,33 @@ router.post('/otp', async (req, res) => {
       flowType = flowTypes.login;
     }
     payload.flowType = flowType;
+    auditLogger.info('Driver login', {
+      eventType: 'Driver Login',
+      eventCreatedBy: driver.driverId,
+      description: 'Driver successfully logged in',
+      timestamp: new Date().toISOString(),
+      ip:
+        req.headers['x-real-ip'] ||
+        req.headers['x-forwared-for'] ||
+        req.socket.remoteAddress ||
+        '',
+    });
     return res.status(200).json({ success: true, data: payload });
   } catch (error: any) {
     logger.error(
       `OTP API, error: ${error.message}, phone: ${phone} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
     );
+    auditLogger.error('OTP verification failed', {
+      eventType: 'OTP Verification',
+      eventCreatedBy: 'System',
+      description: `OTP verification failed for phone: ${phone}`,
+      timestamp: new Date().toISOString(),
+      ip:
+        req.headers['x-real-ip'] ||
+        req.headers['x-forwared-for'] ||
+        req.socket.remoteAddress ||
+        '',
+    });
     return res.json({ success: false, message: error.message });
   }
 });

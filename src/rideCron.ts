@@ -1,8 +1,9 @@
 import cron from 'node-cron';
-import TemplatedRide from './models/templatedRides';
+import TemplatedRide, { TemplateRideStatus } from './models/templatedRides';
 import Ride from './models/rides';
 import logger from './logger/logger';
 import { getFormattedDate } from './utils/date.util';
+import { RideStatus } from './utils/constants';
 
 const Cron_String = process.env.CRON_STRING || '0 0 * * *';
 
@@ -16,7 +17,11 @@ export function startCron() {
 export async function addRides() {
   logger.info('Adding Rides');
   try {
-    const templated_rides = await TemplatedRide.find().sort({ time: 1 }).exec();
+    const templated_rides = await TemplatedRide.find({
+      status: TemplateRideStatus.ACTIVE,
+    })
+      .sort({ time: 1 })
+      .exec();
     for (let i = 0; i < templated_rides.length; i++) {
       const templateRide = templated_rides[i];
       for (let index = 0; index < 3; index++) {
@@ -43,7 +48,7 @@ export async function addRides() {
             seats: templateRide.seats,
             price: templateRide.price,
             discountedPrice: templateRide.discountedPrice,
-            status: 'pending',
+            status: RideStatus.pending,
           });
           await ride.save();
         }

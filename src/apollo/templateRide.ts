@@ -20,6 +20,7 @@ export const templateTypeDefs = gql`
     seats: Int!
     price: Int!
     discountedPrice: Int!
+    status: String
   }
 
   input TemplatedRideInput {
@@ -35,6 +36,7 @@ export const templateTypeDefs = gql`
     seats: Int!
     price: Int!
     discountedPrice: Int!
+    status: String!
   }
   input TemplatedRideUpdateInput {
     from: String
@@ -49,6 +51,7 @@ export const templateTypeDefs = gql`
     seats: Int
     price: Int
     discountedPrice: Int
+    status: String
   }
 
   input TemplatedRideFilter {
@@ -67,6 +70,7 @@ export const templateTypeDefs = gql`
     seats: Int
     price: Int
     discountedPrice: Int
+    status: String
   }
 `;
 

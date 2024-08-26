@@ -1,6 +1,10 @@
 import mongoose, { Schema, Types } from 'mongoose';
 import { IDriver } from './drivers';
 
+export enum TemplateRideStatus {
+  ACTIVE = 'active',
+  PAUSE = 'pause',
+}
 export interface ILocation {
   type: string;
   coordinates: any[];
@@ -21,6 +25,7 @@ export interface ITemplateRide extends Document {
   seats: number;
   price: number;
   discountedPrice: number;
+  status: TemplateRideStatus;
 }
 
 const TemplatedRideSchema = new mongoose.Schema(
@@ -46,6 +51,7 @@ const TemplatedRideSchema = new mongoose.Schema(
     seats: Number,
     price: Number,
     discountedPrice: Number,
+    status: { type: String, enum: TemplateRideStatus },
   },
   { timestamps: true }
 );

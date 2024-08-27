@@ -150,6 +150,9 @@ export default class BotController {
             { status: BookingStatus.pending },
           ],
         },
+        {
+          'ride.date': -1,
+        },
         perPage ?? 10,
         page ?? 1
       );

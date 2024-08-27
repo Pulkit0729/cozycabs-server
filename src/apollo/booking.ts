@@ -1,7 +1,5 @@
 import { GraphQLScalarType, Kind } from 'graphql';
 import Booking from '../models/bookings';
-import { IRide } from '../models/rides';
-import { IUser } from '../models/users';
 
 import gql from 'graphql-tag';
 import { constructQuery } from '../utils/apollo.util';
@@ -11,6 +9,7 @@ import {
   isDriverAuthenticated,
   isUserAuthenticated,
 } from '../utils/permission.util';
+import { searchBookingsFromRideFilters } from '../dal/booking.dal';
 
 const dateScalar = new GraphQLScalarType({
   name: 'Date',
@@ -90,7 +89,9 @@ export const bookingTypeDefs = gql(`
     OR: [BookingFilter]
     bookingId: String
     rideId: String
+    ride: RideFilter
     userId: String
+    user: UserFilter
     channel: String
     seats: Float
     promoId: String
@@ -111,15 +112,14 @@ export const bookingResolvers = {
         sortBy,
         sortOrder
       );
-      const bookings = await Booking.find(query)
-        .sort(sortOptions)
-        .skip((page - 1) * perPage)
-        .limit(perPage)
-        .populate<{ ride: IRide }>({
-          path: 'ride',
-          populate: { path: 'driver' },
-        })
-        .populate<{ user: IUser }>('user');
+      console.log(query, sortOptions);
+
+      const bookings = await searchBookingsFromRideFilters(
+        query,
+        Object.keys(sortOptions).length > 0 ? sortOptions : { 'ride.date': -1 },
+        perPage,
+        page
+      );
       return bookings;
     },
   },

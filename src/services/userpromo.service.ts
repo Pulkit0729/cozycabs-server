@@ -18,8 +18,8 @@ export class UserPromoService {
     const validUptoDate = new Date();
     validUptoDate.setDate(validUptoDate.getDate() + validDays);
     const userPromo = new UserPromo({
-      userId: user.userId,
-      referredFrom: referalUser?.userId ?? '',
+      userId: user.userId.toString(),
+      referredFrom: referalUser?.userId.toString() ?? '',
       promoId: promo.promoId,
       isUsed: false,
       validUpto: validUptoDate,
@@ -61,7 +61,7 @@ export class UserPromoService {
     if (
       !userPromo ||
       userPromo.isUsed ||
-      userPromo.userId.valueOf() != user.userId.toString()
+      userPromo.userId.toString() != user.userId.toString()
     )
       throw new Error(`User do not have promo: ${userPromoId}`);
     if (userPromo.validUpto < new Date())

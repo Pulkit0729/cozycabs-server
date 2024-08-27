@@ -21,7 +21,7 @@ router.post('/navstatus', driverAuthMiddle, async (req, res) => {
   try {
     const ride = await getRide(rideId);
     if (!ride) throw new Error('Ride not found');
-    if (driver.driverId.toJSON() != ride.driver.driverId.toString())
+    if (driver.driverId.toString() != ride.driver.driverId.toString())
       throw new Error('Unauthenticated driver');
     ride.navigationStatus = navstatus;
     const bookings = await getBookingsFromRide(ride.rideId.toString());

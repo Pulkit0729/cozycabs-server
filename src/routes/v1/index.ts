@@ -38,5 +38,6 @@ router.use('/search', require('./search'));
 router.use('/ride', require('./ride'));
 router.use('/userpromo', require('./userpromo'));
 router.use('/referral', require('./referral'));
+router.use('/track', require('./track'));
 
 module.exports = router;

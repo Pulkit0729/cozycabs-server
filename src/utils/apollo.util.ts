@@ -47,7 +47,7 @@ export function constructSubQuery(condition: { [key: string]: any }) {
         query[key] = { $regex: value, $options: 'i' };
       } else if (key == 'id') {
         query['id'] = value;
-      } else if (typeof value == 'object') {
+      } else if (typeof value == 'object' && !(value instanceof Date)) {
         Object.keys(value!).forEach((key1: string) => {
           query[key + '.' + key1] = value[key1] as string;
         });

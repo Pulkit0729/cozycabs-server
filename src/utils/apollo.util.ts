@@ -1,4 +1,4 @@
-import { isValidObjectId } from 'mongoose';
+import mongoose, { isValidObjectId } from 'mongoose';
 
 export function constructQuery(
   filterBy: any,
@@ -51,6 +51,8 @@ export function constructSubQuery(condition: { [key: string]: any }) {
         Object.keys(value!).forEach((key1: string) => {
           query[key + '.' + key1] = value[key1] as string;
         });
+      } else if (isValidObjectId(value)) {
+        query[key] = new mongoose.Types.ObjectId(value);
       } else {
         query[key] = value;
       }

@@ -5,7 +5,9 @@ import { sendMessageToGroup } from '../../../services/external/telegram';
 export default class TrackController {
   static async book(req: Request, res: Response) {
     try {
-      await sendMessageToGroup(JSON.stringify(req.body));
+      await sendMessageToGroup(
+        'Book Request' + Object.values(req.body).join('')
+      );
     } catch (error: any) {
       logger.error(error.message);
     }

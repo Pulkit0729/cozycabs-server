@@ -31,7 +31,7 @@ export function constructQuery(
   return { query, sortOptions };
 }
 
-export function constructSubQuery(condition: any) {
+export function constructSubQuery(condition: { [key: string]: any }) {
   const query: any = {};
 
   Object.entries(condition).forEach(([key, value]) => {
@@ -47,6 +47,10 @@ export function constructSubQuery(condition: any) {
         query[key] = { $regex: value, $options: 'i' };
       } else if (key == 'id') {
         query['id'] = value;
+      } else if (typeof value == 'object') {
+        Object.keys(value!).forEach((key1: string) => {
+          query[key + '.' + key1] = value[key1] as string;
+        });
       } else {
         query[key] = value;
       }

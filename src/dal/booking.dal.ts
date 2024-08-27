@@ -1,4 +1,4 @@
-import { FilterQuery } from 'mongoose';
+import { Expression, FilterQuery } from 'mongoose';
 import Booking, { IBooking } from '../models/bookings';
 import { IRide } from '../models/rides';
 import { IUser } from '../models/users';
@@ -48,6 +48,7 @@ export async function updateBookings(rideId: string, status: RideStatus) {
 
 export async function searchBookingsFromRideFilters(
   match: FilterQuery<any>,
+  sort: Record<string, 1 | -1 | Expression.Meta>,
   perPage: number = 10,
   page: number = 1
 ): Promise<IBooking[]> {
@@ -63,6 +64,15 @@ export async function searchBookingsFromRideFilters(
     { $unwind: '$ride' },
     {
       $lookup: {
+        from: 'users',
+        localField: 'userId',
+        foreignField: 'userId',
+        as: 'user',
+      },
+    },
+    { $unwind: '$user' },
+    {
+      $lookup: {
         from: 'drivers', // The drivers collection
         localField: 'ride.driverId', // The driverId field in rides that connects to drivers
         foreignField: 'driverId', // The field in drivers that is the driver id
@@ -76,9 +86,7 @@ export async function searchBookingsFromRideFilters(
       $match: match,
     },
     {
-      $sort: {
-        'ride.date': -1, // Sort by ride date in ascending order (1 for ascending, -1 for descending)
-      },
+      $sort: sort,
     },
     {
       $skip: (page - 1) * perPage, // Skip the first 10 results (adjust this for your page number)

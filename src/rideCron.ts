@@ -22,6 +22,12 @@ export async function addRides() {
     })
       .sort({ time: 1 })
       .exec();
+
+    templated_rides.sort((tr1, tr2) => {
+      const a = new Date('1970/01/01 ' + tr1.departureTime).valueOf();
+      const b = new Date('1970/01/01 ' + tr2.departureTime).valueOf();
+      return a - b;
+    });
     for (let i = 0; i < templated_rides.length; i++) {
       const templateRide = templated_rides[i];
       for (let index = 0; index < 3; index++) {

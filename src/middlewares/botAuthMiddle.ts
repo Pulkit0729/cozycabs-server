@@ -40,8 +40,10 @@ export default async function botAuthMiddle(
 
     res.status(401).json({
       success: false,
-      auth: false,
-      msg: 'Token expired or invalid or API Key was invalid',
+      data: {
+        auth: false,
+        msg: 'Token expired or invalid or API Key was invalid',
+      },
     });
   }
 }

@@ -41,7 +41,7 @@ router.post('/otp', async (req, res) => {
       token,
       phone,
     };
-    if (!user.phoneConfirmed || !user.name) {
+    if (!user.phoneConfirmed || !user.name || !user.accountCreated) {
       user.phoneConfirmed = true;
       user.referralCode = genreferralCode();
       user.markModified('phoneConfirmed');

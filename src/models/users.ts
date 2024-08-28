@@ -15,6 +15,7 @@ export interface IUser extends Document {
     value: string;
     timestamp: Date;
   };
+  accountCreated: boolean;
 }
 
 export interface IUserFilter {
@@ -32,6 +33,7 @@ export interface IUserFilter {
     value: string;
     timestamp: Date;
   };
+  accountCreated?: boolean;
 }
 
 const UserSchema = new mongoose.Schema<IUser>(
@@ -62,6 +64,7 @@ const UserSchema = new mongoose.Schema<IUser>(
       value: String,
       timestamp: Date,
     },
+    accountCreated: Boolean,
   },
   { timestamps: true }
 );

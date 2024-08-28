@@ -14,14 +14,14 @@ import User from '../../../models/users';
 
 export default class AdminController {
   static async book(req: Request, res: Response) {
-    const { rideId, seats } = req.body;
+    const { rideId, seats, userName } = req.body;
     let { userPhone } = req.body;
     try {
       userPhone = userPhone.replace(/ /g, '');
       userPhone = '91' + userPhone.substr(userPhone.length - 10);
       let user = await getUserFromPhone(userPhone);
       if (!user) {
-        user = new User({ phone: userPhone, name: 'Unknown' });
+        user = new User({ phone: userPhone, name: userName ?? 'Unknown' });
         await user.save();
       }
       const response = await BookingService.book(

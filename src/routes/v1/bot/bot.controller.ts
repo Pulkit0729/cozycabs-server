@@ -18,12 +18,13 @@ import User from '../../../models/users';
 export default class BotController {
   static async botAccessToken(req: Request, res: Response) {
     try {
-      let { userPhone } = req.body;
+      // eslint-disable-next-line prefer-const
+      let { userPhone, userName } = req.body;
       userPhone = userPhone.replace(/ /g, '');
       userPhone = '91' + userPhone.substr(userPhone.length - 10);
       let user = await getUserFromPhone(userPhone);
       if (!user) {
-        user = new User({ phone: userPhone, name: 'Unknown' });
+        user = new User({ phone: userPhone, name: userName ?? 'Unknown' });
         await user.save();
       }
       const token = issueJWT(user.userId.toString(), 120);

@@ -26,7 +26,7 @@ const router = Router();
 //     const response = await sendNotification(message);
 //     res.send(response);
 // })
-router.use('/publishrides', require('./publishrides'));
+router.use('/admin', require('./admin'));
 router.use('/auth', require('./auth'));
 router.use('/authDriver', require('./authDriver'));
 router.use('/user', require('./user'));

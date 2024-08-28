@@ -20,6 +20,7 @@ export enum BookingStatus {
 export enum BookingChannel {
   app = 'app',
   bot = 'bot',
+  admin = 'admin',
 }
 
 export enum NavigationStatus {

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { findOrCreateUser, getUserFromPhone } from '../../../dal/user.dal';
+import { getUserFromPhone } from '../../../dal/user.dal';
 import logger from '../../../logger/logger';
 import { issueJWT } from '../../../utils/jwt.util';
 import { BookingService } from '../../../services/booking.service';
@@ -13,6 +13,7 @@ import {
 } from '../../../dal/booking.dal';
 import Admin from '../../../models/admin';
 import { BookingChannel, BookingStatus } from '../../../utils/constants';
+import User from '../../../models/users';
 
 export default class BotController {
   static async botAccessToken(req: Request, res: Response) {
@@ -20,7 +21,11 @@ export default class BotController {
       let { userPhone } = req.body;
       userPhone = userPhone.replace(/ /g, '');
       userPhone = '91' + userPhone.substr(userPhone.length - 10);
-      const user = await findOrCreateUser({ phone: userPhone });
+      let user = await getUserFromPhone(userPhone);
+      if (!user) {
+        user = new User({ phone: userPhone, name: userPhone });
+        await user.save();
+      }
       const token = issueJWT(user.userId.toString(), 120);
       const payload: any = {
         token,

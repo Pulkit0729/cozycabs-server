@@ -3,13 +3,14 @@ import { addRides } from '../../../rideCron';
 import logger from '../../../logger/logger';
 import { BookingService } from '../../../services/booking.service';
 import { getBooking } from '../../../dal/booking.dal';
-import { findOrCreateUser } from '../../../dal/user.dal';
+import { getUserFromPhone } from '../../../dal/user.dal';
 import { BookingChannel } from '../../../utils/constants';
 import {
   sendMessage,
   SendPulseEventTypes,
 } from '../../../services/external/sendpulse';
 import Admin from '../../../models/admin';
+import User from '../../../models/users';
 
 export default class AdminController {
   static async book(req: Request, res: Response) {
@@ -18,7 +19,11 @@ export default class AdminController {
     try {
       userPhone = userPhone.replace(/ /g, '');
       userPhone = '91' + userPhone.substr(userPhone.length - 10);
-      const user = await findOrCreateUser({ phone: userPhone });
+      let user = await getUserFromPhone(userPhone);
+      if (!user) {
+        user = new User({ phone: userPhone, name: userPhone });
+        await user.save();
+      }
       const response = await BookingService.book(
         user,
         rideId,

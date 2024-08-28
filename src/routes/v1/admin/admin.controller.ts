@@ -21,7 +21,7 @@ export default class AdminController {
       userPhone = '91' + userPhone.substr(userPhone.length - 10);
       let user = await getUserFromPhone(userPhone);
       if (!user) {
-        user = new User({ phone: userPhone, name: userPhone });
+        user = new User({ phone: userPhone, name: 'Unknown' });
         await user.save();
       }
       const response = await BookingService.book(

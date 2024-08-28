@@ -23,7 +23,7 @@ export default class BotController {
       userPhone = '91' + userPhone.substr(userPhone.length - 10);
       let user = await getUserFromPhone(userPhone);
       if (!user) {
-        user = new User({ phone: userPhone, name: userPhone });
+        user = new User({ phone: userPhone, name: 'Unknown' });
         await user.save();
       }
       const token = issueJWT(user.userId.toString(), 120);

@@ -3,7 +3,7 @@ import { getUserFromPhone } from '../../../dal/user.dal';
 import User from '../../../models/users';
 import logger from '../../../logger/logger';
 import { sendOTP } from '../../../services/external/mcentral';
-
+import auditLogger from '../../../logger/auditLogger';
 const userRouter = Router();
 
 // userRouter.get('/', (_req: any, res) => {
@@ -62,6 +62,18 @@ userRouter.post('/phone', async (req, res) => {
     user.phoneVerificationId = vId;
     user.markModified('phoneVerificationId');
     await user.save();
+    auditLogger.info('OTP sent to user', {
+      eventType: 'Login Attempt',
+      eventCreatedBy: user.userId,
+      description: `OTP sent to the user with phone number ${formattedPhone}`,
+      timestamp: new Date().toISOString(),
+      ip:
+        req.headers['x-real-ip'] ||
+        req.headers['x-forwarded-for'] ||
+        req.socket.remoteAddress ||
+        '',
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Otp Send to phone',

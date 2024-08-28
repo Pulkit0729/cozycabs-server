@@ -3,6 +3,7 @@ import { issueJWT } from '../../../utils/jwt.util';
 import { genreferralCode } from '../../../utils/user.util';
 import { getUserFromPhone } from '../../../dal/user.dal';
 import logger from '../../../logger/logger';
+import auditLogger from '../../../logger/auditLogger';
 import { flowTypes } from '../../../utils/constants';
 import { verifyOTP } from '../../../services/external/mcentral';
 import { UserPromoService } from '../../../services/userpromo.service';
@@ -54,9 +55,31 @@ router.post('/otp', async (req, res) => {
         await UserPromoService.addPromoToUser(user, promo, 365);
       }
       flowType = flowTypes.createUser;
+      auditLogger.info('New user created', {
+        eventType: 'User Registration',
+        eventCreatedBy: user.userId,
+        description: 'New user registered and confirmed phone number',
+        timestamp: new Date().toISOString(),
+        ip:
+          req.headers['x-real-ip'] ||
+          req.headers['x-forwared-for'] ||
+          req.socket.remoteAddress ||
+          '',
+      });
     } else {
       payload = { ...payload, user: user };
       flowType = flowTypes.login;
+      auditLogger.info('User login', {
+        eventType: 'User Login',
+        eventCreatedBy: user.userId,
+        description: 'User successfully logged in',
+        timestamp: new Date().toISOString(),
+        ip:
+          req.headers['x-real-ip'] ||
+          req.headers['x-forwared-for'] ||
+          req.socket.remoteAddress ||
+          '',
+      });
     }
     payload.flowType = flowType;
     return res.status(200).json({ success: true, data: payload });
@@ -64,6 +87,17 @@ router.post('/otp', async (req, res) => {
     logger.error(
       `OTP API, error: ${error.message}, phone: ${phone} URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`
     );
+    auditLogger.error('OTP verification failed', {
+      eventType: 'OTP Verification',
+      eventCreatedBy: 'System',
+      description: `OTP verification failed for phone: ${phone}`,
+      timestamp: new Date().toISOString(),
+      ip:
+        req.headers['x-real-ip'] ||
+        req.headers['x-forwared-for'] ||
+        req.socket.remoteAddress ||
+        '',
+    });
     return res.json({ success: false, message: error.message });
   }
 });

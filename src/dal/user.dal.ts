@@ -1,5 +1,5 @@
 import { FilterQuery } from 'mongoose';
-import User, { IUser, IUserFilter } from '../models/users';
+import User, { IUser } from '../models/users';
 
 export async function getUser(userId: string) {
   return await User.findOne({ userId: userId }).then((user) => {
@@ -24,7 +24,7 @@ export async function getUserFromPhone(phone: string) {
   });
 }
 
-export async function searchUser(filters: IUserFilter) {
+export async function searchUser(filters: FilterQuery<IUser>) {
   return await User.findOne(filters).then((user) => {
     return user;
   });

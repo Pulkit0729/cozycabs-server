@@ -4,7 +4,7 @@ import { mailOptions, verifyMail } from './mail';
 import ejs from 'ejs';
 import path from 'path';
 import User from '../models/users';
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
 
 export function validPassword(
   password: BinaryLike,
@@ -120,18 +120,18 @@ export async function sendResetPasswordEmail(
   verifyMail(mailOption);
 }
 
-export async function updateUserConfirm(id: string) {
-  const user: any = await User.findOne({
-    id: new mongoose.Types.ObjectId(id),
-  });
+// export async function updateUserConfirm(id: string) {
+//   const user: any = await User.findOne({
+//     id: new mongoose.Types.ObjectId(id),
+//   });
 
-  user.emailConfirmed = true;
-  await user.save();
-  return user;
-}
+//   user.emailConfirmed = true;
+//   await user.save();
+//   return user;
+// }
 
-export async function getUserFromEmail(email: string) {
-  return await User.findOne({ email: email }).then((user) => {
-    return user;
-  });
-}
+// export async function getUserFromEmail(email: string) {
+//   return await User.findOne({ email: email }).then((user) => {
+//     return user;
+//   });
+// }

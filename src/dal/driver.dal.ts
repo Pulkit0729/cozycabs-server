@@ -5,11 +5,6 @@ export async function getDriver(driverId: string) {
     return driver;
   });
 }
-export async function getDriverFromApiKey(apiKey: string) {
-  return await Driver.findOne({ apiKey: apiKey }).then((driver) => {
-    return driver;
-  });
-}
 
 export async function getDriverFromEmail(email: string) {
   return await Driver.findOne({ email: email }).then((driver) => {

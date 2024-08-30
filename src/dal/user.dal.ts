@@ -6,11 +6,6 @@ export async function getUser(userId: string) {
     return user;
   });
 }
-export async function getUserFromApiKey(apiKey: string) {
-  return await User.findOne({ apiKey: apiKey }).then((user) => {
-    return user;
-  });
-}
 
 export async function getUserFromEmail(email: string) {
   return await User.findOne({ email: email }).then((user) => {

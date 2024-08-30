@@ -54,6 +54,20 @@ export const typeDefs = gql`
       page: Int
       perPage: Int
     ): [UserPromo]
+    admins(
+      filterBy: AdminFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [Admin]
+    blablas(
+      filterBy: BlablaFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [Blabla]
     termsAndConditions(
       filterBy: TermsAndConditionFilter
       sortBy: String
@@ -68,6 +82,8 @@ export const typeDefs = gql`
   }
   type Mutation {
     addUser(input: UserInput): User
+    addAdmin(input: AdminInput): Admin
+    addBlabla(input: BlablaInput): Blabla
     addDriver(input: DriverInput): Driver
     addTemplatedRide(input: TemplatedRideInput): TemplatedRide
     addRide(input: RideInput): Ride
@@ -80,6 +96,8 @@ export const typeDefs = gql`
       id: String!
       input: TemplatedRideUpdateInput!
     ): TemplatedRide
+    updateAdmin(id: String!, input: AdminUpdateInput!): Admin
+    updateBlabla(id: String!, input: BlablaUpdateInput!): Blabla
     updateRide(id: String!, input: RideUpdateInput!): Ride
     updateBooking(bookingId: String!, input: BookingUpdateInput!): Booking
     updatePromo(promoId: String!, input: PromoUpdateInput!): Promo

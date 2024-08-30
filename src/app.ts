@@ -37,6 +37,16 @@ import {
   termsandconditionTypeDefs,
 } from './apollo/termsAndCodition';
 import { billDetailsTypeDef } from './apollo/billDetails';
+import {
+  blablaPermissions,
+  blablaResolvers,
+  blablaTypeDefs,
+} from './apollo/blabla';
+import {
+  adminPermissions,
+  adminResolvers,
+  adminTypeDefs,
+} from './apollo/admin';
 
 const cors = require('cors');
 const PORT = process.env.API_PORT || 3000;
@@ -52,6 +62,8 @@ export default async function App() {
         { typeDefs: templateTypeDefs, resolvers: templateResolvers },
         { typeDefs: promoTypeDefs, resolvers: promoResolvers },
         { typeDefs: userpromosTypeDefs, resolvers: userPromosResolvers },
+        { typeDefs: blablaTypeDefs, resolvers: blablaResolvers },
+        { typeDefs: adminTypeDefs, resolvers: adminResolvers },
         {
           typeDefs: termsandconditionTypeDefs,
           resolvers: termsandconditionResolvers,
@@ -66,7 +78,9 @@ export default async function App() {
       templateRidePermissions,
       prmoPermissions,
       userPrmoPermissions,
-      termsandconditionPermissions
+      termsandconditionPermissions,
+      blablaPermissions,
+      adminPermissions
     ),
   });
   await server.start();

@@ -1,3 +1,8 @@
+export enum NodeEnv {
+  development = 'development',
+  production = 'production',
+}
+
 export enum flowTypes {
   login = 'login',
   createUser = 'createUser',
@@ -21,6 +26,7 @@ export enum BookingChannel {
   app = 'app',
   bot = 'bot',
   admin = 'admin',
+  blabla = 'blabla',
 }
 
 export enum NavigationStatus {

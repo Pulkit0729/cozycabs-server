@@ -164,6 +164,16 @@ export default class BlablaService {
         }
       } else {
         await sendMessage(SendPulseEventTypes.ERROR, 'user', user);
+        const admins = await Admin.find();
+        for (const admin of admins) {
+          await sendMessage(
+            SendPulseEventTypes.BLABLAERROR,
+            'admin',
+            user,
+            undefined,
+            admin
+          );
+        }
       }
       return;
     } catch (error) {

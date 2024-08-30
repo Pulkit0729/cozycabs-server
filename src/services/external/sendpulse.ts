@@ -22,6 +22,7 @@ export enum SendPulseEventTypes {
   RIDECANCEL = 'rideCancel',
   BOOK = 'book',
   ERROR = 'error',
+  BLABLAERROR = 'blablaError',
   CANCEL = 'cancel',
 }
 export interface ISendpulsePostBody {

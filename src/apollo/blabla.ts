@@ -12,9 +12,9 @@ export const blablaTypeDefs = gql`
   }
 
   input BlablaInput {
-    blablaId: String
-    rideId: String
-    price: Float
+    blablaId: String!
+    rideId: String!
+    price: Float!
   }
   input BlablaUpdateInput {
     blablaId: String

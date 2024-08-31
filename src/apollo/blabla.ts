@@ -8,21 +8,25 @@ export const blablaTypeDefs = gql`
   type Blabla {
     blablaId: String
     rideId: String
+    price: Float
   }
 
   input BlablaInput {
     blablaId: String
     rideId: String
+    price: Float
   }
   input BlablaUpdateInput {
     blablaId: String
     rideId: String
+    price: Float
   }
   input BlablaFilter {
     AND: [BlablaFilter]
     OR: [BlablaFilter]
     blablaId: String
     rideId: String
+    price: Float
   }
 `;
 

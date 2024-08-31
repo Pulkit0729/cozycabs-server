@@ -11,7 +11,10 @@ const BlablaSchema = new mongoose.Schema<IBlabla>(
       required: true,
       unique: true,
     },
-    rideId: String,
+    rideId: {
+      type: String,
+      unique: true,
+    },
     price: Number,
   },
   { timestamps: true }

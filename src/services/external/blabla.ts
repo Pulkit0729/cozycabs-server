@@ -1,6 +1,6 @@
 import { parse } from 'node-html-parser';
 import logger from '../../logger/logger';
-import User from '../../models/users';
+import User, { IUser } from '../../models/users';
 import { getUser, getUserFromPhone } from '../../dal/user.dal';
 import Blabla from '../../models/blabla';
 import { BookingService } from '../booking.service';
@@ -11,6 +11,8 @@ import {
 } from '../../dal/booking.dal';
 import { sendMessage, SendPulseEventTypes } from './sendpulse';
 import Admin from '../../models/admin';
+import { getRide } from '../../dal/ride.dal';
+import { IRide } from '../../models/rides';
 
 export default class BlablaService {
   static async handleBlabla(subject: string, message: string) {
@@ -129,6 +131,12 @@ export default class BlablaService {
 
       const blabla = await Blabla.findOne({ blablaId: blablaId });
       if (!blabla) throw new Error('No Blabla ride found');
+      const ride = await getRide(blabla.rideId);
+      if (!ride) throw new Error(`Ride ${blabla.rideId} does not exist`);
+      if (ride.seats < seats) {
+        await this.bookingWhenNoSeats(ride, user);
+        return;
+      }
       const response = await BookingService.book(
         user,
         blabla.rideId,
@@ -164,16 +172,6 @@ export default class BlablaService {
         }
       } else {
         await sendMessage(SendPulseEventTypes.ERROR, 'user', user);
-        const admins = await Admin.find();
-        for (const admin of admins) {
-          await sendMessage(
-            SendPulseEventTypes.BLABLAERROR,
-            'admin',
-            user,
-            undefined,
-            admin
-          );
-        }
       }
       return;
     } catch (error) {
@@ -237,6 +235,22 @@ export default class BlablaService {
         message: 'Error in cancelling:' + error,
       });
       return;
+    }
+  }
+
+  static async bookingWhenNoSeats(ride: IRide, user: IUser) {
+    await sendMessage(SendPulseEventTypes.BLABLASEATSERROR, 'user', user);
+    const admins = await Admin.find();
+    for (const admin of admins) {
+      await sendMessage(
+        SendPulseEventTypes.BLABLASEATSERROR,
+        'admin',
+        user,
+        undefined,
+        admin,
+        undefined,
+        ride
+      );
     }
   }
 }

@@ -130,7 +130,7 @@ export const bookingResolvers = {
     },
     updateBooking: async (_: any, { bookingId, input }: any) => {
       try {
-        const booking = await Booking.findById(bookingId);
+        const booking = await Booking.findOne({ bookingId });
         if (!booking) {
           throw new Error('Ride not found');
         }

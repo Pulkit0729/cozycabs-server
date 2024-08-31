@@ -1,3 +1,4 @@
+import { searchBlabla } from '../dal/blabla.dal';
 import { searchBooking, getBooking } from '../dal/booking.dal';
 import { getRide } from '../dal/ride.dal';
 import logger from '../logger/logger';
@@ -38,7 +39,11 @@ export class BookingService {
       ride.seats = ride.seats - seats;
 
       const total = seats * ride.price;
-      const discountedTotal = seats * ride.discountedPrice;
+      let discountedTotal = seats * ride.discountedPrice;
+
+      if (channel == BookingChannel.blabla) {
+        discountedTotal = await this.getBlablatotal(rideId, seats);
+      }
 
       const booking = new Booking({
         rideId: ride.rideId,
@@ -79,7 +84,7 @@ export class BookingService {
       return { success: true, booking };
     } catch (error: any) {
       logger.error(`Book error: ${error.message}`);
-      return { success: false, msg: 'Failed to Book' };
+      return { success: false, msg: `Failed to Book ${error.message}` };
     }
   }
 
@@ -143,5 +148,10 @@ export class BookingService {
     if (booking.status != BookingStatus.pending || booking.isCancelled)
       throw new Error(`Booking status ${booking.status} not pending`);
     return booking;
+  }
+
+  static async getBlablatotal(rideId: string, seats: number) {
+    const blabla = await searchBlabla({ rideId: rideId });
+    return blabla[0].price * seats;
   }
 }

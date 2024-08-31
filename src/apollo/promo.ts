@@ -81,14 +81,14 @@ export const promoResolvers = {
     },
     updatePromo: async (_: any, { promoId, input }: any) => {
       try {
-        const promo = await Promo.findById(promoId);
+        const promo = await Promo.findOne({ promoId });
         if (!promo) {
           throw new Error('Promo not found');
         }
         // Update promo properties if provided in the input
         await promo.updateOne({ ...input });
 
-        return await Promo.findById(promoId);
+        return await Promo.findOne({ promoId });
       } catch (error: any) {
         throw new Error(`Failed to update promo: ${error.message}`);
       }

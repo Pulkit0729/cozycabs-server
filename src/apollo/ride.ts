@@ -103,9 +103,9 @@ export const rideResolvers = {
       const newRide = new Ride(input);
       return newRide.save();
     },
-    updateRide: async (_: any, { id, input }: any) => {
+    updateRide: async (_: any, { rideId, input }: any) => {
       try {
-        const ride = await Ride.findById(id);
+        const ride = await Ride.findOne({ rideId });
         if (!ride) {
           throw new Error('Ride not found');
         }

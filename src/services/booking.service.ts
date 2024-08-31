@@ -84,7 +84,7 @@ export class BookingService {
       return { success: true, booking };
     } catch (error: any) {
       logger.error(`Book error: ${error.message}`);
-      return { success: false, msg: 'Failed to Book' };
+      return { success: false, msg: `Failed to Book ${error.message}` };
     }
   }
 

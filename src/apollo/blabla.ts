@@ -55,14 +55,14 @@ export const blablaResolvers = {
     },
     updateBlabla: async (_: any, { blablaId, input }: any) => {
       try {
-        const blabla = await Blabla.findById(blablaId);
+        const blabla = await Blabla.findOne({ blablaId: blablaId });
         if (!blabla) {
           throw new Error('Blabla not found');
         }
         // Update blabla properties if provided in the input
         await blabla.updateOne({ ...input });
 
-        return await Blabla.findById(blablaId);
+        return await Blabla.findOne({ blablaId: blablaId });
       } catch (error: any) {
         throw new Error(`Failed to update blabla: ${error.message}`);
       }

@@ -96,9 +96,9 @@ export const typeDefs = gql`
       id: String!
       input: TemplatedRideUpdateInput!
     ): TemplatedRide
-    updateAdmin(id: String!, input: AdminUpdateInput!): Admin
-    updateBlabla(id: String!, input: BlablaUpdateInput!): Blabla
-    updateRide(id: String!, input: RideUpdateInput!): Ride
+    updateAdmin(adminId: String!, input: AdminUpdateInput!): Admin
+    updateBlabla(blablaId: String!, input: BlablaUpdateInput!): Blabla
+    updateRide(rideId: String!, input: RideUpdateInput!): Ride
     updateBooking(bookingId: String!, input: BookingUpdateInput!): Booking
     updatePromo(promoId: String!, input: PromoUpdateInput!): Promo
     updateTermsAndCondition(

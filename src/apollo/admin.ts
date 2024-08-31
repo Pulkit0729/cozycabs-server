@@ -55,14 +55,14 @@ export const adminResolvers = {
     },
     updateAdmin: async (_: any, { adminId, input }: any) => {
       try {
-        const admin = await Admin.findById(adminId);
+        const admin = await Admin.findOne({ adminId });
         if (!admin) {
           throw new Error('Admin not found');
         }
         // Update admin properties if provided in the input
         await admin.updateOne({ ...input });
 
-        return await Admin.findById(adminId);
+        return await Admin.findOne({ adminId });
       } catch (error: any) {
         throw new Error(`Failed to update admin: ${error.message}`);
       }

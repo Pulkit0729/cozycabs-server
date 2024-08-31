@@ -98,9 +98,9 @@ export const templateResolvers = {
       const newRide = new TemplatedRide(input);
       return newRide.save();
     },
-    updateTemplatedRide: async (_: any, { id, input }: any) => {
+    updateTemplatedRide: async (_: any, { templateRideId, input }: any) => {
       try {
-        const templatedRide = await TemplatedRide.findById(id);
+        const templatedRide = await TemplatedRide.findOne({ templateRideId });
         if (!templatedRide) {
           throw new Error('Ride not found');
         }

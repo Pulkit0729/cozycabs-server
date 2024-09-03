@@ -3,7 +3,7 @@ import { addRides } from '../../../rideCron';
 import logger from '../../../logger/logger';
 import { BookingService } from '../../../services/booking.service';
 import { getBooking } from '../../../dal/booking.dal';
-import { getUserFromPhone } from '../../../dal/user.dal';
+import { getUser, getUserFromPhone } from '../../../dal/user.dal';
 import { BookingChannel } from '../../../utils/constants';
 import {
   sendMessage,
@@ -69,7 +69,8 @@ export default class AdminController {
     try {
       const booking = await getBooking(bookingId);
       if (!booking) throw new Error('Booking Id not valid');
-      const response = await BookingService.cancel(booking.user, bookingId);
+      const user = await getUser(booking.userId.toString());
+      const response = await BookingService.cancel(user!, bookingId);
       if (response.success && response.data) {
         const booking = await getBooking(response.data?.bookingId.toString());
         if (booking) {

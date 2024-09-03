@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { BookingService } from '../../../services/booking.service';
 import { BookingChannel } from '../../../utils/constants';
-import { getBooking } from '../../../dal/booking.dal';
+import { getBooking, getBookingsFromRide } from '../../../dal/booking.dal';
 import {
   sendMessage,
   SendPulseEventTypes,
 } from '../../../services/external/sendpulse';
 import Admin from '../../../models/admin';
+import { verifybydriver } from '../../../utils/verify';
 
 export class BookingControlller {
   static async book(req: Request, res: Response) {
@@ -59,5 +60,34 @@ export class BookingControlller {
       }
     }
     return res.json(response);
+  }
+  static async verify(req: Request, res: Response) {
+    const { rideId, otp } = req.body;
+    const booking = await getBookingsFromRide(rideId);
+    if (!rideId || !otp || !booking) {
+      return res
+        .status(400)
+        .json({ success: false, message: 'Booking ID and OTP are required' });
+    }
+
+    try {
+      const result = await verifybydriver(rideId, otp);
+
+      if (result.success) {
+        return res.json({
+          success: true,
+          message: 'OTP verification successful',
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: result.message || 'Invalid OTP' });
+      }
+    } catch (error: any) {
+      console.error('Error verifying OTP:', error.message);
+      return res
+        .status(500)
+        .json({ success: false, message: 'Internal server error' });
+    }
   }
 }

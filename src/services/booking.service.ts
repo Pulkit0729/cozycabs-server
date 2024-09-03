@@ -5,6 +5,7 @@ import logger from '../logger/logger';
 import Booking from '../models/bookings';
 import { IRide } from '../models/rides';
 import { IUser } from '../models/users';
+import { generateAndStoreOTP } from '../utils/otp';
 import { BookingChannel, BookingStatus, RideStatus } from '../utils/constants';
 import { getFormattedDate } from '../utils/date.util';
 import {
@@ -24,7 +25,6 @@ export class BookingService {
   ) {
     try {
       const ride = await BookingService.validateRide(rideId, true);
-
       const existingBooking = await searchBooking({
         rideId: ride.rideId,
         userId: user.userId,
@@ -68,6 +68,11 @@ export class BookingService {
           booking
         );
       }
+      const otpResult = await generateAndStoreOTP(rideId);
+      if (!otpResult.otp) {
+        throw new Error('Failed to generate OTP');
+      }
+      booking.otp = otpResult.otp;
       await booking.save();
       await ride.save();
 

@@ -70,14 +70,15 @@ export default class AdminController {
       const booking = await getBooking(bookingId);
       if (!booking) throw new Error('Booking Id not valid');
       const user = await getUser(booking.userId.toString());
-      const response = await BookingService.cancel(user!, bookingId);
+      if (!user) throw new Error('User not found');
+      const response = await BookingService.cancel(user, bookingId);
       if (response.success && response.data) {
         const booking = await getBooking(response.data?.bookingId.toString());
         if (booking) {
           await sendMessage(
             SendPulseEventTypes.CANCEL,
             'user',
-            booking.user,
+            user,
             booking?.ride.driver,
             undefined,
             booking,
@@ -88,7 +89,7 @@ export default class AdminController {
             await sendMessage(
               SendPulseEventTypes.CANCEL,
               'admin',
-              booking.user,
+              user,
               booking?.ride.driver,
               admin,
               booking,

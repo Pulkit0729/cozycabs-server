@@ -33,6 +33,13 @@ export const typeDefs = gql`
       page: Int
       perPage: Int
     ): [Ride]
+    points(
+      filterBy: RideFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [Point]
     bookings(
       filterBy: BookingFilter
       sortBy: String
@@ -87,10 +94,13 @@ export const typeDefs = gql`
     addDriver(input: DriverInput): Driver
     addTemplatedRide(input: TemplatedRideInput): TemplatedRide
     addRide(input: RideInput): Ride
+    addPoint(input: PointInput): Point
     addBooking(input: BookingInput): Booking
     addPromo(input: PromoInput): Promo
     addUserPromo(input: UserPromoInput): UserPromo
     addTermsAndCondition(input: TermsAndConditionInput): TermsAndCondition
+
+    addBulkPoints(input: [PointInput]): [Point]
 
     updateTemplatedRide(
       id: String!
@@ -99,6 +109,7 @@ export const typeDefs = gql`
     updateAdmin(adminId: String!, input: AdminUpdateInput!): Admin
     updateBlabla(blablaId: String!, input: BlablaUpdateInput!): Blabla
     updateRide(rideId: String!, input: RideUpdateInput!): Ride
+    updatePoint(pointId: String!, input: PointUpdateInput!): Point
     updateBooking(bookingId: String!, input: BookingUpdateInput!): Booking
     updatePromo(promoId: String!, input: PromoUpdateInput!): Promo
     updateTermsAndCondition(

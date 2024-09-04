@@ -47,6 +47,7 @@ import {
   adminResolvers,
   adminTypeDefs,
 } from './apollo/admin';
+import { pointResolvers, pointTypeDefs } from './apollo/point';
 
 const cors = require('cors');
 const PORT = process.env.API_PORT || 3000;
@@ -64,6 +65,7 @@ export default async function App() {
         { typeDefs: userpromosTypeDefs, resolvers: userPromosResolvers },
         { typeDefs: blablaTypeDefs, resolvers: blablaResolvers },
         { typeDefs: adminTypeDefs, resolvers: adminResolvers },
+        { typeDefs: pointTypeDefs, resolvers: pointResolvers },
         {
           typeDefs: termsandconditionTypeDefs,
           resolvers: termsandconditionResolvers,

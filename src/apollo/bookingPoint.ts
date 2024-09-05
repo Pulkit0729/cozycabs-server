@@ -5,6 +5,7 @@ import { IPoint } from '../models/points';
 
 export const bookingPointTypeDefs = gql`
   type BookingPoint {
+    bookingPointId: String
     bookingId: String
     dropId: String
     drop: Point
@@ -25,6 +26,7 @@ export const bookingPointTypeDefs = gql`
   input BookingPointFilter {
     AND: [BookingPointFilter]
     OR: [BookingPointFilter]
+    bookingPointId: String
     bookingId: String
     dropId: String
     pickupId: String

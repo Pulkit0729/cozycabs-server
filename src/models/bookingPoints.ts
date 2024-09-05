@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
-export interface IBookingPoint {
+export interface IBookingPoint extends Document {
+  bookingPointId: string;
   bookingId: string;
   dropId: string;
   pickupId: string;
@@ -8,6 +9,12 @@ export interface IBookingPoint {
 
 export const BookingPointSchema = new mongoose.Schema<IBookingPoint>(
   {
+    bookingPointId: {
+      type: String,
+      default: () => new mongoose.Types.ObjectId().toString(),
+      required: true,
+      unique: true,
+    },
     bookingId: String,
     dropId: String,
     pickupId: String,

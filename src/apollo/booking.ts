@@ -10,6 +10,7 @@ import {
   isUserAuthenticated,
 } from '../utils/permission.util';
 import { searchBookingsFromRideFilters } from '../dal/booking.dal';
+import { getBookingPointFromBooking } from '../dal/bookingPoint.dal';
 
 const dateScalar = new GraphQLScalarType({
   name: 'Date',
@@ -60,6 +61,7 @@ export const bookingTypeDefs = gql(`
     isPaid: Boolean!
     isCancelled: Boolean!
     status: String!
+    bookingPoint: BookingPoint
   }
   input BookingInput {
     rideId: String!
@@ -121,6 +123,33 @@ export const bookingResolvers = {
         page
       );
       return bookings;
+    },
+    bookings2: async (
+      _: any,
+      { filterBy, sortBy, sortOrder, page = 1, perPage = 10 }: any
+    ) => {
+      const { query, sortOptions } = constructQuery(
+        filterBy,
+        sortBy,
+        sortOrder
+      );
+      const bookings = await searchBookingsFromRideFilters(
+        query,
+        Object.keys(sortOptions).length > 0 ? sortOptions : { 'ride.date': -1 },
+        perPage,
+        page
+      );
+      const jsonBookings: any[] = [];
+      for (let i = 0; i < bookings.length; i++) {
+        const bookingPoint = await getBookingPointFromBooking(
+          bookings[i].bookingId.toString()
+        );
+        jsonBookings.push({
+          ...bookings[i],
+          bookingPoint,
+        });
+      }
+      return jsonBookings;
     },
   },
   Mutation: {

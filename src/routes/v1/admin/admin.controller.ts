@@ -14,7 +14,7 @@ import User from '../../../models/users';
 
 export default class AdminController {
   static async book(req: Request, res: Response) {
-    const { rideId, seats, userName } = req.body;
+    const { rideId, seats, userName, pickupId, dropId } = req.body;
     let { userPhone } = req.body;
     try {
       userPhone = userPhone.replace(/ /g, '');
@@ -28,7 +28,10 @@ export default class AdminController {
         user,
         rideId,
         seats,
-        BookingChannel.admin
+        BookingChannel.admin,
+        undefined,
+        pickupId,
+        dropId
       );
       if (response.success && response.booking) {
         const booking = await getBooking(

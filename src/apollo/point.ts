@@ -72,8 +72,12 @@ export const pointResolvers = {
       return newUser.save();
     },
     addBulkPoints: async (_: any, { input }: any) => {
-      const newPoints = await Point.bulkSave(input);
-      return newPoints;
+      try {
+        const newPoints = await Point.insertMany(input);
+        return newPoints;
+      } catch (error: any) {
+        throw new Error(`Failed to bulk add point: ${error.message}`);
+      }
     },
     updatePoint: async (_: any, { pointId, input }: any) => {
       try {

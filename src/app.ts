@@ -48,6 +48,10 @@ import {
   adminTypeDefs,
 } from './apollo/admin';
 import { pointResolvers, pointTypeDefs } from './apollo/point';
+import {
+  bookingPointResolvers,
+  bookingPointTypeDefs,
+} from './apollo/bookingPoint';
 
 const cors = require('cors');
 const PORT = process.env.API_PORT || 3000;
@@ -66,6 +70,7 @@ export default async function App() {
         { typeDefs: blablaTypeDefs, resolvers: blablaResolvers },
         { typeDefs: adminTypeDefs, resolvers: adminResolvers },
         { typeDefs: pointTypeDefs, resolvers: pointResolvers },
+        { typeDefs: bookingPointTypeDefs, resolvers: bookingPointResolvers },
         {
           typeDefs: termsandconditionTypeDefs,
           resolvers: termsandconditionResolvers,

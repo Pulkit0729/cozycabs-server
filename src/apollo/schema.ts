@@ -34,7 +34,7 @@ export const typeDefs = gql`
       perPage: Int
     ): [Ride]
     points(
-      filterBy: RideFilter
+      filterBy: PointFilter
       sortBy: String
       sortOrder: SortOrder
       page: Int
@@ -47,6 +47,20 @@ export const typeDefs = gql`
       page: Int
       perPage: Int
     ): [Booking]
+    bookings2(
+      filterBy: BookingFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [Booking]
+    bookingPoints(
+      filterBy: BookingPointFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [BookingPoint]
     promos(
       filterBy: PromoFilter
       sortBy: String
@@ -96,6 +110,7 @@ export const typeDefs = gql`
     addRide(input: RideInput): Ride
     addPoint(input: PointInput): Point
     addBooking(input: BookingInput): Booking
+    addBookingPoint(input: BookingPointInput): BookingPoint
     addPromo(input: PromoInput): Promo
     addUserPromo(input: UserPromoInput): UserPromo
     addTermsAndCondition(input: TermsAndConditionInput): TermsAndCondition
@@ -111,6 +126,10 @@ export const typeDefs = gql`
     updateRide(rideId: String!, input: RideUpdateInput!): Ride
     updatePoint(pointId: String!, input: PointUpdateInput!): Point
     updateBooking(bookingId: String!, input: BookingUpdateInput!): Booking
+    updateBookingPoint(
+      bookingPointId: String!
+      input: BookingPointUpdateInput!
+    ): BookingPoint
     updatePromo(promoId: String!, input: PromoUpdateInput!): Promo
     updateTermsAndCondition(
       id: String!

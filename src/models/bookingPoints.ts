@@ -29,7 +29,7 @@ BookingPointSchema.virtual('pickup', {
   justOne: true,
 });
 
-const BookingPoint = mongoose.model(
+const BookingPoint = mongoose.model<IBookingPoint>(
   'BookingPoints',
   BookingPointSchema,
   'bookingPoints'

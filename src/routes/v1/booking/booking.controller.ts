@@ -10,13 +10,15 @@ import Admin from '../../../models/admin';
 
 export class BookingControlller {
   static async book(req: Request, res: Response) {
-    const { user, rideId, userPromoId, seats } = req.body;
+    const { user, rideId, userPromoId, seats, pickupId, dropId } = req.body;
     const response = await BookingService.book(
       user,
       rideId,
       seats,
       BookingChannel.app,
-      userPromoId
+      userPromoId,
+      pickupId,
+      dropId
     );
     if (response.success && response.booking) {
       const booking = await getBooking(response.booking?.bookingId.toString());

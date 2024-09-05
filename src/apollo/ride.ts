@@ -6,6 +6,7 @@ import { constructQuery } from '../utils/apollo.util';
 export const rideTypeDefs = gql`
   type Ride {
     rideId: String!
+    templateRideId: String
     from: String!
     to: String!
     fromAddress: String!
@@ -25,6 +26,7 @@ export const rideTypeDefs = gql`
   input RideInput {
     from: String!
     to: String!
+    templateRideId: String!
     fromAddress: String!
     toAddress: String!
     fromLocation: LocationInput!
@@ -42,6 +44,7 @@ export const rideTypeDefs = gql`
   input RideUpdateInput {
     from: String
     to: String
+    templateRideId: String
     fromAddress: String
     toAddress: String
     fromLocation: LocationInput
@@ -61,6 +64,7 @@ export const rideTypeDefs = gql`
     AND: [RideFilter]
     OR: [RideFilter]
     rideId: String
+    templateRideId: String
     from: String
     to: String
     fromAddress: String

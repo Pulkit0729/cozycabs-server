@@ -23,6 +23,8 @@ export const adminTypeDefs = gql`
     type: String
   }
   input AdminFilter {
+    AND: [AdminFilter]
+    OR: [AdminFilter]
     adminId: String
     name: String
     phone: String

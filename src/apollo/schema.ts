@@ -118,7 +118,7 @@ export const typeDefs = gql`
     addBulkPoints(input: [PointInput]): [Point]
 
     updateTemplatedRide(
-      id: String!
+      templateRideId: String!
       input: TemplatedRideUpdateInput!
     ): TemplatedRide
     updateAdmin(adminId: String!, input: AdminUpdateInput!): Admin

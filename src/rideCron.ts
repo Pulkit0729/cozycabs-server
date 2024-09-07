@@ -54,6 +54,7 @@ export async function addRides() {
             seats: templateRide.seats,
             price: templateRide.price,
             discountedPrice: templateRide.discountedPrice,
+            templateRideId: templateRide.templateRideId.toString(),
             status: RideStatus.pending,
           });
           await ride.save();

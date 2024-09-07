@@ -16,6 +16,7 @@ function logger() {
         format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), json()),
         filename: path.join(__dirname, '../../', 'logs/api/logs.log'),
         maxsize: 102400,
+        maxFiles: 10,
       }),
       new transports.Console({
         format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), myFormat),

@@ -60,12 +60,15 @@ export default class BotController {
     }
   }
   static async bookFromBot(req: Request, res: Response) {
-    const { user, rideId, seats } = req.body;
+    const { user, rideId, seats, pickupId, dropId } = req.body;
     const response = await BookingService.book(
       user,
       rideId,
       seats,
-      BookingChannel.bot
+      BookingChannel.bot,
+      undefined,
+      pickupId,
+      dropId
     );
     if (response.success && response.booking) {
       const booking = await getBooking(response.booking?.bookingId.toString());

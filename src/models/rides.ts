@@ -4,6 +4,7 @@ import { IDriver } from './drivers';
 
 export interface IRide extends Document {
   rideId: Types.ObjectId;
+  templateRideId?: string;
   from: string;
   fromLocation: ILocation;
   to: string;
@@ -32,6 +33,7 @@ const RideSchema = new mongoose.Schema<IRide>(
       required: true,
       unique: true,
     },
+    templateRideId: String,
     from: String,
     to: String,
     fromLocation: Object,

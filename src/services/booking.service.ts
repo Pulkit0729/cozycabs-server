@@ -1,8 +1,10 @@
 import { searchBlabla } from '../dal/blabla.dal';
 import { searchBooking, getBooking } from '../dal/booking.dal';
+import { getPoint } from '../dal/point.dal';
 import { getRide } from '../dal/ride.dal';
 import logger from '../logger/logger';
-import Booking from '../models/bookings';
+import BookingPoint from '../models/bookingPoints';
+import Booking, { IBooking } from '../models/bookings';
 import { IRide } from '../models/rides';
 import { IUser } from '../models/users';
 import { BookingChannel, BookingStatus, RideStatus } from '../utils/constants';
@@ -20,7 +22,9 @@ export class BookingService {
     rideId: string,
     seats: string | number,
     channel: BookingChannel,
-    userPromoId: string | any[] | undefined = undefined
+    userPromoId: string | any[] | undefined = undefined,
+    pickupId: string | undefined = undefined,
+    dropId: string | undefined = undefined
   ) {
     try {
       const ride = await BookingService.validateRide(rideId, true);
@@ -61,6 +65,9 @@ export class BookingService {
         isCancelled: false,
         status: BookingStatus.pending,
       });
+
+      await this.handlePickAndDropCharges(pickupId, dropId, booking, ride);
+
       if (userPromoId != undefined && userPromoId.length != 0) {
         await UserPromoService.handlePromoApplication(
           user,
@@ -153,5 +160,42 @@ export class BookingService {
   static async getBlablatotal(rideId: string, seats: number) {
     const blabla = await searchBlabla({ rideId: rideId });
     return blabla[0].price * seats;
+  }
+
+  static async handlePickAndDropCharges(
+    pickupId: string | undefined,
+    dropId: string | undefined,
+    booking: IBooking,
+    ride: IRide
+  ) {
+    const bookingPoint = new BookingPoint({
+      bookingId: booking.bookingId,
+    });
+    if (pickupId != undefined) {
+      const pickup = await getPoint(pickupId);
+      if (pickup) {
+        if (pickup.templateRideId === ride.templateRideId) {
+          booking.billDetails.itemTotal += pickup.extraCost;
+          booking.billDetails.discountItemTotal += pickup.extraCost;
+          booking.billDetails.grandTotal += pickup.extraCost;
+          bookingPoint.pickupId = pickupId;
+        }
+      }
+    }
+    if (dropId != undefined) {
+      const drop = await getPoint(dropId);
+      if (drop) {
+        if (drop.templateRideId === ride.templateRideId) {
+          booking.billDetails.itemTotal += drop.extraCost;
+          booking.billDetails.discountItemTotal += drop.extraCost;
+          booking.billDetails.grandTotal += drop.extraCost;
+          bookingPoint.dropId = dropId;
+        }
+      }
+    }
+    if (bookingPoint.pickupId || bookingPoint.dropId) {
+      await bookingPoint.save();
+    }
+    return booking;
   }
 }

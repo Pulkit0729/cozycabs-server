@@ -144,10 +144,16 @@ export const bookingResolvers = {
         const bookingPoint = await getBookingPointFromBooking(
           bookings[i].bookingId.toString()
         );
-        jsonBookings.push({
-          ...bookings[i],
-          bookingPoint,
-        });
+        if (bookingPoint) {
+          jsonBookings.push({
+            ...bookings[i],
+            bookingPoint,
+          });
+        } else {
+          jsonBookings.push({
+            ...bookings[i],
+          });
+        }
       }
       return jsonBookings;
     },

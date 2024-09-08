@@ -27,7 +27,7 @@ export default class BotController {
         user = new User({ phone: userPhone, name: userName ?? 'Unknown' });
         await user.save();
       }
-      const token = issueJWT(user.userId.toString(), 120);
+      const token = issueJWT(user.userId.toString(), 180);
       const payload: any = {
         token,
       };

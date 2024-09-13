@@ -20,6 +20,7 @@ export enum BookingStatus {
   active = 'active',
   ended = 'ended',
   cancelled = 'cancelled',
+  pickedup = 'picked up',
 }
 
 export enum BookingChannel {

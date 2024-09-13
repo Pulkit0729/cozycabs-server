@@ -21,6 +21,7 @@ export interface IBooking extends Document {
   isPaid: Boolean;
   isCancelled: Boolean;
   status: BookingStatus;
+  otp: Number;
 }
 
 export interface IBookingFilter {
@@ -68,6 +69,7 @@ const BookingSchema = new mongoose.Schema<IBooking>(
     isPaid: Boolean,
     isCancelled: Boolean,
     status: { type: String, enum: BookingStatus },
+    otp: Number,
   },
   { timestamps: true, toJSON: { virtuals: true } }
 );

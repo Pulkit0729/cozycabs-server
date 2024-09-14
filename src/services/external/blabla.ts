@@ -192,7 +192,7 @@ export default class BlablaService {
           'user.name': { $regex: userName, $options: 'i' },
           channel: BookingChannel.blabla,
         },
-        {}
+        { 'ride.date': -1 }
       );
       const user = await getUser(bookings[0].userId.toString());
       if (!user) throw new Error('No user found');

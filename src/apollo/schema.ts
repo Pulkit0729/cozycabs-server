@@ -96,6 +96,14 @@ export const typeDefs = gql`
       page: Int
       perPage: Int
     ): [TermsAndCondition]
+
+    screens(
+      filterBy: ScreenFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [Screen]
   }
   enum SortOrder {
     ASC
@@ -114,6 +122,7 @@ export const typeDefs = gql`
     addPromo(input: PromoInput): Promo
     addUserPromo(input: UserPromoInput): UserPromo
     addTermsAndCondition(input: TermsAndConditionInput): TermsAndCondition
+    addScreen(input: ScreenInput): Screen
 
     addBulkPoints(input: [PointInput]): [Point]
 

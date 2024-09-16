@@ -52,6 +52,11 @@ import {
   bookingPointResolvers,
   bookingPointTypeDefs,
 } from './apollo/bookingPoint';
+import { screenResolvers, screenTypeDefs } from './apollo/ui/screen';
+import { layoutTypeDefs } from './apollo/ui/layout';
+import { sectionTypeDefs } from './apollo/ui/sections/section';
+import { listTileTypeDefs } from './apollo/ui/sections/listTileSection';
+import { listViewTypeDefs } from './apollo/ui/sections/listViewSection';
 
 const cors = require('cors');
 const PORT = process.env.API_PORT || 3000;
@@ -78,6 +83,13 @@ export default async function App() {
         { typeDefs: locationTypeDefs },
         { typeDefs: billDetailsTypeDef },
         { typeDefs },
+
+        //UI Part
+        { typeDefs: screenTypeDefs, resolvers: screenResolvers },
+        { typeDefs: layoutTypeDefs },
+        { typeDefs: sectionTypeDefs },
+        { typeDefs: listTileTypeDefs },
+        { typeDefs: listViewTypeDefs },
       ]),
       userPermissions,
       driverPermissions,

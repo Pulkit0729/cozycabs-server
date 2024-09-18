@@ -21,9 +21,13 @@ export class ReferralController {
         await getTermsAndConditionsFromName('referral');
       const refLink = `https://app.cozycabs.in/referral?code=${user.referralCode}`;
       const message = `Hey! Found an amazing deal for you. Rs50 off Coupon on your first booking from Cozycabs. Tap the link to claim the offer: ${refLink}`;
-      return res
-        .status(200)
-        .json({ success: true, termsAndConditions, message, url: refLink });
+      return res.status(200).json({
+        success: true,
+        termsAndConditions,
+        message,
+        url: refLink,
+        data: { termsAndConditions, message, url: refLink },
+      });
     } catch (error: any) {
       logger.error(error.message);
       return res.status(500).json({ success: false, error: error.message });

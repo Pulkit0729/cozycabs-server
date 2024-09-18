@@ -58,5 +58,6 @@ router.get('/navigation', async (req, res) => {
 });
 
 router.post('/status', driverAuthMiddle, RideController.updateRideStatus);
+router.get('/metadata', RideController.getMetadata);
 
 module.exports = router;

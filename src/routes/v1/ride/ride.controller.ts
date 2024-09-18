@@ -12,6 +12,7 @@ import {
   sendMessage,
   SendPulseEventTypes,
 } from '../../../services/external/sendpulse';
+import { getUniqueFromToPlaces } from '../../../dal/templateRide.dal';
 
 export class RideController {
   static async updateRideStatus(req: Request, res: Response) {
@@ -90,5 +91,12 @@ export class RideController {
       );
       return res.send({ success: false, msg: 'Unable to update status' });
     }
+  }
+
+  static async getMetadata(_req: Request, res: Response) {
+    const { from, to } = await getUniqueFromToPlaces();
+    return res
+      .status(200)
+      .json({ success: true, data: { from: from, to: to } });
   }
 }

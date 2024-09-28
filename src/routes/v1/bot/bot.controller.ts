@@ -14,6 +14,7 @@ import {
 import Admin from '../../../models/admin';
 import { BookingChannel, BookingStatus } from '../../../utils/constants';
 import User from '../../../models/users';
+import { getPoint } from '../../../dal/point.dal';
 
 export default class BotController {
   static async botAccessToken(req: Request, res: Response) {
@@ -60,15 +61,17 @@ export default class BotController {
     }
   }
   static async bookFromBot(req: Request, res: Response) {
-    const { user, rideId, seats, pickupId, dropId } = req.body;
+    const { user, rideId, seats, pickupId, dropId, pickup, drop } = req.body;
+    const pickup1 = await getPoint(pickupId);
+    const drop1 = await getPoint(dropId);
     const response = await BookingService.book(
       user,
       rideId,
       seats,
       BookingChannel.bot,
       undefined,
-      pickupId,
-      dropId
+      pickup ?? pickup1,
+      drop ?? drop1
     );
     if (response.success && response.booking) {
       const booking = await getBooking(response.booking?.bookingId.toString());

@@ -7,18 +7,22 @@ import {
   SendPulseEventTypes,
 } from '../../../services/external/sendpulse';
 import Admin from '../../../models/admin';
+import { getPoint } from '../../../dal/point.dal';
 
 export class BookingControlller {
   static async book(req: Request, res: Response) {
-    const { user, rideId, userPromoId, seats, pickupId, dropId } = req.body;
+    const { user, rideId, userPromoId, seats, pickupId, dropId, pickup, drop } =
+      req.body;
+    const pickup1 = await getPoint(pickupId);
+    const drop1 = await getPoint(dropId);
     const response = await BookingService.book(
       user,
       rideId,
       seats,
       BookingChannel.app,
       userPromoId,
-      pickupId,
-      dropId
+      pickup ?? pickup1,
+      drop ?? drop1
     );
     if (response.success && response.booking) {
       const booking = await getBooking(response.booking?.bookingId.toString());

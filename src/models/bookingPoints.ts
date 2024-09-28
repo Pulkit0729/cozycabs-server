@@ -1,10 +1,13 @@
 import mongoose from 'mongoose';
+import { IPoint, PointSchema } from './points';
 
 export interface IBookingPoint extends Document {
   bookingPointId: string;
   bookingId: string;
   dropId: string;
   pickupId: string;
+  pickup: IPoint;
+  drop: IPoint;
 }
 
 export const BookingPointSchema = new mongoose.Schema<IBookingPoint>(
@@ -18,23 +21,11 @@ export const BookingPointSchema = new mongoose.Schema<IBookingPoint>(
     bookingId: String,
     dropId: String,
     pickupId: String,
+    pickup: PointSchema,
+    drop: PointSchema,
   },
-  { timestamps: true, toJSON: { virtuals: true } }
+  { timestamps: true }
 );
-
-BookingPointSchema.virtual('drop', {
-  ref: 'Points',
-  localField: 'dropId',
-  foreignField: 'pointId',
-  justOne: true,
-});
-
-BookingPointSchema.virtual('pickup', {
-  ref: 'Points',
-  localField: 'pickupId',
-  foreignField: 'pointId',
-  justOne: true,
-});
 
 const BookingPoint = mongoose.model<IBookingPoint>(
   'BookingPoints',

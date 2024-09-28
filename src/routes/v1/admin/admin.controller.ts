@@ -11,10 +11,12 @@ import {
 } from '../../../services/external/sendpulse';
 import Admin from '../../../models/admin';
 import User from '../../../models/users';
+import { getPoint } from '../../../dal/point.dal';
 
 export default class AdminController {
   static async book(req: Request, res: Response) {
-    const { rideId, seats, userName, pickupId, dropId } = req.body;
+    const { rideId, seats, userName, pickupId, dropId, pickup, drop } =
+      req.body;
     let { userPhone } = req.body;
     try {
       userPhone = userPhone.replace(/ /g, '');
@@ -24,14 +26,16 @@ export default class AdminController {
         user = new User({ phone: userPhone, name: userName ?? 'Unknown' });
         await user.save();
       }
+      const pickup1 = await getPoint(pickupId);
+      const drop1 = await getPoint(dropId);
       const response = await BookingService.book(
         user,
         rideId,
         seats,
         BookingChannel.admin,
         undefined,
-        pickupId,
-        dropId
+        pickup ?? pickup1,
+        drop ?? drop1
       );
       if (response.success && response.booking) {
         const booking = await getBooking(

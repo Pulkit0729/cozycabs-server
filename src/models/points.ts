@@ -21,8 +21,6 @@ export interface IPoint extends Document {
 export const PointSchema = new mongoose.Schema<IPoint>({
   pointId: {
     type: String,
-    required: true,
-    unique: true,
     default: () => new mongoose.Types.ObjectId().toString(),
   },
   location: Object,

@@ -12,6 +12,7 @@ import {
 import Admin from '../../../models/admin';
 import User from '../../../models/users';
 import { getPoint } from '../../../dal/point.dal';
+import { RideService } from '../../../services/ride.service';
 
 export default class AdminController {
   static async book(req: Request, res: Response) {
@@ -106,6 +107,18 @@ export default class AdminController {
         }
       }
       res.send({ success: true, data: { booking } });
+    } catch (error: any) {
+      logger.log({ level: 'error', message: 'Booking Cancel' + error });
+      res.json({ success: false, error: error });
+    }
+  }
+
+  static async cancelRide(req: Request, res: Response) {
+    const { rideId, status } = req.body;
+    try {
+      await RideService.updateRideStatus(rideId, status);
+
+      res.send({ success: true, message: 'Ride Stautus Updated successfully' });
     } catch (error: any) {
       logger.log({ level: 'error', message: 'Booking Cancel' + error });
       res.json({ success: false, error: error });

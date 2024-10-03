@@ -35,3 +35,6 @@ export async function findOrCreateUser(params: FilterQuery<IUser>) {
     }
   });
 }
+export async function deleteUser(userId: String) {
+  return await User.deleteOne({ userId: userId });
+}

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 export interface IBlockedUser extends Document {
   userId: string;
-  isBlocked: string;
+  isBlocked: boolean;
   reason: string;
   date: Date;
 }
@@ -12,7 +12,7 @@ const BlockedUserSchema = new mongoose.Schema<IBlockedUser>(
       required: true,
       unique: true,
     },
-    isBlocked: String,
+    isBlocked: Boolean,
     reason: {
       type: String,
       unique: true,

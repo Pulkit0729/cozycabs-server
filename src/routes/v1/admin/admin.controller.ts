@@ -13,6 +13,8 @@ import Admin from '../../../models/admin';
 import User from '../../../models/users';
 import { getPoint } from '../../../dal/point.dal';
 import { RideService } from '../../../services/ride.service';
+import { getBlockedUserFromUser } from '../../../dal/blockedUser.dal';
+import BlockedUser from '../../../models/blockedUser';
 
 export default class AdminController {
   static async book(req: Request, res: Response) {
@@ -132,6 +134,73 @@ export default class AdminController {
     } catch (error) {
       logger.log({ level: 'error', message: 'Rides Published' + error });
       res.json({ success: false, error: error });
+    }
+  }
+  static async blockUser(req: Request, res: Response) {
+    const { phone, userId, reason } = req.body;
+    try {
+      let user;
+      if (userId) {
+        user = await getUser(userId);
+      } else if (phone) {
+        const formattedPhone = '91' + phone.trim();
+        user = await getUserFromPhone(formattedPhone);
+      }
+      if (!user) {
+        throw Error('User not found');
+      }
+      const blockedUser = await getBlockedUserFromUser(user.userId.toString());
+      if (blockedUser && blockedUser.isBlocked) {
+        throw Error('User blocked already');
+      } else if (blockedUser && !blockedUser.isBlocked) {
+        blockedUser.isBlocked = true;
+        blockedUser.reason = reason;
+        blockedUser.markModified('isBlocked');
+        blockedUser.markModified('reason');
+        await blockedUser.save();
+      } else {
+        const newblockedUser = new BlockedUser({
+          userId: user.userId.toString(),
+          reason: reason,
+          isBlocked: true,
+        });
+        await newblockedUser.save();
+        return res.json({
+          success: true,
+          data: { blockedUser: newblockedUser },
+        });
+      }
+      return res.json({ success: true, data: { blockedUser } });
+    } catch (error: any) {
+      logger.error(error.message);
+      return res.json({ success: false, message: error.message });
+    }
+  }
+  static async unblockUser(req: Request, res: Response) {
+    const { phone, userId } = req.body;
+
+    try {
+      let user;
+      if (userId) {
+        user = await getUser(userId);
+      } else if (phone) {
+        const formattedPhone = '91' + phone.trim();
+        user = await getUserFromPhone(formattedPhone);
+      }
+      if (!user) {
+        throw Error('User not found');
+      }
+      const blockedUser = await getBlockedUserFromUser(user.userId.toString());
+      if (!blockedUser || !blockedUser.isBlocked) {
+        throw Error('User not blocked');
+      }
+      blockedUser.isBlocked = false;
+      blockedUser.markModified('isBlocked');
+      await blockedUser.save();
+      return res.json({ success: true, data: { blockedUser } });
+    } catch (error: any) {
+      logger.error(error.message);
+      return res.json({ success: false, message: error.message });
     }
   }
 }

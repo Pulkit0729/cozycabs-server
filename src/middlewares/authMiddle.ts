@@ -4,6 +4,9 @@ import { verifyJWT } from '../utils/jwt.util';
 import { getBearerToken } from '../utils/decode.util';
 import { getUser } from '../dal/user.dal';
 import logger from '../logger/logger';
+import BlockedUser from '../models/blockedUser';
+import { IUser } from '../models/users';
+import { Document } from 'mongoose';
 
 export default async function authMiddle(
   req: Request,
@@ -22,6 +25,7 @@ export default async function authMiddle(
     if (!user || !user.phoneConfirmed) {
       throw new Error('Unauthorized');
     }
+    await validatedBlockUser(user);
     req.body = { ...req.body, auth: true, user: user };
     next();
   } catch (error: any) {
@@ -31,5 +35,18 @@ export default async function authMiddle(
       auth: false,
       msg: 'Token expired or invalid',
     });
+  }
+}
+
+async function validatedBlockUser(
+  user: Document<unknown, {}, IUser> &
+    IUser &
+    Required<{
+      _id: unknown;
+    }>
+) {
+  const blockedUser = await BlockedUser.findOne({ userId: user.userId });
+  if (blockedUser && blockedUser.isBlocked) {
+    throw new Error('User blocked');
   }
 }

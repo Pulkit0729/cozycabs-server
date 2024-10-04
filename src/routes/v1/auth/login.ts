@@ -3,6 +3,7 @@ import { getUserFromPhone } from '../../../dal/user.dal';
 import User from '../../../models/users';
 import logger from '../../../logger/logger';
 import { sendOTP } from '../../../services/external/mcentral';
+import BlockedUser from '../../../models/blockedUser';
 
 const userRouter = Router();
 
@@ -57,6 +58,15 @@ userRouter.post('/phone', async (req, res) => {
         message: 'Otp Send to phone',
       });
     }
+
+    const blockedUser = await BlockedUser.findOne({
+      userId: user.userId,
+      isBlocked: true,
+    });
+    if (blockedUser) {
+      throw new Error('User is blocked');
+    }
+
     const vId = await sendOTP(phone);
     if (!vId) throw new Error(`Error sending otp`);
     user.phoneVerificationId = vId;

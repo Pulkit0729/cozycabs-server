@@ -8,7 +8,8 @@ import { UserPromoService } from '../../../../services/userpromo.service';
 import { flowTypes } from '../../../../utils/constants';
 import { issueJWT } from '../../../../utils/jwt.util';
 import { genreferralCode } from '../../../../utils/user.util';
-import User from '../../../../models/users';
+import User, { IUser } from '../../../../models/users';
+import BlockedUser from '../../../../models/blockedUser';
 export class VerifyController {
   static async verifyOtp(req: Request, res: Response) {
     const { otp, phone } = req.body;
@@ -22,10 +23,13 @@ export class VerifyController {
       }
 
       const user = await getUserFromPhone(formattedPhone);
+
       let flowType = flowTypes.login;
       if (!user || !user?.phoneVerificationId)
         throw new Error('Invalid phone or Otp');
-
+      if (await VerifyController.handleBlockedUser(user)) {
+        throw new Error('User is blocked');
+      }
       const isVerified = await verifyOTP(
         user.phoneVerificationId,
         parseInt(otp)
@@ -87,5 +91,16 @@ export class VerifyController {
       return { user, flowType: flowTypes.login, token };
     }
     return undefined;
+  }
+
+  static async handleBlockedUser(user: IUser) {
+    const blockedUser = await BlockedUser.findOne({
+      userId: user.userId,
+      isBlocked: true,
+    });
+    if (blockedUser) {
+      return true;
+    }
+    return false;
   }
 }

@@ -5,3 +5,9 @@ export async function getDeletedUser(phone: string) {
     return deletedUser;
   });
 }
+
+export async function getDeletedUserFromUser(userId: string) {
+  return await DeletedUser.findOne({ userId: userId }).then((deletedUser) => {
+    return deletedUser;
+  });
+}

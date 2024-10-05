@@ -4,6 +4,7 @@ import { verifyJWT } from '../utils/jwt.util';
 import { getApiKey, getBearerToken } from '../utils/decode.util';
 import { getUser } from '../dal/user.dal';
 import logger from '../logger/logger';
+import { BlockUserService } from '../services/blockUser.service';
 
 export default async function botAuthMiddle(
   req: Request,
@@ -20,6 +21,7 @@ export default async function botAuthMiddle(
     if (!user) {
       throw new Error('Unauthorized');
     }
+    await BlockUserService.validatedBlockUser(user);
     req.body = { ...req.body, auth: true, user: user, fromBot: true };
     next();
     return;

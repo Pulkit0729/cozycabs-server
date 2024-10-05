@@ -15,6 +15,7 @@ import Admin from '../../../models/admin';
 import { BookingChannel, BookingStatus } from '../../../utils/constants';
 import User from '../../../models/users';
 import { getPoint } from '../../../dal/point.dal';
+import { BlockUserService } from '../../../services/blockUser.service';
 
 export default class BotController {
   static async botAccessToken(req: Request, res: Response) {
@@ -28,6 +29,7 @@ export default class BotController {
         user = new User({ phone: userPhone, name: userName ?? 'Unknown' });
         await user.save();
       }
+      await BlockUserService.validatedBlockUser(user);
       const token = issueJWT(user.userId.toString(), 180);
       const payload: any = {
         token,
@@ -36,7 +38,7 @@ export default class BotController {
     } catch (error: any) {
       logger.log({
         level: 'error',
-        message: 'Bot Generate Access ErrorF' + error,
+        message: 'Bot Generate Access Error' + error,
       });
       return res.json({ success: false, error: error });
     }

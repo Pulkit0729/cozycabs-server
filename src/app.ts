@@ -52,6 +52,11 @@ import {
   bookingPointResolvers,
   bookingPointTypeDefs,
 } from './apollo/bookingPoint';
+import {
+  reviewPermissions,
+  reviewResolvers,
+  reviewTypeDefs,
+} from './apollo/review';
 
 const cors = require('cors');
 const PORT = process.env.API_PORT || 3000;
@@ -71,6 +76,7 @@ export default async function App() {
         { typeDefs: adminTypeDefs, resolvers: adminResolvers },
         { typeDefs: pointTypeDefs, resolvers: pointResolvers },
         { typeDefs: bookingPointTypeDefs, resolvers: bookingPointResolvers },
+        { typeDefs: reviewTypeDefs, resolvers: reviewResolvers },
         {
           typeDefs: termsandconditionTypeDefs,
           resolvers: termsandconditionResolvers,
@@ -87,7 +93,8 @@ export default async function App() {
       userPrmoPermissions,
       termsandconditionPermissions,
       blablaPermissions,
-      adminPermissions
+      adminPermissions,
+      reviewPermissions
     ),
   });
   await server.start();

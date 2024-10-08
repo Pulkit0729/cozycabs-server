@@ -115,10 +115,10 @@ export const rideResolvers = {
         }
 
         // Update ride properties if provided in the input
-        if (input.seats != false) {
+        if (input.status) {
           ride.status = input.status;
         }
-        if (input.seats) {
+        if (input.seats != false) {
           ride.seats = input.seats;
         }
         // Save the updated ride

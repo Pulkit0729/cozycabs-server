@@ -11,6 +11,7 @@ import {
 } from '../utils/permission.util';
 import { searchBookingsFromRideFilters } from '../dal/booking.dal';
 import { getBookingPointFromBooking } from '../dal/bookingPoint.dal';
+import Review from '../models/review';
 
 const dateScalar = new GraphQLScalarType({
   name: 'Date',
@@ -62,6 +63,7 @@ export const bookingTypeDefs = gql(`
     isCancelled: Boolean!
     status: String!
     bookingPoint: BookingPoint
+    review: Review
   }
   input BookingInput {
     rideId: String!
@@ -141,19 +143,20 @@ export const bookingResolvers = {
       );
       const jsonBookings: any[] = [];
       for (let i = 0; i < bookings.length; i++) {
+        let book: any = { ...bookings[i] };
         const bookingPoint = await getBookingPointFromBooking(
           bookings[i].bookingId.toString()
         );
+        const review = await Review.findOne({
+          bookingId: bookings[i].bookingId.toString(),
+        });
         if (bookingPoint) {
-          jsonBookings.push({
-            ...bookings[i],
-            bookingPoint,
-          });
-        } else {
-          jsonBookings.push({
-            ...bookings[i],
-          });
+          book = { ...book, bookingPoint };
         }
+        if (review) {
+          book = { ...book, review };
+        }
+        jsonBookings.push(book);
       }
       return jsonBookings;
     },

@@ -96,6 +96,13 @@ export const typeDefs = gql`
       page: Int
       perPage: Int
     ): [TermsAndCondition]
+    reviews(
+      filterBy: ReviewFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [Review]
   }
   enum SortOrder {
     ASC
@@ -114,6 +121,7 @@ export const typeDefs = gql`
     addPromo(input: PromoInput): Promo
     addUserPromo(input: UserPromoInput): UserPromo
     addTermsAndCondition(input: TermsAndConditionInput): TermsAndCondition
+    addReview(input: ReviewInput): Review
 
     addBulkPoints(input: [PointInput]): [Point]
 
@@ -124,6 +132,7 @@ export const typeDefs = gql`
     updateAdmin(adminId: String!, input: AdminUpdateInput!): Admin
     updateBlabla(blablaId: String!, input: BlablaUpdateInput!): Blabla
     updateRide(rideId: String!, input: RideUpdateInput!): Ride
+    updateReview(reviewId: String!, input: ReviewUpdateInput!): Review
     updatePoint(pointId: String!, input: PointUpdateInput!): Point
     updateBooking(bookingId: String!, input: BookingUpdateInput!): Booking
     updateBookingPoint(

@@ -11,6 +11,7 @@ export interface IDriver extends Document {
   phoneConfirmed: Boolean;
   emailConfirmed: Boolean;
   phoneVerificationId: number;
+  rating?: number;
   fcm: {
     value: string;
     timestamp: Date;
@@ -33,6 +34,7 @@ const DriverSchema = new mongoose.Schema<IDriver>(
     emailConfirmed: Boolean,
     phoneConfirmed: Boolean,
     phoneVerificationId: Number,
+    rating: Number,
     fcm: {
       value: String,
       timestamp: Date,

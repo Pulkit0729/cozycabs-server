@@ -14,6 +14,7 @@ export const driverTypeDefs = gql`
     carNo: String
     emailConfirmed: Boolean
     phoneConfirmed: Boolean
+    rating: Float
   }
 
   input DriverInput {
@@ -22,6 +23,7 @@ export const driverTypeDefs = gql`
     email: String
     carName: String
     carNo: String
+    rating: Float
   }
   input DriverFilter {
     AND: [DriverFilter]
@@ -32,6 +34,7 @@ export const driverTypeDefs = gql`
     email: String
     carName: String
     carNo: String
+    rating: Float
   }
 `;
 

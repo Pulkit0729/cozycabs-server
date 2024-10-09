@@ -40,5 +40,6 @@ router.use('/userpromo', require('./userpromo'));
 router.use('/referral', require('./referral'));
 router.use('/track', require('./track'));
 router.use('/settings', require('./settings'));
+router.use('/review', require('./review'));
 
 module.exports = router;

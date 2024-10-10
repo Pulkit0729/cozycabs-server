@@ -13,7 +13,7 @@ router.put('/', driverAuthMiddle, async (req, res) => {
     if (driverInfo === undefined || driverInfo === null)
       throw new Error('Info missing');
     await Driver.updateOne(
-      { email: driver.email },
+      { driverId: driver.driverId },
       { $set: { ...driverInfo } }
     );
     const newDriver = await getDriver(driver.driverId.toString());

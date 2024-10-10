@@ -46,7 +46,9 @@ export async function getReferralUserPromo(userId: string) {
   return await UserPromo.find({
     $and: [
       { userId: userId },
-      { $or: [{ referredFrom: { $ne: '' } }, { referredFrom: { $ne: null } }] },
+      {
+        $and: [{ referredFrom: { $ne: '' } }, { referredFrom: { $ne: null } }],
+      },
     ],
   })
     .populate<{ promo: IPromo }>('promo')

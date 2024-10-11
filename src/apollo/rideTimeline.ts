@@ -6,10 +6,12 @@ export const rideTimelineTypeDefs = gql`
   type HistoryInstance {
     status: String
     time: Date
+    location: Location
   }
   input HistoryInstanceInput {
     status: String
     time: Date
+    location: LocationInput
   }
 
   type RideTimeline {

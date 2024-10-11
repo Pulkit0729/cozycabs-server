@@ -98,10 +98,14 @@ export class RideService {
         history: [],
       });
     }
-    const history = JSON.parse(JSON.stringify(rideTimeline.history)) as [
-      { status: NavigationStatus | RideStatus; time: Date },
-    ];
-    history.push({ status: navstatus, time: new Date() });
+    const ride = await getRide(rideId);
+    const history = JSON.parse(JSON.stringify(rideTimeline.history));
+
+    history.push({
+      status: navstatus,
+      time: new Date(),
+      location: ride?.driver.currentLocation,
+    });
     rideTimeline.history = history;
     rideTimeline.markModified('history');
     await rideTimeline.save();

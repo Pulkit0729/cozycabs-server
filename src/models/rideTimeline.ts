@@ -1,14 +1,21 @@
 import { Document, model, Schema } from 'mongoose';
 import { NavigationStatus, RideStatus } from '../utils/constants';
+import { ILocation } from './templatedRides';
 
+export interface IHistory extends Document {
+  status: NavigationStatus | RideStatus;
+  time: Date;
+  location?: ILocation;
+}
 export interface IRideTimeline extends Document {
   rideId: string;
-  history: [{ status: NavigationStatus | RideStatus; time: Date }];
+  history: [IHistory];
 }
 
-const HistoryInstaceSchema = new Schema({
+export const HistoryInstaceSchema = new Schema({
   status: { type: String },
   time: Date,
+  location: Object,
 });
 
 const RideTimelineSchema = new Schema<IRideTimeline>({

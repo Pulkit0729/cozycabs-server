@@ -57,6 +57,10 @@ import {
   reviewResolvers,
   reviewTypeDefs,
 } from './apollo/review';
+import {
+  rideTimelineResolvers,
+  rideTimelineTypeDefs,
+} from './apollo/rideTimeline';
 
 const cors = require('cors');
 const PORT = process.env.API_PORT || 3000;
@@ -77,6 +81,7 @@ export default async function App() {
         { typeDefs: pointTypeDefs, resolvers: pointResolvers },
         { typeDefs: bookingPointTypeDefs, resolvers: bookingPointResolvers },
         { typeDefs: reviewTypeDefs, resolvers: reviewResolvers },
+        { typeDefs: rideTimelineTypeDefs, resolvers: rideTimelineResolvers },
         {
           typeDefs: termsandconditionTypeDefs,
           resolvers: termsandconditionResolvers,

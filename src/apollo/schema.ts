@@ -103,6 +103,13 @@ export const typeDefs = gql`
       page: Int
       perPage: Int
     ): [Review]
+    rideTimeline(
+      filterBy: ReviewFilter
+      sortBy: String
+      sortOrder: SortOrder
+      page: Int
+      perPage: Int
+    ): [RideTimeline]
   }
   enum SortOrder {
     ASC
@@ -122,6 +129,7 @@ export const typeDefs = gql`
     addUserPromo(input: UserPromoInput): UserPromo
     addTermsAndCondition(input: TermsAndConditionInput): TermsAndCondition
     addReview(input: ReviewInput): Review
+    addRideTimeline(input: RideTimelineInput): RideTimeline
 
     addBulkPoints(input: [PointInput]): [Point]
 

@@ -1,8 +1,14 @@
 import { getBookingsFromRide } from '../dal/booking.dal';
 import { getRide } from '../dal/ride.dal';
+import { getRideTimeline } from '../dal/rideTimeline.dal';
 import { updateUserPromo } from '../dal/userPromo.dal';
 import { IRide } from '../models/rides';
-import { BookingStatus, RideStatus } from '../utils/constants';
+import RideTimeline from '../models/rideTimeline';
+import {
+  BookingStatus,
+  NavigationStatus,
+  RideStatus,
+} from '../utils/constants';
 import { createRideStatusNotification } from '../utils/notifications';
 import { sendNotification } from './external/firebase';
 import { sendMessage, SendPulseEventTypes } from './external/sendpulse';
@@ -38,6 +44,7 @@ export class RideService {
     ride.markModified('status');
     await ride.save();
     await this.updateRideStatusNotif(ride, bookings);
+    await this.handleRideTimeline(rideId, status);
     return ride;
   }
 
@@ -78,5 +85,25 @@ export class RideService {
       );
       await sendNotification(message);
     }
+  }
+
+  static async handleRideTimeline(
+    rideId: string,
+    navstatus: NavigationStatus | RideStatus
+  ) {
+    let rideTimeline = await getRideTimeline(rideId);
+    if (!rideTimeline) {
+      rideTimeline = new RideTimeline({
+        rideId: rideId,
+        history: [],
+      });
+    }
+    const history = JSON.parse(JSON.stringify(rideTimeline.history)) as [
+      { status: NavigationStatus | RideStatus; time: Date },
+    ];
+    history.push({ status: navstatus, time: new Date() });
+    rideTimeline.history = history;
+    rideTimeline.markModified('history');
+    await rideTimeline.save();
   }
 }

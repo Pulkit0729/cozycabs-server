@@ -121,6 +121,9 @@ export const templateResolvers = {
         if (input.discountedPrice) {
           templatedRide.discountedPrice = input.discountedPrice;
         }
+        if (input.status) {
+          templatedRide.status = input.status;
+        }
         // Save the updated templatedRide
         await templatedRide.save();
 
